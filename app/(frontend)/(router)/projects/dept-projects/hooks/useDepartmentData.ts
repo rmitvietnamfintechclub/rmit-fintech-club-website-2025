@@ -4,8 +4,6 @@ import * as React from "react";
 import axios from "axios";
 import type { DeptProjectsMap, ApiResponse, Project } from "../components/types";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE ?? "http://localhost:3000/api/v1";
-
 export function useDepartmentData(departments: readonly string[]) {
   const [departmentProjects, setDepartmentProjects] = React.useState<DeptProjectsMap>({});
   const [departmentDescriptions, setDepartmentDescriptions] = React.useState<Record<string, string>>({});
@@ -25,7 +23,7 @@ export function useDepartmentData(departments: readonly string[]) {
 
         await Promise.all(
           departments.map(async (dept) => {
-            const res = await axios.get<ApiResponse>(`${API_BASE}/projects`, {
+            const res = await axios.get<ApiResponse>(`/api/v1/projects`, {
               params: { type: "department", status: "Ongoing", department: dept },
               signal: controller.signal,
             });
