@@ -73,7 +73,7 @@ const Achievements = () => {
           Our Achievement
           <Image
             src="/Achievement_Decoration.svg"
-            alt="Left Achievement_Decoration"
+            alt="Left Achievement Decoration"
             className="absolute -left-5 -top-2 z-10 md:hidden block"
             width={70}
             height={70}

@@ -1,9 +1,8 @@
 import { PartnerItem } from "@/app/(frontend)/(router)/(home_page)/components/partners";
 import Image from "next/image";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react"; // Removed useRef
 import clsx from "clsx";
 import styles from "@/styles/partners.module.css";
-
 interface PartnerLogo {
   id: number;
   url: string;
@@ -327,15 +326,30 @@ export default function PartnersDiv({
     );
   }, [animating, activeItemId]);
 
+  const isGrid = gridCols.includes("grid");
+  const mobileImageHeight = isGrid ? "max-md:h-16" : "max-md:h-40";
+
   return (
-    <div className="content mr-[8.5vw] ml-auto">
-      <h1
-        className="ml-[1.5rem] mb-[1.5rem] text-[#0D1742] !font-extrabold drop-shadow-[0_4px_4px_rgba(255,204,102,0.6)]"
+    <div className="content md:mr-[8.5vw] md:ml-auto w-full md:w-auto">
+      <div
+        className="max-md relative mb-10 md:mb-[0.5rem] text-[#0D1742] text-[1.85rem] md:text-[3.75rem] !font-extrabold drop-shadow-[0_4px_4px_rgba(255,204,102,0.6)]
+                   text-center md:text-left md:ml-[1.5rem]"
         aria-label="Our Partners"
       >
         Partners
-      </h1>
-      <div className="bg-[linear-gradient(90deg,_#C9D6EA_10px,_#FFEFCA)] w-[70vw] h-[90vh] rounded-[2vw] p-[1vw]">
+        <Image
+          src="/Mobile_Partners_Decoration.svg"
+          alt="Mobile Partners Decoration"
+          className="absolute -top-2 left-1/2 -translate-x-1/2 z-10 md:hidden block"
+          width={250}
+          height={250}
+          loading="lazy"
+        />
+      </div>
+      <div
+        className="bg-[linear-gradient(90deg,_#C9D6EA_10px,_#FFEFCA)] 
+                   w-[95vw] h-fit md:w-[70vw] md:h-[90vh] rounded-[2vw] p-[1vw] mx-auto"
+      >
         <div className="w-full h-full rounded-[1vw] bg-white flex justify-center pb-4">
           <div
             className={clsx(
@@ -343,35 +357,47 @@ export default function PartnersDiv({
               animationClass
             )}
           >
-            <DecorativeSVG className="absolute z-30 left-[1rem] top-[1rem] rotate-[-5deg] w-[30px] h-[30px]" />
-            <DecorativeSVG className="absolute z-30 left-[1rem] bottom-0 rotate-[-5deg] w-[30px] h-[30px]" />
-            <DecorativeSVG className="absolute z-30 right-[1rem] top-[1rem] rotate-[-5deg] w-[30px] h-[30px]" />
-            <DecorativeSVG className="absolute z-30 right-[1rem] bottom-0 rotate-[-5deg] w-[30px] h-[30px]" />
-            <h6 className="text-[#DCB968] bg-[#2C305F] w-fit text-center p-4 mx-auto text-[2rem] font-semibold rounded-b-[1rem]">
+            <DecorativeSVG className="hidden md:block absolute z-30 left-[1rem] top-[1rem] rotate-[-5deg] w-[30px] h-[30px]" />
+            <DecorativeSVG className="hidden md:block absolute z-30 bottom-0 left-[1rem] rotate-[-5deg] w-[30px] h-[30px]" />
+            <DecorativeSVG className="hidden md:block absolute z-30 right-[1rem] top-[1rem] rotate-[-5deg] w-[30px] h-[30px]" />
+            <DecorativeSVG className="hidden md:block absolute z-30 bottom-0 right-[1rem] rotate-[-5deg] w-[30px] h-[30px]" />
+
+            {/* Title with smaller text on mobile */}
+            <h6
+              className="text-[#DCB968] bg-[#2C305F] w-fit text-center p-3 md:p-4 mx-auto 
+                         text-[1.5rem] md:text-[2rem] font-semibold rounded-b-[1rem]"
+            >
               {title}
             </h6>
+            {/* Grid container with mobile-first columns and padding */}
             <div
-              className={`flex-1 flex items-center justify-center px-[4rem] py-[1rem] pb-0 ${
-                gridCols.includes("grid")
-                  ? `grid ${gridCols} gap-4 place-items-center md:grid-cols-4 lg:${gridCols}`
-                  : "flex flex-row gap-12 flex-wrap"
+              className={`flex-1 flex items-center justify-center px-4 py-4 md:px-[4rem] md:py-[1rem] pb-0 ${
+                isGrid
+                  ? `grid grid-cols-3 gap-4 place-items-center md:grid-cols-4 lg:${gridCols}`
+                  : "flex flex-col md:flex-row md:gap-12 flex-wrap justify-center"
               }`}
             >
               {partners.map((partner, index) => {
+                // Responsive centering logic
                 if (
                   centerLast &&
                   index === partners.length - 1 &&
-                  partners.length % 4 === 1
+                  (partners.length % 3 === 1 || partners.length % 4 === 1) // Check for both mobile and desktop grid
                 ) {
                   return (
                     <div
                       key={partner.id}
-                      className="col-span-4 flex justify-center"
+                      className={clsx(
+                        "flex justify-center",
+                        partners.length % 3 === 1 && "col-span-3", // Span 3 for mobile
+                        partners.length % 4 === 1 && "md:col-span-4", // Span 4 for desktop
+                        `lg:col-span-${gridCols.split("-")[2]}` // Span 5 for lg (blockchain)
+                      )}
                     >
                       <Image
                         src={partner.url}
                         alt={partner.alt}
-                        className={`${imageHeight} w-auto object-contain`}
+                        className={`${imageHeight} ${mobileImageHeight} w-auto object-contain`}
                         width={400}
                         height={400}
                         fetchPriority="high"
@@ -386,7 +412,7 @@ export default function PartnersDiv({
                     key={partner.id}
                     src={partner.url}
                     alt={partner.alt}
-                    className={`${imageHeight} w-auto object-contain`}
+                    className={`${imageHeight} ${mobileImageHeight} w-auto object-contain`}
                     width={400}
                     height={400}
                     fetchPriority="high"

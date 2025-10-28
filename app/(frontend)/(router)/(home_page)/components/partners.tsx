@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef } from "react"; // Không cần useMemo nữa
+import { useState, useRef, useEffect } from "react";
 import PartnersCircle from "@/components/home/PartnersCircle";
 import PartnersDiv from "@/components/home/PartnersDiv";
 import styles from "@/styles/partners.module.css";
@@ -27,26 +27,55 @@ const initialItems: PartnerItem[] = baseItems.map((it, i) => ({
   bg: i % 2 === 0 ? "bg-blueSlate" : "bg-bluePrimary",
 }));
 
+const mobileItems: PartnerItem[] = [
+  initialItems[3], // id 4: Blockchain
+  initialItems[4], // id 5: Fintech
+  initialItems[2], // id 3: Academic
+  initialItems[1], // id 2: Hospitality
+  initialItems[5], // id 6: Charity
+  initialItems[0], // id 1: Other
+];
+
 // --- CONFIGURATION ---
 const ANIMATION_DURATION = 3000;
 const CONTENT_UPDATE_DELAY = 1500;
+const MOBILE_ANIMATION_DURATION = 300; // Faster swap for mobile
+const MOBILE_CONTENT_UPDATE_DELAY = 150; // Faster content fade for mobile
 
 export default function Partners() {
   const [circleItems, setCircleItems] = useState(initialItems);
-
   const [activeItemId, setActiveItemId] = useState(initialItems[3].id);
-
   const [isContentAnimating, setIsContentAnimating] = useState(false);
-
   const [isCircleAnimating, setIsCircleAnimating] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   const circleRef = useRef<(HTMLDivElement | null)[]>([]);
+
+  // --- Mobile Detection Hook ---
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768); // Tailwind's 'md' breakpoint
+    };
+    checkMobile(); // Check on initial load
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  // --- Dynamic Timings ---
+  const effectiveAnimationDuration = isMobile
+    ? MOBILE_ANIMATION_DURATION
+    : ANIMATION_DURATION;
+  const effectiveContentDelay = isMobile
+    ? MOBILE_CONTENT_UPDATE_DELAY
+    : CONTENT_UPDATE_DELAY;
 
   const getNextBg = (neighborBg: string): string =>
     neighborBg === "bg-blueSlate" ? "bg-bluePrimary" : "bg-blueSlate";
 
+  // --- 'next' / 'prev' handler (DESKTOP ONLY) ---
   const handleClick = (dir: "next" | "prev") => {
-    if (isCircleAnimating) return;
+    // Guard: Only run on desktop
+    if (isCircleAnimating || isMobile) return;
 
     setIsCircleAnimating(true);
     setIsContentAnimating(true);
@@ -59,13 +88,11 @@ export default function Partners() {
 
     setTimeout(() => {
       const nextActiveItem =
-        dir === "next"
-          ? circleItems[4]
-          : circleItems[2];
+        dir === "next" ? circleItems[4] : circleItems[2];
 
       setActiveItemId(nextActiveItem.id);
       setIsContentAnimating(false);
-    }, CONTENT_UPDATE_DELAY); // 1000ms
+    }, effectiveContentDelay);
 
     setTimeout(() => {
       setCircleItems((prevItems) => {
@@ -90,18 +117,34 @@ export default function Partners() {
       circleRef.current.forEach((el, index) => {
         el?.classList.remove(styles[`circle_item_${index + 1}_${dir}`]);
       });
-    }, ANIMATION_DURATION); // 3000ms
+    }, effectiveAnimationDuration);
+  };
+
+  // --- Direct select handler (MOBILE ONLY) ---
+  const handleItemSelect = (selectedId: number) => {
+    // Guard: Only run on mobile, and not if already active or animating
+    if (isCircleAnimating || !isMobile || selectedId === activeItemId) return;
+
+    setIsCircleAnimating(true);
+    setIsContentAnimating(true);
+
+    // --- Content Update (happens faster) ---
+    // This state change triggers the content fade AND the circle button transition
+    setTimeout(() => {
+      setActiveItemId(selectedId);
+      setIsContentAnimating(false);
+    }, effectiveContentDelay);
+
+    // --- Animation "cooldown" ---
+    // We just set a cooldown; no array rotation needed for mobile.
+    setTimeout(() => {
+      setIsCircleAnimating(false);
+    }, effectiveAnimationDuration);
   };
 
   return (
-    <div className="w-[100vw] h-fit min-h-[35vh] bg-[#F9FAFB] py-20 relative flex items-center">
-      <PartnersCircle
-        items={circleItems}
-        handleClick={handleClick}
-        circleRef={circleRef}
-        animating={isCircleAnimating}
-      />
-      <div className="absolute z-30 left-[37rem] top-[3.3rem] rotate-[-5deg]">
+    <div className="w-[100vw] h-fit min-h-[35vh] bg-[#F9FAFB] max-md:pb-10 md:py-20 relative flex flex-col md:flex-row items-center">
+      <div className="absolute z-30 left-[45rem] top-[4.3rem] rotate-[-5deg] max-md:hidden">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="70"
@@ -115,7 +158,7 @@ export default function Partners() {
           />
         </svg>
       </div>
-      <div className="absolute z-30 left-[42rem] top-[7rem] rotate-[-5deg]">
+      <div className="absolute z-30 left-[50rem] top-[8rem] rotate-[-5deg] max-md:hidden">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="30"
@@ -129,10 +172,21 @@ export default function Partners() {
           />
         </svg>
       </div>
+
       <PartnersDiv
         allItems={initialItems}
         activeItemId={activeItemId}
         animating={isContentAnimating}
+      />
+      <PartnersCircle
+        items={circleItems}
+        mobileItems={mobileItems}
+        activeItemId={activeItemId} 
+        handleClick={handleClick}
+        handleItemSelect={handleItemSelect}
+        circleRef={circleRef}
+        animating={isCircleAnimating}
+        isMobile={isMobile}
       />
     </div>
   );
