@@ -286,7 +286,7 @@ const partnerConfig: Record<
     title: "Academic",
     partners: academicPartners,
     gridCols: "flex-row",
-    imageHeight: "h-[15rem]",
+    imageHeight: "h-[12rem]",
   },
   2: {
     title: "Hospitality",
@@ -298,13 +298,13 @@ const partnerConfig: Record<
     title: "Charity Organizations",
     partners: charityPartners,
     gridCols: "flex-row",
-    imageHeight: "h-[15rem]",
+    imageHeight: "h-[12rem]",
   },
   1: {
     title: "Other Partners",
     partners: otherPartners,
     gridCols: "flex-row",
-    imageHeight: "h-[20rem]",
+    imageHeight: "h-[18rem]",
   },
 };
 
@@ -335,8 +335,8 @@ export default function PartnersDiv({
       >
         Partners
       </h1>
-      <div className="bg-[linear-gradient(90deg,_#C9D6EA_10px,_#FFEFCA)] w-[70vw] h-[88vh] rounded-[2vw] p-[1vw]">
-        <div className="w-full h-full rounded-[1vw] bg-white flex justify-center">
+      <div className="bg-[linear-gradient(90deg,_#C9D6EA_10px,_#FFEFCA)] w-[70vw] h-[90vh] rounded-[2vw] p-[1vw]">
+        <div className="w-full h-full rounded-[1vw] bg-white flex justify-center pb-4">
           <div
             className={clsx(
               "w-full h-full flex flex-col relative",
@@ -344,17 +344,17 @@ export default function PartnersDiv({
             )}
           >
             <DecorativeSVG className="absolute z-30 left-[1rem] top-[1rem] rotate-[-5deg] w-[30px] h-[30px]" />
-            <DecorativeSVG className="absolute z-30 left-[1rem] bottom-[1rem] rotate-[-5deg] w-[30px] h-[30px]" />
+            <DecorativeSVG className="absolute z-30 left-[1rem] bottom-0 rotate-[-5deg] w-[30px] h-[30px]" />
             <DecorativeSVG className="absolute z-30 right-[1rem] top-[1rem] rotate-[-5deg] w-[30px] h-[30px]" />
-            <DecorativeSVG className="absolute z-30 right-[1rem] bottom-[1rem] rotate-[-5deg] w-[30px] h-[30px]" />
+            <DecorativeSVG className="absolute z-30 right-[1rem] bottom-0 rotate-[-5deg] w-[30px] h-[30px]" />
             <h6 className="text-[#DCB968] bg-[#2C305F] w-fit text-center p-4 mx-auto text-[2rem] font-semibold rounded-b-[1rem]">
               {title}
             </h6>
             <div
               className={`flex-1 flex items-center justify-center px-[4rem] py-[1rem] pb-0 ${
                 gridCols.includes("grid")
-                  ? `grid ${gridCols} h-[65vh] gap-4 place-items-center sm:grid-cols-2 md:grid-cols-3 lg:${gridCols}`
-                  : "flex flex-row h-[62vh] gap-12 flex-wrap"
+                  ? `grid ${gridCols} gap-4 place-items-center md:grid-cols-4 lg:${gridCols}`
+                  : "flex flex-row gap-12 flex-wrap"
               }`}
             >
               {partners.map((partner, index) => {

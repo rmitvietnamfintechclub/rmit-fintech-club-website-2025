@@ -69,12 +69,12 @@ const Achievements = () => {
       <div className="absolute bottom-[34rem] right-[6rem] w-[2rem] h-[2rem] bg-[#97ABD6] rounded-full z-10 hidden md:block"></div>
 
       <div className="px-4 md:pl-[7rem] md:px-0">
-        <div className="text-[2rem] md:text-[2.5rem] max-md:relative max-md:text-center font-bold text-[#2C305F] [text-shadow:_0_3px_4px_rgba(0,0,0,0.5)]">
+        <div className="text-[1.85rem] md:text-[2.5rem] max-md:relative max-md:text-center font-bold text-[#2C305F] [text-shadow:_0_3px_4px_rgba(0,0,0,0.5)]">
           Our Achievement
           <Image
             src="/Achievement_Decoration.svg"
             alt="Left Achievement_Decoration"
-            className="absolute left-0 -top-2 z-10 md:hidden block"
+            className="absolute -left-5 -top-2 z-10 md:hidden block"
             width={70}
             height={70}
             loading="lazy"
@@ -82,23 +82,23 @@ const Achievements = () => {
           <Image
             src="/Achievement_Decoration.svg"
             alt="Left Achievement_Decoration"
-            className="absolute right-0 -top-2 z-10 rotate-180 md:hidden block"
+            className="absolute -right-5 -top-2 z-10 rotate-180 md:hidden block"
             width={70}
             height={70}
             loading="lazy"
           />
         </div>
-        <h3 className="text-4xl md:text-[3.5rem] max-md:mt-8 font-bold text-[#DCB968] leading-tight md:leading-[6rem] [text-shadow:_0_3px_4px_rgba(0,0,0,0.5)]">
+        <h3 className="text-[2rem] md:text-[3.5rem] max-md:mt-8 font-bold text-[#DCB968] leading-tight md:leading-[6rem] [text-shadow:_0_3px_4px_rgba(0,0,0,0.5)]">
           Best Club of Semester
         </h3>
         {/* Removed horizontal padding for mobile, restored for desktop */}
-        <p className="text-2xl md:text-[2.5rem] max-md:mt-2 max-md:text-right font-bold text-[#5E5E92] md:pl-[44rem]">
+        <p className="text-[1.25rem] md:text-[2.5rem] max-md:mt-1 max-md:text-right font-bold text-[#5E5E92] md:pl-[44rem]">
           5 times
         </p>
 
-        <div className="-mt-12 md:mt-[5rem] md:pb-[9rem] md:-ml-[14rem]">
+        <div className="-mt-16 md:mt-[5rem] md:pb-[9rem] md:-ml-[14rem]">
           {/* Set a min-height for mobile to contain the absolute cards */}
-          <div className="min-h-[400px] md:min-h-[200px] flex justify-center items-center max-md:pl-4 relative">
+          <div className="min-h-[400px] md:min-h-[200px] flex justify-center items-center max-md:pl-12 relative">
             {cards.map((card) => (
               <CARD_STACK
                 key={card.id}
@@ -113,7 +113,7 @@ const Achievements = () => {
       </div>
 
       {/* Innovation Award Section */}
-      <div className="flex flex-col-reverse md:items-center md:flex-row md:justify-between gap-4 md:gap-8 px-6 md:px-20">
+      <div className="flex flex-col-reverse md:items-center md:flex-row md:justify-between gap-2 md:gap-8 px-6 md:px-20 max-md:-mt-[5rem]">
         <Image
           src="https://d2prwyp3rwi40.cloudfront.net/home/achievement/InnovationAward-2023.png"
           className="object-cover w-full md:w-[35vw] h-auto rounded-lg shadow-lg hover:scale-105 transition-transform duration-200"
@@ -123,10 +123,10 @@ const Achievements = () => {
           priority={true}
         />
         <div className="flex flex-col">
-          <h3 className="text-4xl md:text-[3.5rem] font-bold text-[#DCB968] leading-tight md:leading-[3rem] [text-shadow:_0_3px_4px_rgba(0,0,0,0.5)] max-md:-mt-[4rem]">
+          <h3 className="text-[2rem] md:text-[3.5rem] font-bold text-[#DCB968] leading-tight md:leading-[3rem] [text-shadow:_0_3px_4px_rgba(0,0,0,0.5)]">
             Innovation Award
           </h3>
-          <div className="text-2xl md:text-[2.5rem] max-md:text-right max-md:mt-1 font-bold text-[#5E5E92] md:leading-[5rem]">
+          <div className="text-[1.25rem] md:text-[2.5rem] max-md:text-right max-md:mt-1 font-bold text-[#5E5E92] md:leading-[5rem]">
             2023
           </div>
         </div>
@@ -134,10 +134,10 @@ const Achievements = () => {
 
       {/* Publicity Award Section */}
       <div className="px-6 md:pl-20 mt-4 md:mt-[2rem]">
-        <h3 className="pt-4 md:pt-[2rem] text-4xl md:text-[3.5rem] font-bold text-[#DCB968] leading-tight md:leading-[3rem] [text-shadow:_0_3px_4px_rgba(0,0,0,0.5)]">
+        <h3 className="pt-4 md:pt-[2rem] text-[2rem] md:text-[3.5rem] font-bold text-[#DCB968] leading-tight md:leading-[3rem] [text-shadow:_0_3px_4px_rgba(0,0,0,0.5)]">
           Publicity Award
         </h3>
-        <p className="mt-0 max-md:mb-1 text-2xl md:text-[2.5rem] max-md:text-right font-bold text-[#5E5E92] md:leading-[5rem]">
+        <p className="mt-0 max-md:mb-1 text-[1.25rem] md:text-[2.5rem] max-md:text-right font-bold text-[#5E5E92] md:leading-[5rem]">
           2024
         </p>
         {/* Centered items on mobile */}
@@ -238,7 +238,7 @@ const CARD_STACK = ({
     <motion.img
       src={image}
       alt={`Achievement ${id}`}
-      className="object-cover w-full max-w-[20rem] md:w-[32rem] md:max-w-none hover:cursor-grab active:cursor-grabbing rounded-lg"
+      className="object-cover w-full max-w-[18rem] md:w-[32rem] md:max-w-none hover:cursor-grab active:cursor-grabbing rounded-lg"
       style={{
         position: "absolute",
         x: cardX,

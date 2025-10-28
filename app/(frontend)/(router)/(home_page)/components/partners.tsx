@@ -28,37 +28,28 @@ const initialItems: PartnerItem[] = baseItems.map((it, i) => ({
 }));
 
 // --- CONFIGURATION ---
-const ANIMATION_DURATION = 3000; // Tổng thời gian animation vòng tròn (3s)
-const CONTENT_UPDATE_DELAY = 1000; // Thời gian update nội dung sớm (1s)
-// --- END CONFIGURATION ---
+const ANIMATION_DURATION = 3000;
+const CONTENT_UPDATE_DELAY = 1500;
 
 export default function Partners() {
-  // STATE 1: Chỉ dành cho vòng tròn. Update SAU 3 giây.
   const [circleItems, setCircleItems] = useState(initialItems);
 
-  // STATE 2: Chỉ dành cho PartnersDiv. Update SỚM sau 1 giây.
-  // Ban đầu, item active là item ở vị trí thứ 4 (index 3)
   const [activeItemId, setActiveItemId] = useState(initialItems[3].id);
 
-  // STATE 3: Điều khiển fade-in/out cho PartnersDiv
   const [isContentAnimating, setIsContentAnimating] = useState(false);
 
-  // STATE 4: Khóa click khi vòng tròn đang xoay
   const [isCircleAnimating, setIsCircleAnimating] = useState(false);
 
   const circleRef = useRef<(HTMLDivElement | null)[]>([]);
 
-  // Helper: return the opposite background color of neighbor
   const getNextBg = (neighborBg: string): string =>
     neighborBg === "bg-blueSlate" ? "bg-bluePrimary" : "bg-blueSlate";
 
   const handleClick = (dir: "next" | "prev") => {
-    // Nếu vòng tròn đang xoay thì không làm gì cả
     if (isCircleAnimating) return;
 
-    // 1. BẮT ĐẦU: Khóa click, chạy animation CSS và bắt đầu fade-out content
     setIsCircleAnimating(true);
-    setIsContentAnimating(true); // Ra lệnh cho PartnersDiv mờ đi (fade-out)
+    setIsContentAnimating(true);
 
     circleRef.current.forEach((el, index) => {
       if (el) {
@@ -66,22 +57,17 @@ export default function Partners() {
       }
     });
 
-    // 2. UPDATE CONTENT SỚM (Sau 1 giây)
     setTimeout(() => {
-      // Tìm ID của item *sắp* đi vào giữa
-      // Dựa trên state *hiện tại* của vòng tròn
       const nextActiveItem =
         dir === "next"
-          ? circleItems[4] // Item ở vị trí 5 (index 4)
-          : circleItems[2]; // Item ở vị trí 3 (index 2)
+          ? circleItems[4]
+          : circleItems[2];
 
-      setActiveItemId(nextActiveItem.id); // Cập nhật state cho PartnersDiv
-      setIsContentAnimating(false); // Ra lệnh cho PartnersDiv hiện ra (fade-in)
+      setActiveItemId(nextActiveItem.id);
+      setIsContentAnimating(false);
     }, CONTENT_UPDATE_DELAY); // 1000ms
 
-    // 3. UPDATE VÒNG TRÒN MUỘN (Sau 3 giây)
     setTimeout(() => {
-      // Bây giờ mới thực sự update state của vòng tròn
       setCircleItems((prevItems) => {
         const rotated = [...prevItems];
 
@@ -99,10 +85,8 @@ export default function Partners() {
         return rotated;
       });
 
-      // 4. DỌN DẸP
-      setIsCircleAnimating(false); // Mở khóa click
+      setIsCircleAnimating(false);
 
-      // Xóa class CSS animation
       circleRef.current.forEach((el, index) => {
         el?.classList.remove(styles[`circle_item_${index + 1}_${dir}`]);
       });
