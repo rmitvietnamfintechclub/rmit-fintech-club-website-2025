@@ -1,0 +1,253 @@
+@keyframes circle_item_2_next {
+    from {
+        left: 21vw;
+        top: 2vh;
+    }
+    to {
+        left: 8vw;
+        top: 4vh;
+    }
+}
+
+@keyframes circle_item_3_next {
+    from {
+        left: 31vw;
+        top: 16vh;
+    }
+    to {
+        left: 21vw;
+        top: 2vh;
+    }
+}
+
+@keyframes circle_item_4_next {
+    from {
+        width: 20vh;
+        left: 35vw;
+        top: 50%;
+    }
+    to {
+        width: 15vh;
+        left: 31vw;
+        top: 16vh;
+    }
+}
+
+@keyframes circle_item_5_next {
+    from {
+        width: 15vh;
+        left: 31vw;
+        top: 66vh;
+    }
+    to {
+        width: 20vh;
+        left: 35vw;
+        top: 50%;
+    }
+}
+
+@keyframes circle_item_6_next {
+    from {
+        left: 21vw;
+        top: 77vh;
+    }
+    to {
+        left: 31vw;
+        top: 66vh;
+    }
+}
+
+@keyframes circle_item_7_next {
+    from {
+        left: 8vw;
+        top: 75vh;
+    }
+    to {
+        left: 21vw;
+        top: 77vh;
+    }
+}
+
+@keyframes circle_item_1_prev {
+    from {
+        left: 8vw;
+        top: 4vh;
+    }
+    to {
+        left: 21vw;
+        top: 2vh;
+    }
+}
+
+@keyframes circle_item_2_prev {
+    from {
+        left: 21vw;
+        top: 2vh;
+    }
+    to {
+        left: 31vw;
+        top: 16vh;
+    }
+}
+
+@keyframes circle_item_3_prev {
+    from {
+        width: 15vh;
+        left: 31vw;
+        top: 16vh;
+    }
+    to {
+        width: 20vh;
+        left: 35vw;
+        top: 50%;
+    }
+}
+
+@keyframes circle_item_4_prev {
+    from {
+        width: 20vh;
+        left: 35vw;
+        top: 50%;
+    }
+    to {
+        width: 15vh;
+        left: 31vw;
+        top: 66vh;
+    }
+}
+
+@keyframes circle_item_5_prev {
+    from {
+        left: 31vw;
+        top: 66vh;
+    }
+    to {
+        left: 21vw;
+        top: 77vh;
+    }
+}
+
+@keyframes circle_item_6_prev {
+    from {
+        left: 21vw;
+        top: 77vh;
+    }
+    to {
+        left: 8vw;
+        top: 75vh;
+    }
+}
+
+@keyframes fade_in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fade_out {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+.circle_item {
+    position: absolute;
+    aspect-ratio: 1;
+    transform: translateY(-50%);
+    border-radius: 50%;
+    animation: ease 3s forwards;
+}
+
+.circle_item_1 {
+    width: 15vh;
+    left: 8vw;
+    top: 4vh;
+}
+
+.circle_item_2 {
+    width: 15vh;
+    left: 21vw;
+    top: 2vh;
+}
+
+.circle_item_3 {
+    cursor: pointer;
+    width: 15vh;
+    left: 31vw;
+    top: 16vh;
+}
+
+.circle_item_4 {
+    width: 20vh;
+    left: 35vw;
+    top: 50%;
+}
+
+.circle_item_5 {
+    cursor: pointer;
+    width: 15vh;
+    left: 31vw;
+    top: 66vh;
+}
+
+.circle_item_6 {
+    width: 15vh;
+    left: 21vw;
+    top: 77vh;
+}
+
+.circle_item_7 {
+    width: 15vh;
+    left: 8vw;
+    top: 75vh;
+}
+
+.pattern {
+    opacity: 0;
+}
+
+.circle_item_4 .pattern {
+    opacity: 1;
+}
+
+.circle_item_4_next .pattern,
+.circle_item_4_prev .pattern {
+    animation: fade_out 3s ease forwards;
+}
+
+.circle_item_5_next .pattern,
+.circle_item_3_prev .pattern {
+    animation: fade_in 3s ease forwards;
+}
+
+.circle_item_1_next { animation-name: circle_item_1_next; }
+.circle_item_2_next { animation-name: circle_item_2_next; }
+.circle_item_3_next { animation-name: circle_item_3_next; }
+.circle_item_4_next { animation-name: circle_item_4_next; }
+.circle_item_5_next { animation-name: circle_item_5_next; }
+.circle_item_6_next { animation-name: circle_item_6_next; }
+.circle_item_7_next { animation-name: circle_item_7_next; }
+
+.circle_item_1_prev { animation-name: circle_item_1_prev; }
+.circle_item_2_prev { animation-name: circle_item_2_prev; }
+.circle_item_3_prev { animation-name: circle_item_3_prev; }
+.circle_item_4_prev { animation-name: circle_item_4_prev; }
+.circle_item_5_prev { animation-name: circle_item_5_prev; }
+.circle_item_6_prev { animation-name: circle_item_6_prev; }
+.circle_item_7_prev { animation-name: circle_item_7_prev; }
+
+.fade_in_content {
+  animation: fade_in 1.5s ease forwards;
+  opacity: 1;
+}
+
+.fade_out_content {
+  animation: fade_out 1.5s ease forwards;
+  opacity: 0;
+}

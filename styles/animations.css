@@ -1,0 +1,189 @@
+@keyframes glowing {
+    0% {
+        filter: brightness(1);
+    }
+
+    50% {
+        filter: brightness(2);
+    }
+
+    100% {
+        filter: brightness(1);
+    }
+}
+
+@keyframes goDark {
+    0% {
+        filter: brightness(1);
+    }
+
+    50% {
+        filter: brightness(0.7);
+    }
+
+    100% {
+        filter: brightness(1);
+    }
+}
+
+@keyframes moveUpDown {
+    0% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-4vh);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
+}
+
+@keyframes moveDownUp {
+    0% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(4vh);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
+}
+
+@keyframes moveLeftRight {
+    0% {
+        transform: translateX(0);
+    }
+
+    50% {
+        transform: translateX(-4vw);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+}
+
+@keyframes moveRightLeft {
+    0% {
+        transform: translateX(0);
+    }
+
+    50% {
+        transform: translateX(4vw);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+}
+
+@keyframes shaking {
+    0% {
+        transform: rotate(0);
+    }
+
+    25% {
+        transform: rotate(5deg);
+    }
+
+    75% {
+        transform: rotate(-5deg);
+    }
+
+    100% {
+        transform: rotate(0);
+    }
+}
+
+@keyframes moveAndSpin {
+    0% {
+        transform: translateX(0) rotate(-100deg);
+    }
+
+    50% {
+        transform: translateX(-6vw) rotate(100deg);
+    }
+
+    100% {
+        transform: translateX(0) rotate(-100deg);
+    }
+}
+
+@media screen and (min-aspect-ratio: 1) {
+    @keyframes moveAndGlow {
+        0% {
+            filter: brightness(1.5);
+            transform: translateX(0);
+        }
+    
+        50% {
+            filter: brightness(1);
+            transform: translateX(1vw);
+        }
+    
+        100% {
+            filter: brightness(1.5);
+            transform: translateX(0);
+        }
+    }
+}
+
+@media screen and (max-aspect-ratio: 1) {
+    @keyframes moveAndGlow {
+        0% {
+            filter: brightness(1.5);
+            transform: translateX(0);
+        }
+    
+        50% {
+            filter: brightness(1);
+            transform: translateX(3vw);
+        }
+    
+        100% {
+            filter: brightness(1.5);
+            transform: translateX(0);
+        }
+    }
+}
+
+.glowing {
+    animation: glowing infinite ease;
+}
+
+.moveUD {
+    animation: moveUpDown infinite ease;
+}
+
+.moveDU {
+    animation: moveDownUp infinite ease;
+}
+
+.moveLR {
+    animation: moveLeftRight infinite ease;
+}
+
+.moveRL {
+    animation: moveRightLeft infinite ease;
+}
+
+.shaking {
+    animation: shaking infinite ease;
+}
+
+.goDark {
+    animation: goDark infinite ease;
+}
+
+.MAS {
+    animation: moveAndSpin infinite ease;
+}
+
+.MAG {
+    animation: moveAndGlow infinite ease;
+}
