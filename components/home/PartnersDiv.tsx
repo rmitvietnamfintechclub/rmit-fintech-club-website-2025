@@ -338,9 +338,10 @@ export default function PartnersDiv({
       <div className="bg-[linear-gradient(90deg,_#C9D6EA_10px,_#FFEFCA)] w-[70vw] h-[88vh] rounded-[2vw] p-[1vw]">
         <div className="w-full h-full rounded-[1vw] bg-white flex justify-center">
           <div
-            className={
-              (clsx("w-full h-full flex flex-col relative"), animationClass)
-            }
+            className={clsx(
+              "w-full h-full flex flex-col relative",
+              animationClass
+            )}
           >
             <DecorativeSVG className="absolute z-30 left-[1rem] top-[1rem] rotate-[-5deg] w-[30px] h-[30px]" />
             <DecorativeSVG className="absolute z-30 left-[1rem] bottom-[1rem] rotate-[-5deg] w-[30px] h-[30px]" />
