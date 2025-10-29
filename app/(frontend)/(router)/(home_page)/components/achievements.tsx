@@ -113,7 +113,7 @@ const Achievements = () => {
       </div>
 
       {/* Innovation Award Section */}
-      <div className="flex flex-col-reverse md:items-center md:flex-row md:justify-between gap-2 md:gap-8 px-6 md:px-20 max-md:-mt-[5rem]">
+      <div className="flex flex-col-reverse md:items-center md:flex-row md:justify-between gap-2 md:gap-8 px-4 md:px-20 max-md:-mt-[5rem]">
         <Image
           src="https://d2prwyp3rwi40.cloudfront.net/home/achievement/InnovationAward-2023.png"
           className="object-cover w-full md:w-[35vw] h-auto rounded-lg shadow-lg hover:scale-105 transition-transform duration-200"
@@ -133,7 +133,7 @@ const Achievements = () => {
       </div>
 
       {/* Publicity Award Section */}
-      <div className="px-6 md:pl-20 mt-4 md:mt-[2rem]">
+      <div className="px-4 md:pl-20 mt-4 md:mt-[2rem]">
         <h3 className="pt-4 md:pt-[2rem] text-[2rem] md:text-[3.5rem] font-bold text-[#DCB968] leading-tight md:leading-[3rem] [text-shadow:_0_3px_4px_rgba(0,0,0,0.5)]">
           Publicity Award
         </h3>

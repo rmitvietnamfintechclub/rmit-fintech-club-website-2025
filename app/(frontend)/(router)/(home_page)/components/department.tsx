@@ -57,6 +57,15 @@ const Department = () => {
 
   return (
     <div className="relative w-screen h-[50rem] flex flex-row">
+      <div className="absolute w-[14rem] h-auto right-0 -top-12 z-30 hidden md:block">
+        <Image
+          src="/Department_Decoration.svg"
+          alt="Department Decoration"
+          width={400}
+          height={400}
+          loading="lazy"
+        />
+      </div>
       {/*con gấu */}
       <div className="absolute w-[14rem] h-auto top-[-4rem] left-[-5.25rem] rotate-[109deg] z-30">
         <Image

@@ -143,8 +143,8 @@ export default function Partners() {
   };
 
   return (
-    <div className="w-[100vw] h-fit min-h-[35vh] bg-[#F9FAFB] max-md:pb-10 md:py-20 relative flex flex-col md:flex-row items-center">
-      <div className="absolute z-30 left-[45rem] top-[4.3rem] rotate-[-5deg] max-md:hidden">
+    <div className="w-[100vw] h-fit min-h-[35vh] bg-[#F9FAFB] max-md:pb-10 md:pb-20 md:pt-24 relative flex flex-col md:flex-row items-center">
+      <div className="absolute z-30 left-[40rem] top-[1.75rem] rotate-[-5deg] max-md:hidden">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="70"
@@ -158,7 +158,7 @@ export default function Partners() {
           />
         </svg>
       </div>
-      <div className="absolute z-30 left-[50rem] top-[8rem] rotate-[-5deg] max-md:hidden">
+      <div className="absolute z-30 left-[45rem] top-[4.75rem] rotate-[-5deg] max-md:hidden">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="30"

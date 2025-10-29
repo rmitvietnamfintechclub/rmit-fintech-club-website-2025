@@ -330,10 +330,10 @@ export default function PartnersDiv({
   const mobileImageHeight = isGrid ? "max-md:h-16" : "max-md:h-40";
 
   return (
-    <div className="content md:mr-[8.5vw] md:ml-auto w-full md:w-auto">
+    <div className="content md:flex md:flex-col md:items-end max-md:px-4 md:pr-20 md:pl-[21vw] md:-mt-20 md:ml-auto w-full">
       <div
         className="max-md relative mb-10 md:mb-[0.5rem] text-[#0D1742] text-[1.85rem] md:text-[3.75rem] !font-extrabold drop-shadow-[0_4px_4px_rgba(255,204,102,0.6)]
-                   text-center md:text-left md:ml-[1.5rem]"
+                   text-center md:text-left md:ml-[1.5rem] md:self-start"
         aria-label="Our Partners"
       >
         Partners
@@ -348,7 +348,7 @@ export default function PartnersDiv({
       </div>
       <div
         className="bg-[linear-gradient(90deg,_#C9D6EA_10px,_#FFEFCA)] 
-                   w-[95vw] h-fit md:w-[70vw] md:h-[90vh] rounded-[2vw] p-[1vw] mx-auto"
+                   h-fit w-full md:h-[90vh] rounded-[2vw] p-[1vw]"
       >
         <div className="w-full h-full rounded-[1vw] bg-white flex justify-center pb-4">
           <div

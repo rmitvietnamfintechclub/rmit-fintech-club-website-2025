@@ -28,7 +28,7 @@ export default function PartnersCircle({
   // --- MOBILE RENDER ---
   if (isMobile) {
     return (
-      <div className="relative w-full h-auto mt-4 mb-4 flex flex-row justify-center items-center gap-2 px-4 md:hidden">
+      <div className="relative w-full h-auto mt-4 mb-4 flex flex-row justify-between items-center gap-2 px-4 md:hidden">
         {/* Map over the STATIC initialItems array */}
         {mobileItems.map((item, index) => (
           <div
