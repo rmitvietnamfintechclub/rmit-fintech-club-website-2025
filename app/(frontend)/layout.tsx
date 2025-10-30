@@ -18,9 +18,9 @@ export const metadata: Metadata = {
   },
   description: siteConfig.description,
   icons: {
-    icon: "https://d2prwyp3rwi40.cloudfront.net/global/FTC-TabLogo.png",
-    shortcut: "https://d2prwyp3rwi40.cloudfront.net/global/FTC-TabLogo.png",
-    apple: "https://d2prwyp3rwi40.cloudfront.net/global/FTC-TabLogo.png",
+    icon: "https://d2uq10394z5icp.cloudfront.net/global/FTC-TabLogo.png",
+    shortcut: "https://d2uq10394z5icp.cloudfront.net/global/FTC-TabLogo.png",
+    apple: "https://d2uq10394z5icp.cloudfront.net/global/FTC-TabLogo.png",
   },
 };
 

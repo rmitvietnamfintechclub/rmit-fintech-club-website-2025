@@ -39,7 +39,7 @@ const HerosectionVid: React.FC = () => {
 					"object-cover", // Cover
 				)}
 			>
-				<source src="https://d2prwyp3rwi40.cloudfront.net/home/assets/HeroSectionVideo.mp4" type="video/mp4" />
+				<source src="https://d2uq10394z5icp.cloudfront.net/home/assets/HeroSectionVideo.mp4" type="video/mp4" />
 			</video>
 
 			{/* Text */}

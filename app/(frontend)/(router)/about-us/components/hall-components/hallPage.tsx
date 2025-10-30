@@ -17,7 +17,7 @@ const HallDisplay = ({
       <div className="flex flex-row justify-center">
         <div className="hidden lg:block">
           <Image
-            src="https://d2prwyp3rwi40.cloudfront.net/global/Mascot+-+M%E1%BA%B7t+tr%C6%B0%E1%BB%9Bc.svg"
+            src="https://d2uq10394z5icp.cloudfront.net/global/Mascot+-+M%E1%BA%B7t+tr%C6%B0%E1%BB%9Bc.svg"
             alt="Mascot"
             width={420}
             height={420}

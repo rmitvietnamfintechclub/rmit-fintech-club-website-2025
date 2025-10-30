@@ -36,7 +36,7 @@ export default function CompetitionCta({ detailsUrl }: CompetitionCtaProps) {
           <div className="hidden lg:block lg:col-span-1">
             <div className="absolute w-[50vw] h-[395px] -right-[2rem] -top-[5.25rem] z-10 overflow-hidden">
               <Image
-                src="https://d2prwyp3rwi40.cloudfront.net/global/Mascot+-+M%E1%BA%B7t+b%C3%AAn.svg"
+                src="https://d2uq10394z5icp.cloudfront.net/global/Mascot+-+M%E1%BA%B7t+b%C3%AAn.svg"
                 alt="Bear Mascot Illustration"
                 width={600}
                 height={600}

@@ -21,7 +21,7 @@ const departments: Record<Department, DepartmentInfo> = {
     description:
       "The Technology Department is an innovation hub for tech enthusiasts, driving practical FinTech solutions through development sprints, collaborative workshops, and industry partnerships. This semester, we’re working on three exciting projects: a blockchain-powered History Chess Game blending strategy with Vietnamese culture, an AI Financial Coach based on the 6 Jar Money Management system, and a feature-rich upgrade of the FinTech Club Website. Beyond practical coding projects, we also foster growth through mentorship, internal training, and a supportive community that empowers every member to thrive.",
     background:
-      "https://d2prwyp3rwi40.cloudfront.net/home/department-mascot/Technology.png",
+      "https://d2uq10394z5icp.cloudfront.net/home/department-mascot/Technology.png",
   },
   Business: {
     name: "BUSINESS DEPARTMENT",
@@ -29,7 +29,7 @@ const departments: Record<Department, DepartmentInfo> = {
     description:
       "The Business Department is a dynamic space for curious minds to grow through peer-to-peer learning, hands-on projects, and real-world exposure. This semester, we are leading two key initiatives: the Bi-weekly Article Series, which explores business and FinTech topics with academic depth and relevance, and Breaking the Curve, a workshop series that helps students excel academically through interactive sessions, expert insights, and practical learning. By engaging in writing, research, and discussions, members develop both analytical thinking and industry-ready skills while contributing to the club’s knowledge-sharing culture.",
     background:
-      "https://d2prwyp3rwi40.cloudfront.net/home/department-mascot/Business.png",
+      "https://d2uq10394z5icp.cloudfront.net/home/department-mascot/Business.png",
   },
   Marketing: {
     name: "MARKETING DEPARTMENT",
@@ -37,7 +37,7 @@ const departments: Record<Department, DepartmentInfo> = {
     description:
       "The Marketing Department is a creative hub that drives the club’s digital presence through strategic campaigns and internal training. This semester, we’re launching an Internal Training Series to upskill members in content creation, from writing and photography to editing. We’re also powering major campaigns for FTC x Charity and Hack-A-Venture, crafting branding, visual identities, and promotional materials across social media. Additionally, our revamped TikTok Project aims to spotlight member stories through engaging short-form videos, fostering connection and inspiration within the FinTech Club community.",
     background:
-      "https://d2prwyp3rwi40.cloudfront.net/home/department-mascot/Marketing.png",
+      "https://d2uq10394z5icp.cloudfront.net/home/department-mascot/Marketing.png",
   },
 
   HumanResources: {
@@ -46,7 +46,7 @@ const departments: Record<Department, DepartmentInfo> = {
     description:
       "The Human Resources Department plays a pivotal role in shaping FinTech Club’s culture and fostering a welcoming, supportive environment for all members. This semester, we’re bringing the community together through heartfelt initiatives like the Charity Project for Tu Hanh Pagoda, high-energy bonding at the FinTech Olympics, and the adventurous End of Semester Trip. We also support personal growth with our Internal CV Review Workshop, and add a spark of fun with the festive FTC Halloween celebration. HR is where connections are built, memories are made, and every member feels at home.",
     background:
-      "https://d2prwyp3rwi40.cloudfront.net/home/department-mascot/Human+Resources.png",
+      "https://d2uq10394z5icp.cloudfront.net/home/department-mascot/Human+Resources.png",
   },
 };
 
@@ -69,7 +69,7 @@ const Department = () => {
       {/*con gấu */}
       <div className="absolute w-[14rem] h-auto top-[-4rem] left-[-5.25rem] rotate-[109deg] z-30">
         <Image
-          src="https://d2prwyp3rwi40.cloudfront.net/global/Mascot+-+M%E1%BA%B7t+tr%C6%B0%E1%BB%9Bc.svg"
+          src="https://d2uq10394z5icp.cloudfront.net/global/Mascot+-+M%E1%BA%B7t+tr%C6%B0%E1%BB%9Bc.svg"
           alt="Bear mascot"
           width={400}
           height={400}
@@ -81,7 +81,7 @@ const Department = () => {
         <section className="relative flex flex-col items-start pl-20 pt-[8.5rem] max-w-[45vw]">
           <div className="absolute w-[3rem] h-auto top-[4.5rem] right-[7rem]">
             <Image
-              src="https://d2prwyp3rwi40.cloudfront.net/home/assets/YellowStar.svg"
+              src="https://d2uq10394z5icp.cloudfront.net/home/assets/YellowStar.svg"
               alt="Yellow Star"
               width={400}
               height={400}
@@ -90,7 +90,7 @@ const Department = () => {
           </div>
           <div className="absolute w-[6rem] h-auto top-[6rem] right-[-1rem]">
             <Image
-              src="https://d2prwyp3rwi40.cloudfront.net/home/assets/YellowStar.svg"
+              src="https://d2uq10394z5icp.cloudfront.net/home/assets/YellowStar.svg"
               alt="Yellow Star"
               width={400}
               height={400}

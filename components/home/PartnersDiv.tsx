@@ -33,102 +33,102 @@ const DecorativeSVG = ({ className }: { className: string }) => (
 const blockchainPartners: PartnerLogo[] = [
   {
     id: 1,
-    url: "https://d2prwyp3rwi40.cloudfront.net/home/partners/blockchain/Monad.png",
+    url: "https://d2uq10394z5icp.cloudfront.net/home/partners/blockchain/Monad.png",
     alt: "Monad",
   },
   {
     id: 2,
-    url: "https://d2prwyp3rwi40.cloudfront.net/home/partners/blockchain/Inferium.png",
+    url: "https://d2uq10394z5icp.cloudfront.net/home/partners/blockchain/Inferium.png",
     alt: "Inferium",
   },
   {
     id: 3,
-    url: "https://d2prwyp3rwi40.cloudfront.net/home/partners/blockchain/Coin98.png",
+    url: "https://d2uq10394z5icp.cloudfront.net/home/partners/blockchain/Coin98.png",
     alt: "Coin98",
   },
   {
     id: 4,
-    url: "https://d2prwyp3rwi40.cloudfront.net/home/partners/blockchain/OKX.png",
+    url: "https://d2uq10394z5icp.cloudfront.net/home/partners/blockchain/OKX.png",
     alt: "OKX",
   },
   {
     id: 5,
-    url: "https://d2prwyp3rwi40.cloudfront.net/home/partners/blockchain/NamiFoundation.png",
+    url: "https://d2uq10394z5icp.cloudfront.net/home/partners/blockchain/NamiFoundation.png",
     alt: "Nami Foundation",
   },
   {
     id: 6,
-    url: "https://d2prwyp3rwi40.cloudfront.net/home/partners/blockchain/KyrosVentures.png",
+    url: "https://d2uq10394z5icp.cloudfront.net/home/partners/blockchain/KyrosVentures.png",
     alt: "Kyros Ventures",
   },
   {
     id: 7,
-    url: "https://d2prwyp3rwi40.cloudfront.net/home/partners/blockchain/Kardiachain.png",
+    url: "https://d2uq10394z5icp.cloudfront.net/home/partners/blockchain/Kardiachain.png",
     alt: "KardiaChain",
   },
   {
     id: 8,
-    url: "https://d2prwyp3rwi40.cloudfront.net/home/partners/blockchain/Binance.png",
+    url: "https://d2uq10394z5icp.cloudfront.net/home/partners/blockchain/Binance.png",
     alt: "Binance",
   },
   {
     id: 9,
-    url: "https://d2prwyp3rwi40.cloudfront.net/home/partners/blockchain/GFI.png",
+    url: "https://d2uq10394z5icp.cloudfront.net/home/partners/blockchain/GFI.png",
     alt: "GFI",
   },
   {
     id: 10,
-    url: "https://d2prwyp3rwi40.cloudfront.net/home/partners/blockchain/Polkadot.png",
+    url: "https://d2uq10394z5icp.cloudfront.net/home/partners/blockchain/Polkadot.png",
     alt: "Polkadot",
   },
   {
     id: 11,
-    url: "https://d2prwyp3rwi40.cloudfront.net/home/partners/blockchain/Blockaid.svg",
+    url: "https://d2uq10394z5icp.cloudfront.net/home/partners/blockchain/Blockaid.svg",
     alt: "Blockaid",
   },
   {
     id: 12,
-    url: "https://d2prwyp3rwi40.cloudfront.net/home/partners/blockchain/TrustWallet.png",
+    url: "https://d2uq10394z5icp.cloudfront.net/home/partners/blockchain/TrustWallet.png",
     alt: "Trust Wallet",
   },
   {
     id: 13,
-    url: "https://d2prwyp3rwi40.cloudfront.net/home/partners/blockchain/Chainlink.png",
+    url: "https://d2uq10394z5icp.cloudfront.net/home/partners/blockchain/Chainlink.png",
     alt: "Chainlink",
   },
   {
     id: 14,
-    url: "https://d2prwyp3rwi40.cloudfront.net/home/partners/blockchain/U2UNetwork.png",
+    url: "https://d2uq10394z5icp.cloudfront.net/home/partners/blockchain/U2UNetwork.png",
     alt: "U2U Network",
   },
   {
     id: 15,
-    url: "https://d2prwyp3rwi40.cloudfront.net/home/partners/blockchain/Cardano.png",
+    url: "https://d2uq10394z5icp.cloudfront.net/home/partners/blockchain/Cardano.png",
     alt: "Cardano",
   },
   {
     id: 16,
-    url: "https://d2prwyp3rwi40.cloudfront.net/home/partners/blockchain/NinetyEight.png",
+    url: "https://d2uq10394z5icp.cloudfront.net/home/partners/blockchain/NinetyEight.png",
     alt: "Ninety Eight",
   },
   {
     id: 17,
-    url: "https://d2prwyp3rwi40.cloudfront.net/home/partners/blockchain/Uniswap.png",
+    url: "https://d2uq10394z5icp.cloudfront.net/home/partners/blockchain/Uniswap.png",
     alt: "Uniswap",
   },
   {
     id: 18,
-    url: "https://d2prwyp3rwi40.cloudfront.net/home/partners/blockchain/ETHVietnam.png",
+    url: "https://d2uq10394z5icp.cloudfront.net/home/partners/blockchain/ETHVietnam.png",
     alt: "ETH Vietnam",
   },
   {
     id: 19,
-    url: "https://d2prwyp3rwi40.cloudfront.net/home/partners/blockchain/Ethereum.png",
+    url: "https://d2uq10394z5icp.cloudfront.net/home/partners/blockchain/Ethereum.png",
     alt: "Ethereum",
   },
   {
     id: 20,
-    url: "https://d2prwyp3rwi40.cloudfront.net/home/partners/blockchain/ESOLLABS.png",
+    url: "https://d2uq10394z5icp.cloudfront.net/home/partners/blockchain/ESOLLABS.png",
     alt: "ESO Labs",
   },
 ];
@@ -136,67 +136,67 @@ const blockchainPartners: PartnerLogo[] = [
 const fintechPartners: PartnerLogo[] = [
   {
     id: 1,
-    url: "https://d2prwyp3rwi40.cloudfront.net/home/partners/fintech/SSI.png",
+    url: "https://d2uq10394z5icp.cloudfront.net/home/partners/fintech/SSI.png",
     alt: "SSI",
   },
   {
     id: 2,
-    url: "https://d2prwyp3rwi40.cloudfront.net/home/partners/fintech/KPMG-New.png",
+    url: "https://d2uq10394z5icp.cloudfront.net/home/partners/fintech/KPMG-New.png",
     alt: "KPMG",
   },
   {
     id: 3,
-    url: "https://d2prwyp3rwi40.cloudfront.net/home/partners/fintech/PWC.png",
+    url: "https://d2uq10394z5icp.cloudfront.net/home/partners/fintech/PWC.png",
     alt: "PWC",
   },
   {
     id: 4,
-    url: "https://d2prwyp3rwi40.cloudfront.net/home/partners/fintech/DragonCapital-New.png",
+    url: "https://d2uq10394z5icp.cloudfront.net/home/partners/fintech/DragonCapital-New.png",
     alt: "Dragon Capital",
   },
   {
     id: 5,
-    url: "https://d2prwyp3rwi40.cloudfront.net/home/partners/fintech/Infina.png",
+    url: "https://d2uq10394z5icp.cloudfront.net/home/partners/fintech/Infina.png",
     alt: "Infina",
   },
   {
     id: 6,
-    url: "https://d2prwyp3rwi40.cloudfront.net/home/partners/fintech/Aquila.png",
+    url: "https://d2uq10394z5icp.cloudfront.net/home/partners/fintech/Aquila.png",
     alt: "Aquila",
   },
   {
     id: 7,
-    url: "https://d2prwyp3rwi40.cloudfront.net/home/partners/fintech/Homebase-New.png",
+    url: "https://d2uq10394z5icp.cloudfront.net/home/partners/fintech/Homebase-New.png",
     alt: "Homebase",
   },
   {
     id: 8,
-    url: "https://d2prwyp3rwi40.cloudfront.net/home/partners/fintech/Tititada-New.png",
+    url: "https://d2uq10394z5icp.cloudfront.net/home/partners/fintech/Tititada-New.png",
     alt: "Tititada",
   },
   {
     id: 9,
-    url: "https://d2prwyp3rwi40.cloudfront.net/home/partners/fintech/Timo.png",
+    url: "https://d2uq10394z5icp.cloudfront.net/home/partners/fintech/Timo.png",
     alt: "Timo",
   },
   {
     id: 10,
-    url: "https://d2prwyp3rwi40.cloudfront.net/home/partners/fintech/MooreAISC.png",
+    url: "https://d2uq10394z5icp.cloudfront.net/home/partners/fintech/MooreAISC.png",
     alt: "Moore AISC",
   },
   {
     id: 11,
-    url: "https://d2prwyp3rwi40.cloudfront.net/home/partners/fintech/Payoo.png",
+    url: "https://d2uq10394z5icp.cloudfront.net/home/partners/fintech/Payoo.png",
     alt: "Payoo",
   },
   {
     id: 12,
-    url: "https://d2prwyp3rwi40.cloudfront.net/home/partners/fintech/FPTSecurities-New.png",
+    url: "https://d2uq10394z5icp.cloudfront.net/home/partners/fintech/FPTSecurities-New.png",
     alt: "FPT Security",
   },
   {
     id: 13,
-    url: "https://d2prwyp3rwi40.cloudfront.net/home/partners/fintech/Momo.png",
+    url: "https://d2uq10394z5icp.cloudfront.net/home/partners/fintech/Momo.png",
     alt: "MoMo",
   },
 ];
@@ -204,12 +204,12 @@ const fintechPartners: PartnerLogo[] = [
 const academicPartners: PartnerLogo[] = [
   {
     id: 1,
-    url: "https://d2prwyp3rwi40.cloudfront.net/home/partners/academic/RMITTheBusinessSchool.png",
+    url: "https://d2uq10394z5icp.cloudfront.net/home/partners/academic/RMITTheBusinessSchool.png",
     alt: "RMIT The Business School",
   },
   {
     id: 2,
-    url: "https://d2prwyp3rwi40.cloudfront.net/home/partners/academic/RMITFintechCryptoHub.png",
+    url: "https://d2uq10394z5icp.cloudfront.net/home/partners/academic/RMITFintechCryptoHub.png",
     alt: "RMIT Fintech Crypto Hub",
   },
 ];
@@ -217,12 +217,12 @@ const academicPartners: PartnerLogo[] = [
 const hospitalityPartners: PartnerLogo[] = [
   {
     id: 1,
-    url: "https://d2prwyp3rwi40.cloudfront.net/home/partners/hospitality/Sofitel.png",
+    url: "https://d2uq10394z5icp.cloudfront.net/home/partners/hospitality/Sofitel.png",
     alt: "Sofitel Hotel & Resort",
   },
   {
     id: 2,
-    url: "https://d2prwyp3rwi40.cloudfront.net/home/partners/hospitality/FusionOriginal.png",
+    url: "https://d2uq10394z5icp.cloudfront.net/home/partners/hospitality/FusionOriginal.png",
     alt: "Fusion Original",
   },
 ];
@@ -230,17 +230,17 @@ const hospitalityPartners: PartnerLogo[] = [
 const charityPartners: PartnerLogo[] = [
   {
     id: 1,
-    url: "https://d2prwyp3rwi40.cloudfront.net/home/partners/charity/Assist-New.png",
+    url: "https://d2uq10394z5icp.cloudfront.net/home/partners/charity/Assist-New.png",
     alt: "Assist",
   },
   {
     id: 2,
-    url: "https://d2prwyp3rwi40.cloudfront.net/home/partners/charity/NhipTimVietNam.png",
+    url: "https://d2uq10394z5icp.cloudfront.net/home/partners/charity/NhipTimVietNam.png",
     alt: "Nhip Tim Viet Nam",
   },
   {
     id: 3,
-    url: "https://d2prwyp3rwi40.cloudfront.net/home/partners/charity/Lotus.png",
+    url: "https://d2uq10394z5icp.cloudfront.net/home/partners/charity/Lotus.png",
     alt: "Quy Tu Thien Bong Sen",
   },
 ];
@@ -248,12 +248,12 @@ const charityPartners: PartnerLogo[] = [
 const otherPartners: PartnerLogo[] = [
   {
     id: 1,
-    url: "https://d2prwyp3rwi40.cloudfront.net/home/partners/others/FipharmcoSkinLab.png",
+    url: "https://d2uq10394z5icp.cloudfront.net/home/partners/others/FipharmcoSkinLab.png",
     alt: "Fipharmco SkinLab",
   },
   {
     id: 2,
-    url: "https://d2prwyp3rwi40.cloudfront.net/home/partners/others/Arches.png",
+    url: "https://d2uq10394z5icp.cloudfront.net/home/partners/others/Arches.png",
     alt: "Arches",
   },
 ];

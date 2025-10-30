@@ -313,7 +313,7 @@ export default function PodcastLibrary() {
       >
         <div className="absolute w-screen h-screen z-10">
           <Image
-            src="https://d2prwyp3rwi40.cloudfront.net/media/podcast/Fintechtainment-LandscapePoster-New.png"
+            src="https://d2uq10394z5icp.cloudfront.net/media/podcast/Fintechtainment-LandscapePoster-New.png"
             alt="Fintechtainment Poster"
             fill
             priority
@@ -322,7 +322,7 @@ export default function PodcastLibrary() {
         </div>
         <div className="absolute w-screen h-screen top-[-12vh] left-[2vw] z-20">
           <Image
-            src="https://d2prwyp3rwi40.cloudfront.net/media/YellowStars.png"
+            src="https://d2uq10394z5icp.cloudfront.net/media/YellowStars.png"
             alt="Yellow Stars"
             width={1200}
             height={800}

@@ -54,7 +54,7 @@ const IntroSection = () => {
       </div>
       {/* Image */}
       <div className="md:w-1/3 hidden md:block content-center">
-        <MaskImage src="https://d2prwyp3rwi40.cloudfront.net/home/assets/KeyMetrics-EditedVersion.png" />
+        <MaskImage src="https://d2uq10394z5icp.cloudfront.net/home/assets/KeyMetrics-EditedVersion.png" />
       </div>
       {/* Right text */}
       <div className="grid grid-rows-2 md:w-1/3 justify-center mt-8 gap-y-8 md:gap-y-16">

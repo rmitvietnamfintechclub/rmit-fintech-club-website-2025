@@ -6,7 +6,7 @@ export default function FinTechInTheEyes() {
     <div className="bg-[#F9FAFB]">
       <div className="relative w-full">
         <Image
-          src="https://d2prwyp3rwi40.cloudfront.net/global/Mascot+-+M%E1%BA%B7t+tr%C6%B0%E1%BB%9Bc.svg"
+          src="https://d2uq10394z5icp.cloudfront.net/global/Mascot+-+M%E1%BA%B7t+tr%C6%B0%E1%BB%9Bc.svg"
           alt="Bear mascot"
           className="absolute w-[368px] -top-[10rem] right-[-8rem] rotate-[-50deg] z-30"
           width={400}
@@ -17,7 +17,7 @@ export default function FinTechInTheEyes() {
       <section className="max-w-screen flex justify-center mr-[8vw] items-center">
         <div>
           <Image
-            src="https://d2prwyp3rwi40.cloudfront.net/about_us/executive_board/President-TriTruong.png"
+            src="https://d2uq10394z5icp.cloudfront.net/about_us/executive_board/President-TriTruong.png"
             alt="President Avatar"
             className="w-[30vw] aspect-auto object-cover"
             width={400}

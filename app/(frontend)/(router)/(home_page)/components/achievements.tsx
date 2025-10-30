@@ -12,27 +12,27 @@ const achievementData = [
   {
     id: 1,
     image:
-      "https://d2prwyp3rwi40.cloudfront.net/home/achievement/BestClubSemA-2021.png",
+      "https://d2uq10394z5icp.cloudfront.net/home/achievement/BestClubSemA-2021.png",
   },
   {
     id: 2,
     image:
-      "https://d2prwyp3rwi40.cloudfront.net/home/achievement/BestClubSemB-2021.png",
+      "https://d2uq10394z5icp.cloudfront.net/home/achievement/BestClubSemB-2021.png",
   },
   {
     id: 3,
     image:
-      "https://d2prwyp3rwi40.cloudfront.net/home/achievement/BestClubSemA-2023.png",
+      "https://d2uq10394z5icp.cloudfront.net/home/achievement/BestClubSemA-2023.png",
   },
   {
     id: 4,
     image:
-      "https://d2prwyp3rwi40.cloudfront.net/home/achievement/BestClubSemB-2023.png",
+      "https://d2uq10394z5icp.cloudfront.net/home/achievement/BestClubSemB-2023.png",
   },
   {
     id: 5,
     image:
-      "https://d2prwyp3rwi40.cloudfront.net/home/achievement/BestClubSemC-2024.png",
+      "https://d2uq10394z5icp.cloudfront.net/home/achievement/BestClubSemC-2024.png",
   },
 ];
 
@@ -43,7 +43,7 @@ const Achievements = () => {
     <section className="w-full pt-4 md:pt-16 pb-8 relative overflow-hidden">
       {/* --- Decorative Elements --- */}
       <Image
-        src="https://d2prwyp3rwi40.cloudfront.net/global/Mascot+-+M%E1%BA%B7t+b%C3%AAn.svg"
+        src="https://d2uq10394z5icp.cloudfront.net/global/Mascot+-+M%E1%BA%B7t+b%C3%AAn.svg"
         alt="Bear mascot"
         className="absolute right-[-10rem] top-[17rem] rotate-[-25deg] z-30 hidden md:block"
         width={400}
@@ -115,7 +115,7 @@ const Achievements = () => {
       {/* Innovation Award Section */}
       <div className="flex flex-col-reverse md:items-center md:flex-row md:justify-between gap-2 md:gap-8 px-4 md:px-20 max-md:-mt-[5rem]">
         <Image
-          src="https://d2prwyp3rwi40.cloudfront.net/home/achievement/InnovationAward-2023.png"
+          src="https://d2uq10394z5icp.cloudfront.net/home/achievement/InnovationAward-2023.png"
           className="object-cover w-full md:w-[35vw] h-auto rounded-lg shadow-lg hover:scale-105 transition-transform duration-200"
           width={400} 
           height={600}
@@ -171,7 +171,7 @@ const Achievements = () => {
             </svg>
           </div>
           <Image
-            src="https://d2prwyp3rwi40.cloudfront.net/home/achievement/PublicityAward-2024.png"
+            src="https://d2uq10394z5icp.cloudfront.net/home/achievement/PublicityAward-2024.png"
             className="max-md:self-start object-cover w-full max-md:max-w-md md:w-[32rem] md:ml-[9rem] rounded-lg shadow-lg hover:scale-105 transition-transform duration-200"
             width={400}
             height={300}

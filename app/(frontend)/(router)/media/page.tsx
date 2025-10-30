@@ -56,7 +56,7 @@ const Media = () => {
           <div className="absolute right-1/2 bottom-0 w-[100vw] h-[4px] bg-[#F0EDFF] z-0"></div>
           <div className="absolute right-[75%] bottom-[2rem] w-[100vw] h-[4px] bg-[#DCB968] z-0"></div>
           <Image
-            src="https://d2prwyp3rwi40.cloudfront.net/global/Mascot+-+M%E1%BA%B7t+b%C3%AAn.svg"
+            src="https://d2uq10394z5icp.cloudfront.net/global/Mascot+-+M%E1%BA%B7t+b%C3%AAn.svg"
             alt="Bear mascot"
             className="absolute top-[16rem] left-[-6rem] scale-x-[-1] z-30"
             width={200}
@@ -80,7 +80,7 @@ const Media = () => {
           {/* Large circle */}
           <div className="relative flex justify-center items-center w-[30rem] h-[30rem] rounded-full border-4 border-[#F7D27F] mx-auto z-10">
             <Image
-              src="https://d2prwyp3rwi40.cloudfront.net/media/article/BiWeeklyArticle-CirclePoster.png"
+              src="https://d2uq10394z5icp.cloudfront.net/media/article/BiWeeklyArticle-CirclePoster.png"
               alt="Biweekly Article Poster"
               className="w-[33rem] h-[33rem] rounded-full object-cover"
               width={200}
@@ -122,7 +122,7 @@ const Media = () => {
             </div>
           </div>
           <Image
-            src="https://d2prwyp3rwi40.cloudfront.net/global/Mascot+-+M%E1%BA%B7t+tr%C6%B0%E1%BB%9Bc.svg"
+            src="https://d2uq10394z5icp.cloudfront.net/global/Mascot+-+M%E1%BA%B7t+tr%C6%B0%E1%BB%9Bc.svg"
             alt="Bear mascot"
             className="absolute w-[17rem] bottom-[-0.5rem] right-[-9rem] rotate-[40deg] z-0"
             width={400}
@@ -146,7 +146,7 @@ const Media = () => {
           {/* Large circle */}
           <div className="relative flex justify-center items-center w-[30rem] h-[30rem] rounded-full border-4 border-[#F7D27F] mx-auto z-30 bg-[#2C305F]">
             <Image
-              src="https://d2prwyp3rwi40.cloudfront.net/media/podcast/FintechtainmentPoster-New.png"
+              src="https://d2uq10394z5icp.cloudfront.net/media/podcast/FintechtainmentPoster-New.png"
               alt="FinTechTainment Poster"
               className="w-[26rem] h-[26rem] rounded-full object-cover"
               width={400}

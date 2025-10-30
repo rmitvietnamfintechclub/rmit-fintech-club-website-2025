@@ -16,7 +16,7 @@ export const ClubMentors = () => {
           </div>
           <div className="w-[25vw] h-auto object-cover overflow-hidden rounded-[50px] border-[#2C305F] border-5">
             <Image
-              src="https://d2prwyp3rwi40.cloudfront.net/about_us/mentors/Mentor-BinhNguyen.png"
+              src="https://d2uq10394z5icp.cloudfront.net/about_us/mentors/Mentor-BinhNguyen.png"
               alt="Mentor Binh Nguyen"
               className="w-full h-auto object-cover"
               width={400}
@@ -146,7 +146,7 @@ export const ClubMentors = () => {
           </div>
           <div className="w-[25vw] h-auto object-cover overflow-hidden rounded-[50px] border-[#2C305F] border-5">
             <Image
-              src="https://d2prwyp3rwi40.cloudfront.net/about_us/mentors/Mentor-HuyPham.png"
+              src="https://d2uq10394z5icp.cloudfront.net/about_us/mentors/Mentor-HuyPham.png"
               alt="Mentor Huy Pham"
               className="w-full h-auto object-cover"
               width={400}
@@ -242,7 +242,7 @@ export const ClubMentors = () => {
           </div>
           <div className="w-[25vw] h-auto object-cover overflow-hidden rounded-[50px] border-[#2C305F] border-5">
             <Image
-              src="https://d2prwyp3rwi40.cloudfront.net/about_us/mentors/Mentor-HieuThai.png"
+              src="https://d2uq10394z5icp.cloudfront.net/about_us/mentors/Mentor-HieuThai.png"
               alt="Mentor Hieu Thai"
               className="w-full h-auto object-cover"
               width={400}

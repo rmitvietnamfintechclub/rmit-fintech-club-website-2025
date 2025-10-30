@@ -33,7 +33,7 @@ const StepsToRegisterPage = ({ id }: StepsToRegisterPageProps) => {
           </p>
           <div>
             <Image
-              src="https://d2prwyp3rwi40.cloudfront.net/join_us/Step+1.svg"
+              src="https://d2uq10394z5icp.cloudfront.net/join_us/Step+1.svg"
               alt="Step 1"
               height={100}
               width={100}
@@ -56,7 +56,7 @@ const StepsToRegisterPage = ({ id }: StepsToRegisterPageProps) => {
         <div className="flex flex-col items-center text-center">
           <div>
             <Image
-              src="https://d2prwyp3rwi40.cloudfront.net/join_us/Step+2.svg"
+              src="https://d2uq10394z5icp.cloudfront.net/join_us/Step+2.svg"
               alt="Step 2"
               height={100}
               width={100}
@@ -91,7 +91,7 @@ const StepsToRegisterPage = ({ id }: StepsToRegisterPageProps) => {
           </p>
           <div>
             <Image
-              src="https://d2prwyp3rwi40.cloudfront.net/join_us/Step+3.svg"
+              src="https://d2uq10394z5icp.cloudfront.net/join_us/Step+3.svg"
               alt="Step 3"
               height={100}
               width={100}
@@ -114,7 +114,7 @@ const StepsToRegisterPage = ({ id }: StepsToRegisterPageProps) => {
         <div className="flex flex-col items-center text-center">
           <div>
            <Image
-              src="https://d2prwyp3rwi40.cloudfront.net/join_us/Step+4.svg"
+              src="https://d2uq10394z5icp.cloudfront.net/join_us/Step+4.svg"
               alt="Step 4"
               height={100}
               width={100}

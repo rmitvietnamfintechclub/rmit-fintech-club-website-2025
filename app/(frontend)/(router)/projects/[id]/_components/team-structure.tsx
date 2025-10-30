@@ -166,7 +166,7 @@ export default function TeamStructure({
                   indicator={({ isOpen }) => (
                     <ChevronLeft
                       className={`text-2xl font-bold text-white transition-transform duration-300 ease-in-out ${
-                        isOpen ? "-rotate-90" : "rotate-0"
+                        isOpen ? "-rotate-0" : "rotate-0"
                       }`}
                     />
                   )}

@@ -57,7 +57,7 @@ const ManagementBoard = () => {
     return (
       <section className="relative bg-[#F9FAFB] bg-cover bg-center pt-[5rem]">
         <Image
-          src="https://d2prwyp3rwi40.cloudfront.net/global/Mascot+-+M%E1%BA%B7t+b%C3%AAn.svg"
+          src="https://d2uq10394z5icp.cloudfront.net/global/Mascot+-+M%E1%BA%B7t+b%C3%AAn.svg"
           alt="Bear mascot"
           className="absolute left-[-8rem] top-0 rotate-[35deg] scale-x-[-1] z-30"
           width={368}
@@ -97,7 +97,7 @@ const ManagementBoard = () => {
   return (
     <section className="relative bg-[#F9FAFB] bg-cover bg-center pt-[5rem]">
       <Image
-        src="https://d2prwyp3rwi40.cloudfront.net/global/Mascot+-+M%E1%BA%B7t+b%C3%AAn.svg"
+        src="https://d2uq10394z5icp.cloudfront.net/global/Mascot+-+M%E1%BA%B7t+b%C3%AAn.svg"
         alt="Bear mascot"
         className="absolute left-[-8rem] top-[-3rem] rotate-[35deg] scale-x-[-1] z-30"
         width={380}

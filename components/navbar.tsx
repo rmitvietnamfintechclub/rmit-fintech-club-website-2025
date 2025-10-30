@@ -74,7 +74,7 @@ const Navbar = () => {
           <div
             className="h-[70%] aspect-square bg-center bg-contain bg-no-repeat"
             style={{
-              backgroundImage: `url('https://d2prwyp3rwi40.cloudfront.net/global/FTC-DefaultLogo-NoName.svg')`,
+              backgroundImage: `url('https://d2uq10394z5icp.cloudfront.net/global/FTC-DefaultLogo-NoName.svg')`,
             }}
           ></div>
         </Link>

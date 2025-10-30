@@ -108,7 +108,7 @@ const FooterNoRounded: React.FC = () => {
 
         <div className="flex justify-center lg:justify-start lg:self-center order-first lg:order-none items-stretch">
           <Image
-            src="https://d2prwyp3rwi40.cloudfront.net/global/FTC-WhiteLogo-WithName.png"
+            src="https://d2uq10394z5icp.cloudfront.net/global/FTC-WhiteLogo-WithName.png"
             alt="FinTech Club Logo"
             width={360}
             height={360}

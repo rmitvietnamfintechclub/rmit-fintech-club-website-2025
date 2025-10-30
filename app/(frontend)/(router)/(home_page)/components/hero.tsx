@@ -51,7 +51,7 @@ const HeroSection = () => {
         <div className="w-full md:w-[40vw] rounded-xl relative flex flex-col items-center justify-center">
           <Image
             className="w-full object-cover rounded-3xl"
-            src="https://d2prwyp3rwi40.cloudfront.net/home/assets/IntroPhoto-ODay.png"
+            src="https://d2uq10394z5icp.cloudfront.net/home/assets/IntroPhoto-ODay.png"
             alt="Intro Photo - Orientation Day"
             fetchPriority="high"
             loading="eager"
@@ -61,7 +61,7 @@ const HeroSection = () => {
           />
           <div className="md:hidden flex-row justify-between items-center flex w-full h-fit mt-4">
             <Image
-              src="https://d2prwyp3rwi40.cloudfront.net/global/Mascot+-+M%E1%BA%B7t+tr%C6%B0%E1%BB%9Bc.svg"
+              src="https://d2uq10394z5icp.cloudfront.net/global/Mascot+-+M%E1%BA%B7t+tr%C6%B0%E1%BB%9Bc.svg"
               alt="Bear Mascot"
               width={1000}
               height={200}
@@ -71,7 +71,7 @@ const HeroSection = () => {
               className="relative rounded-xl object-cover w-[20vw]"
             />
             <Image
-              src="https://d2prwyp3rwi40.cloudfront.net/home/assets/IntroPhoto-EOSTrip.png"
+              src="https://d2uq10394z5icp.cloudfront.net/home/assets/IntroPhoto-EOSTrip.png"
               alt="Intro Photo - EOS Trip"
               width={1000}
               height={200}
@@ -81,7 +81,7 @@ const HeroSection = () => {
               className="relative rounded-xl object-cover w-[27vw]"
             />
             <Image
-              src="https://d2prwyp3rwi40.cloudfront.net/home/assets/IntroPhoto-ClubDay.png"
+              src="https://d2uq10394z5icp.cloudfront.net/home/assets/IntroPhoto-ClubDay.png"
               alt="Intro Photo - Club Day"
               width={1000}
               height={200}
@@ -133,7 +133,7 @@ const HeroSection = () => {
 
       <div className="hidden flex-row justify-between items-center md:flex w-full h-fit">
         <Image
-          src="https://d2prwyp3rwi40.cloudfront.net/global/Mascot+-+M%E1%BA%B7t+tr%C6%B0%E1%BB%9Bc.svg"
+          src="https://d2uq10394z5icp.cloudfront.net/global/Mascot+-+M%E1%BA%B7t+tr%C6%B0%E1%BB%9Bc.svg"
           alt="Bear Mascot"
           width={1000}
           height={200}
@@ -143,7 +143,7 @@ const HeroSection = () => {
           className="relative rounded-xl object-cover w-[20vw]"
         />
         <Image
-          src="https://d2prwyp3rwi40.cloudfront.net/home/assets/IntroPhoto-EOSTrip.png"
+          src="https://d2uq10394z5icp.cloudfront.net/home/assets/IntroPhoto-EOSTrip.png"
           alt="Intro Photo - EOS Trip"
           width={1000}
           height={200}
@@ -153,7 +153,7 @@ const HeroSection = () => {
           className="relative rounded-xl object-cover w-[27vw]"
         />
         <Image
-          src="https://d2prwyp3rwi40.cloudfront.net/home/assets/IntroPhoto-ClubDay.png"
+          src="https://d2uq10394z5icp.cloudfront.net/home/assets/IntroPhoto-ClubDay.png"
           alt="Intro Photo - Club Day"
           width={1000}
           height={200}

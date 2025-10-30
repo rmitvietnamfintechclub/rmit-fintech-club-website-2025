@@ -36,7 +36,7 @@ export default function ProductCta({ productUrl }: ProductCtaProps) {
           <div className="hidden lg:block relative lg:col-span-1">
             <div className="absolute w-[50vw] h-[410px] -right-20 -top-[18rem] z-10 overflow-hidden">
               <Image
-                src="https://d2prwyp3rwi40.cloudfront.net/global/Mascot+-+M%E1%BA%B7t+tr%C6%B0%E1%BB%9Bc.svg"
+                src="https://d2uq10394z5icp.cloudfront.net/global/Mascot+-+M%E1%BA%B7t+tr%C6%B0%E1%BB%9Bc.svg"
                 alt="Bear Mascot Illustration"
                 width={600}
                 height={600}

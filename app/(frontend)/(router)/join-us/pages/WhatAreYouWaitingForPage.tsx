@@ -21,7 +21,7 @@ const WhatAreYouWaitingFor = ({ id }: WhatAreYouWaitingForProps) => {
       }}
     >
       <Image
-        src="https://d2prwyp3rwi40.cloudfront.net/global/Mascot+-+M%E1%BA%B7t+tr%C6%B0%E1%BB%9Bc.svg"
+        src="https://d2uq10394z5icp.cloudfront.net/global/Mascot+-+M%E1%BA%B7t+tr%C6%B0%E1%BB%9Bc.svg"
         alt="Step 1"
         height={100}
         width={100}
@@ -87,7 +87,7 @@ const WhatAreYouWaitingFor = ({ id }: WhatAreYouWaitingForProps) => {
         transition={{ duration: 1, ease: "easeInOut" }}
       >
         <Image
-          src="https://d2prwyp3rwi40.cloudfront.net/join_us/DecorationBear.svg"
+          src="https://d2uq10394z5icp.cloudfront.net/join_us/DecorationBear.svg"
           alt="Fintech Bear"
           width={300}
           height={300}
