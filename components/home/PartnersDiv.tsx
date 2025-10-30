@@ -348,7 +348,7 @@ export default function PartnersDiv({
       </div>
       <div
         className="bg-[linear-gradient(90deg,_#C9D6EA_10px,_#FFEFCA)] 
-                   h-fit w-full md:h-[90vh] rounded-[2vw] p-[1vw]"
+                   h-fit w-full md:h-[90vh] md:rounded-[2vw] max-md:rounded-t-[2vw] p-[1vw]"
       >
         <div className="w-full h-full rounded-[1vw] bg-white flex justify-center pb-4">
           <div

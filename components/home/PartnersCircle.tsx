@@ -28,7 +28,7 @@ export default function PartnersCircle({
   // --- MOBILE RENDER ---
   if (isMobile) {
     return (
-      <div className="relative w-full h-auto mt-4 mb-4 flex flex-row justify-between items-center gap-2 px-4 md:hidden">
+      <div className="relative w-full h-auto mb-4 flex flex-row justify-between items-start gap-2 px-4 md:hidden">
         {/* Map over the STATIC initialItems array */}
         {mobileItems.map((item, index) => (
           <div
@@ -39,7 +39,7 @@ export default function PartnersCircle({
               }
             }}
             className={clsx(
-              "flex justify-center items-center text-white bg-center bg-no-repeat bg-contain rounded-full transition-all duration-300 ease-in-out",
+              "flex justify-center items-center text-white bg-center bg-no-repeat bg-contain rounded-b-3xl transition-all duration-300 ease-in-out",
               item.bg,
               // Check active state based on ID, not index
               item.id === activeItemId
