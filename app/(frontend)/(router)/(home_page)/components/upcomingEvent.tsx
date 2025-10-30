@@ -477,7 +477,7 @@ export default function UpcomingEvent() {
         </p>
         {/* Stars */}
         <div
-          className="absolute -top-3 md:-top-8 left-2 h-[3vh] md:h-[5vh] aspect-square bg-center bg-no-repeat bg-contain"
+          className="absolute -top-5 md:-top-8 left-2 h-[3vh] md:h-[5vh] aspect-square bg-center bg-no-repeat bg-contain"
           style={{
             backgroundImage:
               "url(https://d2uq10394z5icp.cloudfront.net/home/assets/YellowStar.svg)",

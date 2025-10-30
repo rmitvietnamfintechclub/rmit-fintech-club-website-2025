@@ -19,7 +19,7 @@ const PuzzleItem: React.FC<PuzzleItemProps> = ({
 	return (
 		<div
 			className={clsx(
-				"w-24 h-48 z-10 md:right-[100%] md:top-24 md:rotate-0",
+				"w-16 md:w-24 h-[12.5rem] md:h-48 z-10 md:right-[100%] md:top-24 md:rotate-0",
 				bgColor,
 				borderRadius,
 				shadowPosition,

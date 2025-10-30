@@ -1,8 +1,8 @@
 import Image from "next/image";
 import { fontSans } from "@/config/fonts";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import useEmblaCarousel from "embla-carousel-react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 
 const historyData = [
   {
@@ -49,35 +49,77 @@ const historyData = [
   },
 ];
 
+const slideVariants = {
+  enter: (direction: number) => ({
+    x: direction > 0 ? 100 : -100,
+    opacity: 0,
+  }),
+  center: { zIndex: 1, x: 0, opacity: 1 },
+  exit: (direction: number) => ({
+    zIndex: 0,
+    x: direction < 0 ? 100 : -100,
+    opacity: 0,
+  }),
+};
+
 export default function HistorySection() {
   const [emblaHorizontalRef, emblaHorizontalApi] = useEmblaCarousel({
     loop: false,
     dragFree: true,
+    align: "center",
   });
 
   const [centerSlideIndex, setCenterSlideIndex] = useState<number>(0);
+  const prevIndexRef = useRef(centerSlideIndex);
+  const [direction, setDirection] = useState(0);
 
   useEffect(() => {
-    if (emblaHorizontalApi) {
-      const onSelect = () => {
-        const selectedIndex = emblaHorizontalApi.selectedScrollSnap();
-        setCenterSlideIndex(selectedIndex);
-      };
+    const newDirection =
+      centerSlideIndex > prevIndexRef.current
+        ? 1
+        : centerSlideIndex < prevIndexRef.current
+        ? -1
+        : 0;
+    setDirection(newDirection);
+    prevIndexRef.current = centerSlideIndex;
+  }, [centerSlideIndex]);
 
-      emblaHorizontalApi.on("select", onSelect);
-      return () => {
-        emblaHorizontalApi.off("select", onSelect);
-      };
-    }
+  // --- EMBLA SYNC LOGIC ---
+
+  // 1. Sync Carousel SWIPING to our React state
+  const onSelect = useCallback(() => {
+    if (!emblaHorizontalApi) return;
+    const selectedIndex = emblaHorizontalApi.selectedScrollSnap();
+    setCenterSlideIndex(selectedIndex);
   }, [emblaHorizontalApi]);
 
+  useEffect(() => {
+    if (!emblaHorizontalApi) return;
+    emblaHorizontalApi.on("select", onSelect);
+    return () => {
+      emblaHorizontalApi.off("select", onSelect);
+    };
+  }, [emblaHorizontalApi, onSelect]);
+
+  // 2. Sync React state TO the carousel
+  useEffect(() => {
+    if (emblaHorizontalApi) {
+      emblaHorizontalApi.scrollTo(centerSlideIndex);
+    }
+  }, [emblaHorizontalApi, centerSlideIndex]);
+
+  const handleYearClick = (index: number) => {
+    setCenterSlideIndex(index);
+  };
+
   return (
-    <section className="bg-[#F9FAFB] w-full px-6 pt-[1.5rem] pb-[2.5rem] text-center">
+    <section className="bg-[#F9FAFB] w-full px-4 md:px-6 pt-[1.5rem] pb-8 md:pb-[10rem] text-center overflow-hidden">
       <div className="relative w-full">
+        {/* --- DECORATIONS --- */}
         <Image
           src="https://d2uq10394z5icp.cloudfront.net/global/Mascot+-+M%E1%BA%B7t+tr%C6%B0%E1%BB%9Bc.svg"
           alt="Bear mascot"
-          className="absolute w-[368px] left-[-8rem] top-[23rem] rotate-[50deg] z-30"
+          className="hidden md:block absolute w-[368px] left-[-8.5rem] top-[22rem] rotate-[50deg] z-30"
           width={400}
           height={400}
           loading="lazy"
@@ -85,114 +127,256 @@ export default function HistorySection() {
         <Image
           src="https://d2uq10394z5icp.cloudfront.net/global/Mascot+-+M%E1%BA%B7t+tr%C6%B0%E1%BB%9Bc.svg"
           alt="Bear mascot"
-          className="absolute w-[368px] top-[23rem] right-[-8rem] rotate-[-50deg] z-30"
+          className="hidden md:block absolute w-[368px] top-[23rem] right-[-8rem] rotate-[-50deg] z-30"
           width={400}
           height={400}
           loading="lazy"
         />
-        <div className="absolute top-[4rem] left-[2rem] w-[1rem] h-[1rem] bg-[#2C305F] rounded-full z-10"></div>
-        <div className="absolute top-[4rem] right-[2rem] w-[1rem] h-[1rem] bg-[#2C305F] rounded-full z-10"></div>
-        <div className="absolute top-[4.35rem] left-[2.2rem] w-[12rem] h-[0.25rem] bg-[#2C305F] z-10"></div>
-        <div className="absolute top-[4.35rem] right-[2.2rem] w-[12rem] h-[0.25rem] bg-[#2C305F] z-10"></div>
+        <div className="hidden md:block absolute top-[4rem] left-[2rem] w-[1rem] h-[1rem] bg-[#2C305F] rounded-full z-10"></div>
+        <div className="hidden md:block absolute top-[4rem] right-[2rem] w-[1rem] h-[1rem] bg-[#2C305F] rounded-full z-10"></div>
+        <div className="hidden md:block absolute top-[4.35rem] left-[2.2rem] w-[12rem] h-[0.25rem] bg-[#2C305F] z-10"></div>
+        <div className="hidden md:block absolute top-[4.35rem] right-[2.2rem] w-[12rem] h-[0.25rem] bg-[#2C305F] z-10"></div>
 
-        <div className="absolute bottom-[-4rem] left-[6rem] w-[4.3rem] h-[4.3rem] bg-[#2C305F] rounded-full z-10"></div>
-        <div className="absolute bottom-[-2.6rem] left-[3rem] w-[4.3rem] h-[4.3rem] bg-[#C9D6EA] rounded-full z-20"></div>
-        <div className="absolute bottom-[2.6rem] left-[1.5rem] w-[4.3rem] h-[4.3rem] bg-[#DBB968] rounded-full z-10"></div>
-        <div className="absolute bottom-[2.6rem] left-[9.5rem] w-[4.3rem] h-[4.3rem] bg-[#2C305F] rounded-full z-10"></div>
-        <div className="absolute bottom-[9rem] left-[4rem] w-[1rem] h-[1rem] bg-[#DBB968] rounded-full z-10"></div>
-        <div className="absolute bottom-[6rem] left-[15rem] w-[1rem] h-[1rem] bg-[#2C305F] rounded-full z-10"></div>
+        <Image
+          src="/Right_History_Decoration.svg"
+          alt="Right History Decoration"
+          className="hidden md:block absolute bottom-[-12rem] -right-[2rem] w-[25vw] h-auto z-10"
+          width={70}
+          height={70}
+          loading="lazy"
+        />
+        <Image
+          src="/Left_History_Decoration.svg"
+          alt="Left History Decoration"
+          className="hidden md:block absolute bottom-[-10rem] left-0 w-[19vw] h-auto z-10"
+          width={70}
+          height={70}
+          loading="lazy"
+        />
 
-        <div className="absolute bottom-[-4rem] right-[6rem] w-[4.3rem] h-[4.3rem] bg-[#2C305F] rounded-full z-10"></div>
-        <div className="absolute bottom-[-2.6rem] right-[3rem] w-[4.3rem] h-[4.3rem] bg-[#C9D6EA] rounded-full z-20"></div>
-        <div className="absolute bottom-[2.6rem] right-[1.5rem] w-[4.3rem] h-[4.3rem] bg-[#DBB968] rounded-full z-10"></div>
-        <div className="absolute bottom-[2.6rem] right-[9.5rem] w-[4.3rem] h-[4.3rem] bg-[#2C305F] rounded-full z-10"></div>
-        <div className="absolute bottom-[9rem] right-[4rem] w-[1rem] h-[1rem] bg-[#DBB968] rounded-full z-10"></div>
-        <div className="absolute bottom-[6rem] right-[15rem] w-[1rem] h-[1rem] bg-[#2C305F] rounded-full z-10"></div>
-
-        {/* Header */}
-        <div>
+        {/* --- HEADER --- */}
+        <div className="relative z-40">
           <h5
-            className={`text-[1.5rem] text-[#2C305F] font-semibold ${fontSans.style}`}
+            className={`
+                text-lg md:text-[1.5rem] text-[#2C305F] font-semibold 
+                ${fontSans.style}
+              `}
           >
             BACK TO TIME
           </h5>
-          <h3 className={`leading-[3rem] text-[3rem] font-bold mt-2`}>
+          <h3
+            className={`
+                leading-snug md:leading-[3rem] text-[1.55rem] md:text-[3rem] font-bold md:mt-2
+              `}
+          >
             <span className="text-[#2C305F]">Discover the </span>
             <span className="text-[#DCB968]">FINTECH CLUB </span>
           </h3>
-          <h3 className="leading-[3rem] text-[3rem] font-bold mt-4 text-[#97ABD6]">
+          <h3
+            className={`
+                leading-snug md:leading-[3rem] text-[1.55rem] md:text-[3rem] font-bold mt-2 md:mt-4 text-[#97ABD6]
+              `}
+          >
             Story & History
           </h3>
         </div>
 
-        {/* YEAR SECTION */}
-        <div className="flex justify-center items-center gap-[4rem] my-[3.5rem]">
-          {/* Always render 2 before */}
-          {[centerSlideIndex - 2, centerSlideIndex - 1].map((i) =>
-            i < 0 ? (
-              <div key={i} className="w-24 h-24 md:w-28 md:h-28" />
-            ) : (
-              <div
-                key={i}
-                className="flex items-center justify-center bg-[#FBDC83] w-24 h-24 md:w-28 md:h-28 rounded-full cursor-pointer"
-                onClick={() => setCenterSlideIndex(i)}
-              >
-                <span
-                  className={`text-2xl  font-bold text-[#262857] ${fontSans.style}`}
-                >
-                  {historyData[i].year}
-                </span>
-              </div>
-            )
-          )}
+        {/* --- YEAR SECTION --- */}
+        <div className="my-4 md:my-[3.5rem] z-40 relative">
+          {/* 1. DESKTOP VERSION (Animated) */}
+          <div className="hidden md:flex justify-center items-center h-48 relative">
+            {historyData.map((item, index) => {
+              const position = index - centerSlideIndex;
 
-          {/* Center year bubble */}
-          <div className="flex items-center justify-center bg-[#262857] w-44 h-44 md:w-48 md:h-48 rounded-full">
-            <span
-              className={`text-4xl text-[#FBDC83] font-bold ${fontSans.style}`}
-            >
-              {historyData[centerSlideIndex].year}
-            </span>
+              // 1. Define Animation Properties
+              let x = "0rem";
+              let scale = 1;
+              let zIndex = 0;
+              let opacity = 0;
+
+              if (position === 0) {
+                // Center
+                zIndex = 3;
+                opacity = 1;
+                scale = 1;
+                x = "0rem";
+              } else if (position === -1) {
+                // Left 1
+                zIndex = 2;
+                opacity = 1;
+                scale = 7 / 12;
+                x = "-13.5rem";
+              } else if (position === 1) {
+                // Right 1
+                zIndex = 2;
+                opacity = 1;
+                scale = 7 / 12;
+                x = "13.5rem";
+              } else if (position === -2) {
+                // Left 2
+                zIndex = 1;
+                opacity = 1;
+                scale = 7 / 12;
+                x = "-24.5rem";
+              } else if (position === 2) {
+                // Right 2
+                zIndex = 1;
+                opacity = 1;
+                scale = 7 / 12;
+                x = "24.5rem";
+              } else if (position < -2) {
+                // Far Left (hidden)
+                zIndex = 0;
+                opacity = 0;
+                scale = 0.3;
+                x = "-32rem";
+              } else if (position > 2) {
+                // Far Right (hidden)
+                zIndex = 0;
+                opacity = 0;
+                scale = 0.3;
+                x = "32rem";
+              }
+
+              // 2. Define Style Properties
+              const isCenter = position === 0;
+
+              return (
+                <motion.div
+                  key={item.year}
+                  className={`
+                        absolute w-48 h-48 rounded-full cursor-pointer 
+                        flex items-center justify-center
+                        transition-colors duration-300
+                        ${
+                          isCenter
+                            ? "bg-[#262857]" // Center color
+                            : "bg-[#FBDC83]" // Side color
+                        }
+                      `}
+                  animate={{ x, scale, zIndex, opacity }}
+                  transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                  onClick={() => handleYearClick(index)}
+                >
+                  <span
+                    className={`
+                          font-bold ${fontSans.style}
+                          transition-all duration-300
+                          ${
+                            isCenter
+                              ? "text-4xl text-[#FBDC83]" // Center text
+                              : "text-3xl text-[#262857]" // Side text
+                          }
+                        `}
+                  >
+                    {item.year}
+                  </span>
+                </motion.div>
+              );
+            })}
           </div>
 
-          {/* Always render 2 after */}
-          {[centerSlideIndex + 1, centerSlideIndex + 2].map((i) =>
-            i >= historyData.length ? (
-              <div key={i} className="w-24 h-24 md:w-28 md:h-28" />
-            ) : (
-              <div
-                key={i}
-                className="flex items-center justify-center bg-[#FBDC83] w-24 h-24 md:w-28 md:h-28 rounded-full cursor-pointer"
-                onClick={() => setCenterSlideIndex(i)}
-              >
-                <span
-                  className={`text-2xl font-bold text-[#262857] ${fontSans.style}`}
-                >
-                  {historyData[i].year}
-                </span>
-              </div>
-            )
-          )}
+          {/* 2. MOBILE VERSION: (Carousel, hidden on desktop) */}
+          <div
+            className="md:hidden w-full overflow-hidden"
+            ref={emblaHorizontalRef}
+          >
+            {/* Thay đổi ở đây */}
+            <div className="flex">
+              {/* 1. Thêm một slide đệm ở ĐẦU */}
+              <div className="flex-[0_0_33.3%] min-w-0" />
+
+              {/* 2. Map qua các slide thật của bạn */}
+              {historyData.map((item, index) => {
+                const position = index - centerSlideIndex;
+                const isCenter = position === 0;
+
+                return (
+                  <div
+                    key={item.year}
+                    className="flex-[0_0_33.3%] min-w-0 pl-3 pr-3"
+                    onClick={() => handleYearClick(index)}
+                  >
+                    <div
+                      className={`
+                            flex items-center justify-center w-full rounded-full cursor-pointer 
+                            transition-all duration-300 ease-out
+                            ${
+                              isCenter
+                                ? "bg-[#262857] h-28" 
+                                : "bg-[#FBDC83] h-24" 
+                            }
+                          `}
+                      style={{ aspectRatio: "1" }}
+                    >
+                      <span
+                        className={`
+                            font-bold transition-all duration-300 ${
+                              fontSans.style
+                            }
+                            ${
+                              isCenter
+                                ? "text-2xl text-[#FBDC83]"
+                                : "text-xl text-[#262857]"
+                            }
+                          `}
+                      >
+                        {item.year}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
+
+              <div className="flex-[0_0_33.3%] min-w-0" />
+            </div>
+          </div>
         </div>
 
-        {/* Content Section */}
+        {/* --- CONTENT SECTION --- */}
         <motion.div
-          key={centerSlideIndex}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-          className="max-w-3xl mx-auto px-[3rem] pb-[2rem]"
+          layout
+          transition={{
+            type: "spring",
+            stiffness: 300,
+            damping: 30,
+            duration: 0.3,
+          }}
+          className="relative max-w-3xl mx-auto md:h-[320px] z-40"
         >
-          <h4
-            className={`text-4xl font-semibold text-[#97ABD6] mb-4 ${fontSans.style}`}
-          >
-            {historyData[centerSlideIndex].title}
-          </h4>
-          <p
-            className={`text-justify text-[#000000] text-lg px-[3rem] ${fontSans.style}`}
-          >
-            {historyData[centerSlideIndex].content}
-          </p>
+          <AnimatePresence initial={false} custom={direction} mode="wait">
+            <motion.div
+              key={centerSlideIndex}
+              custom={direction}
+              variants={slideVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{
+                x: { type: "spring", stiffness: 300, damping: 30 },
+                opacity: { duration: 0.2 },
+              }}
+              className="w-full px-0 md:px-[3rem]
+                         md:absolute md:top-0 md:left-0"
+            >
+              <h4
+                className={`
+                    text-[1.55rem] md:text-4xl font-semibold text-[#97ABD6] mb-4 
+                    ${fontSans.style}
+                  `}
+              >
+                {historyData[centerSlideIndex].title}
+              </h4>
+              <p
+                className={`
+                    text-base md:text-lg text-justify text-[#000000] 
+                    px-0 md:px-[3rem] ${fontSans.style}
+                  `}
+              >
+                {historyData[centerSlideIndex].content}
+              </p>
+            </motion.div>
+          </AnimatePresence>
         </motion.div>
       </div>
     </section>
