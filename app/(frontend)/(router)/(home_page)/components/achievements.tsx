@@ -69,7 +69,7 @@ const Achievements = () => {
       <div className="absolute bottom-[34rem] right-[6rem] w-[2rem] h-[2rem] bg-[#97ABD6] rounded-full z-10 hidden md:block"></div>
 
       <div className="px-4 md:pl-[7rem] md:px-0">
-        <div className="text-[1.85rem] md:text-[2.5rem] max-md:relative max-md:text-center font-bold text-[#2C305F] [text-shadow:_0_3px_4px_rgba(0,0,0,0.5)]">
+        <div className="text-[1.875rem] md:text-[3rem] max-md:relative max-md:text-center font-bold text-[#2C305F] drop-shadow-[0_4px_4px_rgba(255,204,102,0.6)]">
           Our Achievement
           <Image
             src="/Achievement_Decoration.svg"

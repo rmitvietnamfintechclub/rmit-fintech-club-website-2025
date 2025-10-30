@@ -12,7 +12,7 @@ const IntroSection = () => {
 
   return (
     <section className="content flex flex-col bg-[#F9FAFB] md:flex-row items-center md:gap-6 w-full p-4 md:p-14">
-      <div className="block md:hidden mx-auto text-[#2C305F] max-md:text-3xl md:text-[1.5rem] font-bold max-md:mx-auto">Our Key Metrics</div>
+      <div className="block md:hidden mx-auto text-[#2C305F] max-md:text-3xl md:text-[1.5rem] font-bold max-md:mx-auto drop-shadow-[0_4px_4px_rgba(255,204,102,0.6)]">Our Key Metrics</div>
       {/* Left text */}
       <div
         ref={ref}

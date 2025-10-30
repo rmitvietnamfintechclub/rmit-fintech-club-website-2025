@@ -92,7 +92,7 @@ const HeroSection = () => {
             />
           </div>
           <div className="mt-4 flex flex-col justify-center w-full">
-            <p className="text-[#2C305F] max-md:text-3xl md:text-[1.5rem] font-bold max-md:mx-auto max-md:my-2">
+            <p className="text-[#2C305F] max-md:text-3xl md:text-[1.5rem] font-bold max-md:mx-auto max-md:my-2 max-md:drop-shadow-[0_4px_4px_rgba(255,204,102,0.6)]">
               Our Core Activities
             </p>
             <div className="flex flex-row mt-2 justify-between items-center max-md:gap-4">

@@ -332,7 +332,7 @@ export default function PartnersDiv({
   return (
     <div className="content md:flex md:flex-col md:items-end max-md:px-4 md:pr-20 md:pl-[21vw] md:-mt-20 md:ml-auto w-full">
       <div
-        className="max-md relative mb-10 md:mb-[0.5rem] text-[#0D1742] text-[1.85rem] md:text-[3.75rem] !font-extrabold drop-shadow-[0_4px_4px_rgba(255,204,102,0.6)]
+        className="relative mb-10 md:mb-[0.5rem] text-[#0D1742] text-[1.875rem] md:text-[3.5rem] !font-bold drop-shadow-[0_4px_4px_rgba(255,204,102,0.6)]
                    text-center md:text-left md:ml-[1.5rem] md:self-start"
         aria-label="Our Partners"
       >
