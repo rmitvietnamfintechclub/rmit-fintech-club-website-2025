@@ -475,30 +475,30 @@ export default function UpcomingEvent() {
         <p className="text-3xl md:text-[4vw] text-[#2C305F] drop-shadow-[0_4px_4px_rgba(255,204,102,0.6)] font-bold text-center">
           Upcoming Events
         </p>
-        {/* Stars (hidden on mobile) */}
+        {/* Stars */}
         <div
-          className="absolute -top-4 md:-top-8 left-2 h-[3vh] md:h-[5vh] aspect-square bg-center bg-no-repeat bg-contain"
+          className="absolute -top-3 md:-top-8 left-2 h-[3vh] md:h-[5vh] aspect-square bg-center bg-no-repeat bg-contain"
           style={{
             backgroundImage:
               "url(https://d2uq10394z5icp.cloudfront.net/home/assets/YellowStar.svg)",
           }}
         />
         <div
-          className="absolute -top-4 md:-top-8 left-[-8vh] md:left-[-13vh] h-[7vh] md:h-[12vh] aspect-square bg-center bg-no-repeat bg-contain"
+          className="absolute -top-4 md:-top-8 left-[-7.5vh] md:left-[-13vh] h-[7vh] md:h-[12vh] aspect-square bg-center bg-no-repeat bg-contain"
           style={{
             backgroundImage:
               "url(https://d2uq10394z5icp.cloudfront.net/home/assets/YellowStar.svg)",
           }}
         />
         <div
-          className="absolute top-0 md:-top-4 -right-8 md:right-[-11.5vh] h-[5vh] md:h-[10vh] aspect-square bg-center bg-no-repeat bg-contain"
+          className="absolute -top-2 md:-top-4 -right-10 md:right-[-11.5vh] h-[5vh] md:h-[10vh] aspect-square bg-center bg-no-repeat bg-contain"
           style={{
             backgroundImage:
               "url(https://d2uq10394z5icp.cloudfront.net/home/assets/YellowStar.svg)",
           }}
         />
         <div
-          className="absolute top-8 md:top-10 right-[-2vw] md:right-[-1vw] h-[3vh] md:h-[5vh] aspect-square bg-center bg-no-repeat bg-contain"
+          className="absolute top-8 md:top-10 right-[-3vw] md:right-[-1vw] h-[3vh] md:h-[5vh] aspect-square bg-center bg-no-repeat bg-contain"
           style={{
             backgroundImage:
               "url(https://d2uq10394z5icp.cloudfront.net/home/assets/YellowStar.svg)",
