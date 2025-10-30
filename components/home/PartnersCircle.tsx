@@ -39,8 +39,7 @@ export default function PartnersCircle({
               }
             }}
             className={clsx(
-              "flex justify-center items-center text-white bg-center bg-no-repeat bg-contain rounded-b-3xl transition-all duration-300 ease-in-out",
-              item.bg,
+              "flex justify-center items-center text-white bg-center bg-no-repeat bg-contain rounded-b-3xl transition-all duration-300 ease-in-out bg-bluePrimary",
               // Check active state based on ID, not index
               item.id === activeItemId
                 ? "w-20 h-20"
