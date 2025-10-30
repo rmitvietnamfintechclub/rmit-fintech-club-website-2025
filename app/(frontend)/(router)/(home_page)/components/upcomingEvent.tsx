@@ -191,7 +191,7 @@ export default function UpcomingEvent() {
 
     return (
       <>
-        <div className="h-[85vh] w-full relative">
+        <div className="h-[85vh] w-full relative mt-4">
           {visible.map((ev, index) => {
             const { day, month } = formatEventDate(ev.date);
             return (

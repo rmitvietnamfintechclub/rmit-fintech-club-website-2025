@@ -57,7 +57,7 @@ const Department = () => {
 
   return (
     <div className="relative w-screen h-[50rem] flex flex-row">
-      <div className="absolute w-[14rem] h-auto right-0 -top-12 z-30 hidden md:block">
+      <div className="absolute w-[14rem] h-auto right-3 -top-[13rem] z-30 hidden md:block">
         <Image
           src="/Department_Decoration.svg"
           alt="Department Decoration"

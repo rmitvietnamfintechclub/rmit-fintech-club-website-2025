@@ -360,7 +360,7 @@ export default function PartnersDiv({
             <DecorativeSVG className="hidden md:block absolute z-30 left-[1rem] top-[1rem] rotate-[-5deg] w-[30px] h-[30px]" />
             <DecorativeSVG className="hidden md:block absolute z-30 bottom-0 left-[1rem] rotate-[-5deg] w-[30px] h-[30px]" />
             <DecorativeSVG className="hidden md:block absolute z-30 right-[1rem] top-[1rem] rotate-[-5deg] w-[30px] h-[30px]" />
-            <DecorativeSVG className="hidden md:block absolute z-30 bottom-0 right-[1rem] rotate-[-5deg] w-[30px] h-[30px]" />
+            {/* <DecorativeSVG className="hidden md:block absolute z-30 bottom-0 right-[1rem] rotate-[-5deg] w-[30px] h-[30px]" /> */}
 
             {/* Title with smaller text on mobile */}
             <h6
