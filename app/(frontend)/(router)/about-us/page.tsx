@@ -1,7 +1,7 @@
 "use client";
 import ExecuteBoard from "./components/execute-board/executeBoard";
 import ManagementBoard from "./components/execute-board/managementBoard";
-import III from "./components/III/III";
+import III from "./components/III";
 import HistorySection from "./components/history";
 import FinTechInTheEyes from "./components/inTheEyes";
 import { ClubMentors } from "./components/mentors";

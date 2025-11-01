@@ -51,7 +51,7 @@ export default function CountdownPage() {
           COUNT DOWN TO FORM CLOSED
         </h1>
         <div className={`${isShortHeight ? "mb-8" : ""}`}>
-          <Countdown date={new Date("2025-10-31T23:59:00")} />
+          <Countdown date={new Date("2025-11-10T23:59:00")} />
         </div>
 
         {/*  change svg here nhe  */}
