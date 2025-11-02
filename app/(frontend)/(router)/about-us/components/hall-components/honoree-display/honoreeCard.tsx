@@ -15,11 +15,9 @@ export default function HonoreeCard({
     <div
       className={clsx(
         "inline-block bg-[#DBB968] p-1 m-1 rounded-[40px]",
-        "xl:h-64 lg:h-60 md:h-56 h-52",
         {
-          // Điều kiện cho chiều rộng của thẻ
-          "xl:w-[27rem] lg:w-[23rem] md:w-[21rem] w-[19rem]": isBestDepartment, // Rộng hơn cho Best Department
-          "xl:w-64 lg:w-60 md:w-56 w-52": !isBestDepartment, // Chiều rộng mặc định
+          "md:h-[17.75rem] h-52 md:w-[29rem] w-[22rem]": isBestDepartment, 
+          "md:h-64 h-60 md:w-64 w-60": !isBestDepartment,
         }
       )}
     >
@@ -40,13 +38,13 @@ export default function HonoreeCard({
         <div
           className={clsx(
             "absolute rounded-[30px] overflow-hidden",
-            "lg:-translate-y-14 md:-translate-y-12 sm:-translate-y-10 -translate-y-8",
-            "lg:-translate-x-3 md:-translate-x-3 sm:-translate-x-1 -translate-x-3",
-            "xl:h-16 lg:h-14 md:h-12 h-10", // Giữ chiều cao của overlay
+            "md:-translate-y-14 -translate-y-12",
+            "-translate-x-3",
+            "md:h-16 h-14", // Giữ chiều cao của overlay
             {
               // Điều kiện cho chiều rộng của overlay text
-              "xl:w-[26rem] lg:w-[22rem] md:w-[20rem] w-[18rem]": isBestDepartment,
-              "xl:w-60 lg:w-56 md:w-52 w-48": !isBestDepartment,
+              "md:w-[28rem] w-[21rem]": isBestDepartment,
+              "md:w-60 w-56": !isBestDepartment,
             }
           )}
         >

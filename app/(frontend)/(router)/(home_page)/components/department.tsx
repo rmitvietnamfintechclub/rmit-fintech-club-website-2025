@@ -27,7 +27,7 @@ const departments: Record<DepartmentId, DepartmentInfo> = {
     description:
       "The Technology Department is an innovation hub for tech enthusiasts, fostering both technical expertise and cutting-edge Fintech innovation through development sprints, collaborative workshops, and industry partnerships. This semester, we’re working on three exciting projects: a blockchain-powered History Chess Game blending strategy with Vietnamese history, a peer-to-peer learning hub for mastering foundational Data Structures and Algorithms, and an immersive bootcamp where members learn web development fundamentals.",
     background:
-      "https://d2uq10394z5icp.cloudfront.net/home/department-mascot/Technology.png",
+      "https://d2uq10394z5icp.cloudfront.net/home/department-mascot/Technology_Mascot.png",
   },
   Business: {
     id: "Business",
@@ -36,7 +36,7 @@ const departments: Record<DepartmentId, DepartmentInfo> = {
     description:
       "The Business Department is a dynamic space for curious minds to grow through peer-to-peer learning, hands-on projects, and industry connections, fostering academic excellence and real-world Fintech experience. This semester, members are gaining a professional edge by diving into investment fundamentals with FPT Securities in the Breaking the Curve Workshop, mastering market-aware content creation by producing the bi-weekly FinTech Spotlight series, and thinking like analysts in our new CFA Learning Hub.",
     background:
-      "https://d2uq10394z5icp.cloudfront.net/home/department-mascot/Business.png",
+      "https://d2uq10394z5icp.cloudfront.net/home/department-mascot/Business_Mascot.png",
   },
   Marketing: {
     id: "Marketing",
@@ -45,7 +45,7 @@ const departments: Record<DepartmentId, DepartmentInfo> = {
     description:
       "The Marketing Department is a creative hub for orchestrating campaigns and internal skill trainings, fostering both marketing expertise and an engaged Fintech community. This semester, we are elevating our brand's voice by producing a cinematic Short Film, an original FTC Music Video, and a story-driven Photoshoot Series. Members will master the full content lifecycle — from strategy and trend-spotting for our TikTok and Instagram platforms to professional production and digital analytics — all while building a vibrant online community and a professional creative portfolio.",
     background:
-      "https://d2uq10394z5icp.cloudfront.net/home/department-mascot/Marketing.png",
+      "https://d2uq10394z5icp.cloudfront.net/home/department-mascot/Marketing_Mascot.png",
   },
   HumanResources: {
     id: "HumanResources",
@@ -54,7 +54,7 @@ const departments: Record<DepartmentId, DepartmentInfo> = {
     description:
       "The Human Resources Department plays a pivotal role in shaping the FinTech Club’s culture, managing all internal bonding projects, and fostering a welcoming and supportive home for every member. This semester, we're building community by organizing our high-energy FinTech Olympic sports event, hosting the annual Secret Santa celebration, and exploring the potential for an unforgettable End of Semester Trip.",
     background:
-      "https://d2uq10394z5icp.cloudfront.net/home/department-mascot/Human+Resources.png",
+      "https://d2uq10394z5icp.cloudfront.net/home/department-mascot/HR_Mascot.png",
   },
 };
 

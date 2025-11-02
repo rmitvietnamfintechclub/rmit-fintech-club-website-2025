@@ -107,7 +107,7 @@ function ExecutiveBoardCard({
             />
           </div>
         </CardHeader>
-        <CardBody className="relative z-10 overflow-visible pb-2 max-md:px-6 md:pl-3 md:pr-2 pt-4 bg-[#F7D27F] rounded-t-3xl">
+        <CardBody className="relative z-10 overflow-visible pb-2 max-md:px-5 md:pl-3 md:pr-2 pt-4 bg-[#F7D27F] rounded-t-3xl">
           <div className="flex justify-between items-start space-x-2">
             <div className="flex-1">
               <h6 className="leading-6 font-semibold text-xl md:text-[0.9rem] text-[#2C305F]">

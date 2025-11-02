@@ -48,10 +48,10 @@ const DecorativeElements = () => (
  */
 const PageHeader = () => (
   <div className="content grid text-right">
-    <h2 className="leading-tight text-[#5E5E92] !text-[1.75rem] md:text-4xl font-bold">
+    <h2 className="leading-tight text-[#5E5E92] !text-[1.75rem] md:!text-5xl font-bold">
       Meet Our
     </h2>
-    <h1 className="leading-tight text-[#DCB968] !text-[2.05rem] md:text-7xl font-bold">
+    <h1 className="leading-tight text-[#DCB968] !text-[2.05rem] md:!text-6xl md:mt-1 font-bold">
       Management Board
     </h1>
     <p className="leading-8 w-full text-[#000000] text-[0.95rem] md:text-lg mt-2">
@@ -121,7 +121,7 @@ function ManagementBoardCard({
           </div>
         </CardHeader>
         {/* Responsive padding and text */}
-        <CardBody className="relative z-10 overflow-visible pb-2 max-md:px-6 md:pl-3 md:pr-2 pt-4 bg-[#F7D27F] rounded-t-3xl">
+        <CardBody className="relative z-10 overflow-visible pb-2 max-md:px-5 md:pl-3 md:pr-2 pt-4 bg-[#F7D27F] rounded-t-3xl">
           <div className="flex justify-between items-start space-x-2">
             <div className="flex-1">
               {/* Responsive text sizes */}
@@ -205,7 +205,7 @@ const ManagementBoard = () => {
   // Loading state
   if (loading) {
     return (
-      <section className="relative max-md:pb-16 md:py-24 min-h-screen px-6 md:px-20">
+      <section className="relative max-md:pb-0 md:py-24 min-h-screen px-6 md:px-20">
         <DecorativeElements />
         {/* Responsive padding */}
         <main className="mx-6 md:mx-16 2xl:mx-[10rem]">
@@ -222,7 +222,7 @@ const ManagementBoard = () => {
   }
 
   return (
-    <section className="relative max-md:pb-16 md:py-24 px-6 md:px-20">
+    <section className="relative max-md:pb-0 md:py-24 px-6 md:px-20">
       <DecorativeElements />
       {/* Responsive padding */}
       <main>
