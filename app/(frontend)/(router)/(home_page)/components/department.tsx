@@ -224,18 +224,18 @@ const Department = () => {
 
           {/* Department Name */}
           <p
-            className={`font-bold md:mt-4 mt-6 text-[#5E5E92] text-wrap md:text-5xl text-2xl md:leading-tight md:text-start text-center`}
+            className={`font-bold md:mt-0 mt-6 text-[#5E5E92] text-wrap md:text-5xl text-2xl md:leading-tight md:text-start text-center`}
           >
             {activeDepartment.name}
           </p>
 
           {/* Department Description */}
-          <p className="mt-4 text-base text-justify max-md:text-justify font-normal md:pr-6">
+          <p className="max-md:mt-4 text-base text-justify max-md:text-justify font-normal md:pr-6">
             {activeDepartment.description}
           </p>
 
           {/* Explore Button */}
-          <Button className="text-[#F0EDFF] bg-[#5E5E92] rounded-xl w-fit px-6 py-2 mt-4 font-semibold drop-shadow-lg text-[1rem]">
+          <Button className="text-[#F0EDFF] bg-[#5E5E92] rounded-xl w-fit px-6 py-2 max-md:mt-4 font-semibold drop-shadow-lg text-[1rem]">
             Explore more
           </Button>
 

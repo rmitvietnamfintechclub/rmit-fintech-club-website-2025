@@ -11,12 +11,10 @@ export default function CategoryCard({ category, setSelectedCategory }: Category
             inline-block
             bg-[linear-gradient(to_bottom,#C9D6EA,#DBB968)]
             p-2
-            md:m-1 max-md:m-2
+            md:m-1 max-md:my-2
             rounded-xl
-            xl:w-96
-            lg:w-72
-            md:w-56
-            w-[85vw]
+            md:w-96
+            w-[87vw]
         "
         style={{
             boxShadow: "0 3px 0 0 #2C305F" // X-offset, Y-offset, blur, spread, color

@@ -2,10 +2,13 @@
 import HonoreeCard from "./honoreeCard";
 import type { HonoreeListProps } from "../types";
 
-const categoriesWithoutAchievement = ["Community Builder", "Rookie of the Semester", "Club MVP"];
-
 export default function HonoreeList({ members }: HonoreeListProps) {
-  // Ưu tiên kiểm tra xem đây có phải là danh sách cho "Best Department" không
+  // Helper function to determine if achievement should be hidden
+  const shouldHideAchievement = (category?: string, achievement?: string): boolean => {
+    // Hide if both category and achievement exist AND they are a case-insensitive match
+    return !!(category && achievement && category.toLowerCase() === achievement.toLowerCase());
+  };
+
   const isBestDepartmentList = members.length > 0 && members[0].category === "Best Department";
 
   // Layout 2x2 cho Best Department
@@ -24,7 +27,7 @@ export default function HonoreeList({ members }: HonoreeListProps) {
               achievement={one.achievement}
               photo_url={one.photo_url}
               category={one.category}
-              hideAchievement={categoriesWithoutAchievement.includes(one.category)}
+              hideAchievement={shouldHideAchievement(one.category, one.achievement)} // <-- Updated logic
             />
           ))}
         </div>
@@ -38,7 +41,7 @@ export default function HonoreeList({ members }: HonoreeListProps) {
               achievement={one.achievement}
               photo_url={one.photo_url}
               category={one.category}
-              hideAchievement={categoriesWithoutAchievement.includes(one.category)}
+              hideAchievement={shouldHideAchievement(one.category, one.achievement)} // <-- Updated logic
             />
           ))}
         </div>
@@ -62,13 +65,13 @@ export default function HonoreeList({ members }: HonoreeListProps) {
               achievement={one.achievement}
               photo_url={one.photo_url}
               category={one.category}
-              hideAchievement={categoriesWithoutAchievement.includes(one.category)}
+              hideAchievement={shouldHideAchievement(one.category, one.achievement)}
             />
           ))}
         </div>
 
         {/* Hàng dưới (phần còn lại) */}
-        <div className="flex flex-col md:flex-row justify-center gap-4">
+        <div className="flex max-md:flex-col-reverse md:flex-row-reverse justify-center max-md:items-center gap-4">
           {bottomRowMembers.map((one, idx) => (
             <HonoreeCard
               key={one.name || idx}
@@ -76,7 +79,7 @@ export default function HonoreeList({ members }: HonoreeListProps) {
               achievement={one.achievement}
               photo_url={one.photo_url}
               category={one.category}
-              hideAchievement={categoriesWithoutAchievement.includes(one.category)}
+              hideAchievement={shouldHideAchievement(one.category, one.achievement)} 
             />
           ))}
         </div>
@@ -94,7 +97,7 @@ export default function HonoreeList({ members }: HonoreeListProps) {
           achievement={one.achievement}
           photo_url={one.photo_url}
           category={one.category}
-          hideAchievement={categoriesWithoutAchievement.includes(one.category)}
+          hideAchievement={shouldHideAchievement(one.category, one.achievement)}
         />
       ))}
     </div>

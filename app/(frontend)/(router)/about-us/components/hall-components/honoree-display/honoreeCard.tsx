@@ -11,13 +11,15 @@ export default function HonoreeCard({
   category,
 }: HonoreeCardProps) {
   const isBestDepartment = category === "Best Department";
+  const isFintechMVP = achievement?.toLowerCase() === "fintech 101 mvp";
   return (
     <div
       className={clsx(
         "inline-block bg-[#DBB968] p-1 m-1 rounded-[40px]",
         {
-          "md:h-[17.75rem] h-52 md:w-[29rem] w-[22rem]": isBestDepartment, 
-          "md:h-64 h-60 md:w-64 w-60": !isBestDepartment,
+          "md:h-[17.75rem] h-52 md:w-[29rem] w-[22rem]": isBestDepartment,
+          "md:h-[17rem] h-[11.95rem] md:w-[34rem] w-[23rem]": isFintechMVP, //For Fintech MVP
+          "md:h-[17rem] h-60 md:w-64 w-60": !isBestDepartment && !isFintechMVP, // Default if not Best Department or Fintech MVP
         }
       )}
     >
@@ -40,31 +42,32 @@ export default function HonoreeCard({
             "absolute rounded-[30px] overflow-hidden",
             "md:-translate-y-14 -translate-y-12",
             "-translate-x-3",
-            "md:h-16 h-14", // Giữ chiều cao của overlay
+            "md:h-16 h-14", // Keep overlay height consistent
             {
-              // Điều kiện cho chiều rộng của overlay text
+              // Overlay width conditions
               "md:w-[28rem] w-[21rem]": isBestDepartment,
-              "md:w-60 w-56": !isBestDepartment,
+              "md:w-[33rem] w-[22rem]": isFintechMVP, // For Fintech MVP
+              "md:w-60 w-56": !isBestDepartment && !isFintechMVP, // Default overlay width
             }
           )}
         >
           {/* Layer 1: bottom gradient */}
           <div
             className="
-                    absolute inset-0
-                    rounded-[30px]
-                    bg-[linear-gradient(to_bottom,rgba(240,237,255,0.3)_0%,rgba(13,23,66,0.9)_50%,rgba(94,94,146,0.9)_100%)]
-                    "
+                       absolute inset-0
+                       rounded-[30px]
+                       bg-[linear-gradient(to_bottom,rgba(240,237,255,0.3)_0%,rgba(13,23,66,0.9)_50%,rgba(94,94,146,0.9)_100%)]
+                       "
           ></div>
 
           {/* Layer 2: top gradient with blur */}
           <div
             className="
-                        absolute inset-0
-                        rounded-[30px]
-                        p-4
-                        flex flex-col justify-center items-center
-                    "
+                                 absolute inset-0
+                                 rounded-[30px]
+                                 p-4
+                                 flex flex-col justify-center items-center
+                                 "
             style={{
               backdropFilter: "blur(15px)",
               WebkitBackdropFilter: "blur(15px)",
