@@ -105,7 +105,7 @@ const ReelPlayer: React.FC<ReelPlayerProps> = ({
     <div className="flex flex-col items-center justify-center w-full">
       <div className="flex flex-col md:flex-row items-center md:items-start justify-center md:space-x-4">
         {/* Column 1: Video Player */}
-        <div className="relative flex-shrink-0 h-[95vh] max-h-[800px] aspect-[9/16] overflow-hidden rounded-xl shadow-2xl">
+        <div className="relative flex-shrink-0 h-[87vh] md:h-[95vh] max-h-[800px] aspect-[9/16] overflow-hidden rounded-xl shadow-2xl">
           <iframe
             src={`https://www.youtube.com/embed/${currentReel.videoId}?shorts=1&autoplay=1&rel=0`}
             title={currentReel.title}
