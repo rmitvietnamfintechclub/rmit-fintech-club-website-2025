@@ -84,7 +84,9 @@ export default function ArticleLibrary() {
           response.data.articles || response.data || [];
 
         // Use a Set to get only unique labels
-        const allLabelsFlat = allArticles.flatMap((article) => article.labels);
+        const allLabelsFlat = allArticles.flatMap(
+          (article) => article.labels
+        );
         const uniqueLabels = Array.from(new Set(allLabelsFlat)).sort();
 
         // Add "All" option to the beginning
@@ -172,14 +174,10 @@ export default function ArticleLibrary() {
 
     if (error) {
       return (
-        <div className="relative w-[87vw] h-48 mx-auto mt-4 mb-10 md:h-64 p-[4px] rounded-lg bg-gradient-to-b from-[#DCB968] to-[#F7D27F]">
+        <div className="relative w-[90vw] max-w-4xl h-48 mx-auto mt-4 mb-10 md:h-64 p-[4px] rounded-lg bg-gradient-to-b from-[#DCB968] to-[#F7D27F]">
           <div className="flex flex-col items-center justify-center w-full h-full bg-[#F9FAFB] rounded-[7px] text-center px-4">
-            <p className="text-5xl font-bold mb-4">
-              ⚠️
-            </p>
-            <p className="text-[#2C305F] text-xl">
-              {error}
-            </p>
+            <p className="text-5xl font-bold mb-4">⚠️</p>
+            <p className="text-[#2C305F] text-lg md:text-xl">{error}</p>
           </div>
         </div>
       );
@@ -187,7 +185,8 @@ export default function ArticleLibrary() {
 
     return (
       <>
-        <div className="py-6 px-24">
+        {/* Responsive padding for the article list */}
+        <div className="py-6 px-6 md:px-12 lg:px-24">
           {articles.map((article) => (
             <Link href={`/media/article/${article._id}`} key={article._id}>
               <ArticleCard
@@ -215,14 +214,16 @@ export default function ArticleLibrary() {
   };
 
   return (
-    <section>
+    // Use `overflow-x-hidden` on the parent to avoid horizontal scroll
+    <section className="overflow-x-hidden">
+      {/* --- Responsive Hero Section --- */}
       <div
-        className="w-screen h-[92vh] flex items-center justify-center"
+        className="w-screen h-[70vh] md:h-[92vh] flex items-center justify-center relative"
         style={{
           background: "linear-gradient(to bottom, #474A6E, #DBB968)",
         }}
       >
-        <div className="absolute w-screen h-[92vh] z-10">
+        <div className="absolute w-screen h-full z-10">
           <Image
             src="https://d2uq10394z5icp.cloudfront.net/media/article/BiWeeklyArticle-LandscapePoster.png"
             alt="Bi-Weekly Article Poster"
@@ -231,20 +232,24 @@ export default function ArticleLibrary() {
             className="object-cover opacity-15"
           />
         </div>
-        <div className="absolute w-screen h-screen top-[-12vh] left-[2vw] z-20">
+        {/* Stars: Hidden on mobile, visible on desktop */}
+        <div className="absolute w-screen h-screen top-[-20vh] left-[2vw] z-20 hidden md:block">
           <Image
             src="https://d2uq10394z5icp.cloudfront.net/media/YellowStars.png"
             alt="Yellow Stars"
             width={1200}
             height={800}
             className="w-full h-auto"
+            loading="lazy"
           />
         </div>
-        <div className="flex flex-col items-center justify-center z-30 mt-[17vh]">
-          <h1 className="text-5xl font-bold text-[9vh] text-center text-[#2C305F] drop-shadow-[1.5px_1.5px_0_#DCB968]">
+        <div className="flex flex-col items-center justify-center z-30 mt-[2vh] md:mt-[17vh] px-6">
+          {/* Responsive title */}
+          <h1 className="text-4xl md:text-7xl lg:text-[9vh] font-bold text-center text-[#2C305F] drop-shadow-[1.5px_1.5px_0_#DCB968]">
             Bi-weekly Article
           </h1>
-          <p className="leading-6 font-semibold text-base text-white w-[50vw] text-justify py-6">
+          {/* Responsive paragraph */}
+          <p className="leading-6 font-medium text-base text-white w-[90vw] md:w-[50vw] text-justify py-6 max-md:py-4">
             Welcome to the Bi-weekly Article Series, where curiosity meets
             analysis at the intersection of finance and technology. Our
             articles, crafted by dedicated members of the FinTech Club, blend
@@ -254,7 +259,7 @@ export default function ArticleLibrary() {
             and discover what’s truly shaping the industry today.
           </p>
           <div
-            className="w-fit h-fit rounded-md p-[2px] mt-[1.5rem]"
+            className="w-fit h-fit rounded-md p-[2px] mt-[1.5rem] max-md:mt-0"
             style={{
               background: "linear-gradient(to top, #474A6E, #DBB968)",
             }}
@@ -271,6 +276,8 @@ export default function ArticleLibrary() {
           </div>
         </div>
       </div>
+
+      {/* --- Responsive Breadcrumbs --- */}
       <Breadcrumbs
         aria-label="breadcrumb"
         separator={
@@ -280,7 +287,8 @@ export default function ArticleLibrary() {
           color: "#000000",
           "& .MuiBreadcrumbs-separator": { mx: 0.5 },
         }}
-        className="w-full py-8 pl-16"
+        // Responsive padding
+        className="w-full py-8 max-md:py-4 px-6 md:pl-16"
       >
         <MuiLink
           underline="hover"
@@ -308,7 +316,8 @@ export default function ArticleLibrary() {
         </MuiLink>
       </Breadcrumbs>
 
-      <div className="relative pb-4 pl-24">
+      {/* --- Responsive LabelSort --- */}
+      <div className="relative pb-4 max-md:pb-0 px-6 md:pl-24">
         <LabelSort
           availableLabels={availableLabels}
           onSelect={handleLabelSelect}
