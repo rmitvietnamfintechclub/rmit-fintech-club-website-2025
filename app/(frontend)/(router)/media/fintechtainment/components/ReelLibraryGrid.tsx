@@ -19,12 +19,12 @@ const ReelLibraryGrid: React.FC<ReelLibraryGridProps> = ({
   onReelSelect,
 }) => {
   return (
-    <div className="grid grid-cols-3 gap-4 md:grid-cols-4">
+    <div className="grid grid-cols-2 md:gap-4 md:grid-cols-4">
       {reels.map((reel, index) => (
         <div
           key={reel.id}
           onClick={() => onReelSelect(index)}
-          className="relative aspect-[9/16] overflow-hidden rounded-xl group cursor-pointer shadow-lg transform transition-transform duration-300 hover:-translate-y-1"
+          className="relative aspect-[9/16] overflow-hidden md:rounded-xl group cursor-pointer shadow-lg transform transition-transform duration-300 hover:-translate-y-1"
         >
           {/* 2. Replace <img> with <Image> */}
           <Image
@@ -36,7 +36,7 @@ const ReelLibraryGrid: React.FC<ReelLibraryGridProps> = ({
             priority={index < 6}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-          <h3 className="absolute bottom-0 left-0 p-3 text-sm font-semibold text-white md:p-4 md:text-base drop-shadow-md">
+          <h3 className="absolute bottom-0 left-0 p-3 text-sm max-md:line-clamp-3 font-semibold text-white md:p-4 md:text-base drop-shadow-md">
             {reel.title}
           </h3>
         </div>

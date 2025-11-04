@@ -191,7 +191,9 @@ export default function PodcastLibrary() {
           if (selectedReelLabel && selectedReelLabel !== "All") {
             params.append("labels", selectedReelLabel);
           }
-          const response = await axios.get(`/api/v1/reel?${params.toString()}`);
+          const response = await axios.get(
+            `/api/v1/reel?${params.toString()}`
+          );
           const {
             reels: fetchedReels = [],
             totalPages: fetchedTotalPages = 1,
@@ -231,17 +233,19 @@ export default function PodcastLibrary() {
     }
     if (podcastsError)
       return (
-        <div className="relative w-[87vw] h-48 mx-auto my-10 md:h-64 p-[4px] rounded-lg bg-gradient-to-b from-[#DCB968] to-[#F7D27F]">
+        <div className="relative w-[90vw] max-w-4xl h-48 mx-auto my-10 md:h-64 p-[4px] rounded-lg bg-gradient-to-b from-[#DCB968] to-[#F7D27F]">
           <div className="flex flex-col items-center justify-center w-full h-full bg-[#F9FAFB] rounded-[7px] text-center px-4">
             <p className="text-5xl font-bold mb-4">⚠️</p>
-            <p className="text-[#2C305F] text-xl">{podcastsError}</p>
+            <p className="text-[#2C305F] text-lg md:text-xl">
+              {podcastsError}
+            </p>
           </div>
         </div>
       );
 
     return (
       <>
-        <div className="pt-8 px-4 md:px-16 lg:px-24">
+        <div className="pt-8 px-6 md:px-16 lg:px-24">
           {podcasts.map((podcast) => (
             <Link
               href={`/media/fintechtainment/${podcast._id}`}
@@ -269,16 +273,16 @@ export default function PodcastLibrary() {
       return (
         <div className="p-8 text-center flex flex-col items-center justify-center h-64">
           <CircularProgress sx={{ color: "#DCB968" }} />
-          <p className="mt-4 text-lg text-[#5E5E92]">Loading Fintech101</p>
+          <p className="mt-4 text-lg text-[#5E5E92]">Loading FinTech101</p>
         </div>
       );
     }
     if (reelsError)
       return (
-        <div className="relative w-[87vw] h-48 mx-auto my-10 md:h-64 p-[4px] rounded-lg bg-gradient-to-b from-[#DCB968] to-[#F7D27F]">
+        <div className="relative w-[90vw] max-w-4xl h-48 mx-auto my-10 md:h-64 p-[4px] rounded-lg bg-gradient-to-b from-[#DCB968] to-[#F7D27F]">
           <div className="flex flex-col items-center justify-center w-full h-full bg-[#F9FAFB] rounded-[7px] text-center px-4">
             <p className="text-5xl font-bold mb-4">⚠️</p>
-            <p className="text-[#2C305F] text-xl">{reelsError}</p>
+            <p className="text-[#2C305F] text-lg md:text-xl">{reelsError}</p>
           </div>
         </div>
       );
@@ -303,24 +307,25 @@ export default function PodcastLibrary() {
   };
 
   return (
-    <section>
+    <section className="overflow-x-hidden">
       {/* Hero Section */}
       <div
-        className="w-screen h-screen flex items-center justify-center"
+        className="w-screen h-[80vh] md:h-screen flex items-center justify-center relative"
         style={{
           background: "linear-gradient(to bottom, #474A6E, #DBB968)",
         }}
       >
-        <div className="absolute w-screen h-screen z-10">
+        <div className="absolute w-screen h-full z-10">
           <Image
             src="https://d2uq10394z5icp.cloudfront.net/media/podcast/Fintechtainment-LandscapePoster-New.png"
             alt="Fintechtainment Poster"
             fill
             priority
-            className="object-fill opacity-15"
+            className="object-cover md:object-fill opacity-15"
           />
         </div>
-        <div className="absolute w-screen h-screen top-[-12vh] left-[2vw] z-20">
+        {/* Stars (Desktop Only) */}
+        <div className="absolute w-screen h-screen top-[-20vh] left-[2vw] z-20 hidden md:block">
           <Image
             src="https://d2uq10394z5icp.cloudfront.net/media/YellowStars.png"
             alt="Yellow Stars"
@@ -330,11 +335,11 @@ export default function PodcastLibrary() {
             className="w-full h-auto"
           />
         </div>
-        <div className="flex flex-col items-center justify-center z-30 mt-[17vh]">
-          <h1 className="text-5xl font-bold text-[9vh] text-center text-ft-primary-yellow-50 drop-shadow-[1.5px_1.5px_0_#1E264A]">
+        <div className="flex flex-col items-center justify-center z-30 mt-[2vh] md:mt-[17vh] px-6">
+          <h1 className="text-4xl md:text-7xl lg:text-[9vh] font-bold text-center text-ft-primary-yellow-50 drop-shadow-[1.5px_1.5px_0_#1E264A]">
             FinTechTainment
           </h1>
-          <p className="leading-6 font-semibold text-base text-white w-[50vw] text-justify py-6">
+          <p className="leading-6 font-medium text-base text-white w-[90vw] md:w-[50vw] text-justify py-6 max-md:py-4">
             FinTechTainment is play of words between "Fintech" and
             "Entertainment". It is a media project aimed at interviewing
             industry professionals with topics in the fields of: Business,
@@ -344,7 +349,7 @@ export default function PodcastLibrary() {
             curious newcomers.
           </p>
           <div
-            className="w-fit h-fit rounded-md p-[2px] mt-[1.5rem]"
+            className="w-fit h-fit rounded-md p-[2px] mt-[1.5rem] max-md:mt-0"
             style={{
               background: "linear-gradient(to top, #474A6E, #DBB968)",
             }}
@@ -370,7 +375,7 @@ export default function PodcastLibrary() {
             <NavigateNextIcon fontSize="small" sx={{ color: "#A28436" }} />
           }
           sx={{ color: "#000000", "& .MuiBreadcrumbs-separator": { mx: 0.5 } }}
-          className="w-full pt-8 pb-2 pl-16"
+          className="w-full py-8 max-md:py-4 px-6 md:pl-16"
         >
           <MuiLink
             underline="hover"
@@ -390,7 +395,7 @@ export default function PodcastLibrary() {
           </MuiLink>
         </Breadcrumbs>
       ) : (
-        <div className="w-full pt-8 pb-4 pl-16">
+        <div className="w-full pt-8 pb-4 px-6 md:pl-16">
           <button
             onClick={() => setSelectedReelIndex(null)}
             className="flex items-center text-gray-700 font-semibold hover:text-black transition-colors"
@@ -414,8 +419,8 @@ export default function PodcastLibrary() {
 
       {/* Conditionally render the Tab Bar only when not in player view */}
       {selectedReelIndex === null && (
-        <div className="px-4 md:px-16 lg:px-24 mb-6">
-          <div className="max-w-lg mx-auto bg-gray-100 rounded-lg p-1 flex items-center space-x-1 shadow-inner border border-gray-200">
+        <div className="px-6 md:px-16 lg:px-24 mb-6">
+          <div className="max-w-lg mx-auto bg-gray-100 rounded-lg p-1 flex space-x-1 shadow-inner border border-gray-200">
             <button
               onClick={() => setActiveTab("podcast")}
               className={`w-1/2 py-2.5 px-2 text-sm md:text-base rounded-md font-semibold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#A28436] focus:ring-opacity-50 ${
@@ -443,7 +448,7 @@ export default function PodcastLibrary() {
       {/* Tab Content */}
       {activeTab === "podcast" && selectedReelIndex === null && (
         <>
-          <div className="relative px-4 md:px-16 lg:px-24">
+          <div className="relative px-0 md:px-16 lg:px-24">
             <LabelSort
               availableLabels={availablePodcastLabels}
               onSelect={handlePodcastLabelSelect}
@@ -454,7 +459,7 @@ export default function PodcastLibrary() {
       )}
 
       {activeTab === "fintech101" && (
-        <div className="px-4 pb-8 md:px-16 lg:px-24">
+        <div className="px-0 pb-8 md:px-16 lg:px-24">
           {selectedReelIndex === null ? (
             <>
               <div className="relative mb-8">
