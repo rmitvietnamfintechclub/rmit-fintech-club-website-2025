@@ -384,13 +384,12 @@ export default function SpecificArticle({
                   key={item._id}
                   className="block rounded-lg overflow-hidden border-2 border-gray-500 md:border-transparent hover:border-[#DBB968] hover:shadow-lg transition-all duration-300"
                 >
-                  <div className="relative w-full h-56 md:h-72">
+                  <div className="relative w-full h-[22rem] md:h-72">
                     <Image
                       src={item.illustration_url}
                       alt={item.title}
                       layout="fill"
-                      // BEST PRACTICE: Use 'cover' to prevent image stretching/distortion
-                      objectFit="cover"
+                      objectFit="fill"
                       className="rounded-t-lg"
                     />
                   </div>
