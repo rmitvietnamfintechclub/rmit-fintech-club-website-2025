@@ -10,6 +10,7 @@ import Image from "next/image";
 import axios from "axios";
 import { CircularProgress } from "@mui/material";
 
+// --- INTERFACES (No changes) ---
 interface ApiArticle {
   _id: string;
   title: string;
@@ -27,7 +28,7 @@ interface SidebarArticle {
   publicationDate: string;
 }
 
-// Helper function for formatting dates
+// --- HELPER FUNCTIONS (No changes) ---
 const addOrdinalSuffix = (day: number): string => {
   if (day > 10 && day < 14) return `${day}th`;
   const lastDigit = day % 10;
@@ -56,15 +57,14 @@ export default function SpecificArticle({
 }: {
   params: { id: string };
 }) {
-  // --- STATE MANAGEMENT ---
+  // --- STATE MANAGEMENT (No changes) ---
   const [article, setArticle] = useState<ApiArticle | null>(null);
-  // Updated state for dynamic sidebar content
   const [sidebarArticles, setSidebarArticles] = useState<SidebarArticle[]>([]);
   const [sidebarTitle, setSidebarTitle] = useState("Related Articles");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // --- DATA FETCHING ---
+  // --- DATA FETCHING (No changes) ---
   useEffect(() => {
     if (!params.id) return;
 
@@ -73,7 +73,6 @@ export default function SpecificArticle({
       setError("");
       try {
         const response = await axios.get(`/api/v1/article/${params.id}`);
-        // Destructure the new, simplified response from the API
         const {
           article: fetchedArticle,
           sidebarTitle,
@@ -94,7 +93,7 @@ export default function SpecificArticle({
     fetchArticleData();
   }, [params.id]);
 
-  // --- CONDITIONAL RENDERING ---
+  // --- CONDITIONAL RENDERING (Minor responsive tweak) ---
   if (loading) {
     return (
       <div className="p-8 text-center flex flex-col items-center justify-center h-screen">
@@ -106,11 +105,12 @@ export default function SpecificArticle({
 
   if (error) {
     return (
-      <div className="h-screen flex items-center justify-center">
-        <div className="relative w-[87vw] h-48 md:h-64 p-[4px] rounded-lg bg-gradient-to-b from-[#DCB968] to-[#F7D27F]">
-          <div className="flex flex-col items-center justify-center w-full h-full bg-[#F9FAFB] rounded-[7px] text-center px-4">
+      <div className="h-screen flex items-center justify-center p-4">
+        {/* Use w-11/12 for better mobile fit, md:w-[87vw] for desktop */}
+        <div className="relative w-11/12 md:w-[87vw] h-auto md:h-64 p-[4px] rounded-lg bg-gradient-to-b from-[#DCB968] to-[#F7D27F]">
+          <div className="flex flex-col items-center justify-center w-full h-full bg-[#F9FAFB] rounded-[7px] text-center px-4 py-8 md:py-0">
             <p className="text-5xl font-bold mb-4">⚠️</p>
-            <p className="text-[#2C305F] text-xl">{error}</p>
+            <p className="text-[#2C305F] text-lg md:text-xl">{error}</p>
             <div
               className="w-fit h-fit rounded-md p-[2px] mt-[1.5rem]"
               style={{
@@ -135,9 +135,10 @@ export default function SpecificArticle({
 
   if (!article) {
     return (
-      <div className="h-screen flex items-center justify-center">
-        <div className="relative w-[87vw] h-48 md:h-64 p-[4px] rounded-lg bg-gradient-to-b from-[#DCB968] to-[#F7D27F]">
-          <div className="flex flex-col items-center justify-center w-full h-full bg-[#F9FAFB] rounded-[7px] text-center px-4">
+      <div className="h-screen flex items-center justify-center p-4">
+        {/* Use w-11/12 for better mobile fit, md:w-[87vw] for desktop */}
+        <div className="relative w-11/12 md:w-[87vw] h-auto md:h-64 p-[4px] rounded-lg bg-gradient-to-b from-[#DCB968] to-[#F7D27F]">
+          <div className="flex flex-col items-center justify-center w-full h-full bg-[#F9FAFB] rounded-[7px] text-center px-4 py-8 md:py-0">
             <Image
               src="/error-404-New.png"
               alt="404 Not Found"
@@ -146,7 +147,7 @@ export default function SpecificArticle({
               loading="lazy"
               className="mb-4"
             />
-            <h3 className="text-2xl font-bold text-[#2C305F] mb-2">
+            <h3 className="text-xl md:text-2xl font-bold text-[#2C305F] mb-2">
               Article Not Found
             </h3>
             <div
@@ -171,17 +172,19 @@ export default function SpecificArticle({
     );
   }
 
+  // --- MAIN COMPONENT RENDER (Responsive) ---
   return (
     <section className="relative">
       {/* HERO SECTION */}
       <div
-        className="w-screen h-[92vh] flex items-center justify-between px-16"
+        className="w-screen h-auto md:h-[92vh] flex flex-col md:flex-row items-center justify-center md:justify-between px-6 md:px-16 py-12 md:py-0"
         style={{
           background: "linear-gradient(to bottom, #0D1742 62%, #DBB968 100%)",
         }}
       >
-        <div className="flex flex-col items-start justify-center z-30 w-[58vw]">
-          <div className="flex flex-wrap gap-2 mb-4">
+        {/* Text content: order-2 on mobile, order-1 on desktop */}
+        <div className="flex flex-col items-center md:items-start justify-center z-30 w-full md:w-[58vw] order-2 md:order-1">
+          <div className="flex flex-wrap gap-2 mb-4 justify-center md:justify-start">
             {article.labels?.map((label) => (
               <div
                 key={label}
@@ -191,15 +194,16 @@ export default function SpecificArticle({
               </div>
             ))}
           </div>
-          <h1 className="text-4xl font-bold text-ft-text-bright">
+          <h1 className="text-2xl md:text-4xl font-bold text-ft-text-bright text-center md:text-left">
             {article.title}
           </h1>
-          <p className="font-medium text-base text-white text-justify py-2 whitespace-pre-wrap">
+          <p className="font-medium text-base text-white text-left md:text-justify py-2 whitespace-pre-wrap">
             {article.summary}
           </p>
-          <section className="flex flex-row justify-start gap-4">
+          {/* Buttons: Stacked on mobile, row on desktop */}
+          <section className="flex flex-col md:flex-row justify-center md:justify-start gap-2 md:gap-4 w-full md:w-auto">
             <div
-              className="w-fit h-fit rounded-md p-[2px] mt-[0.5rem]"
+              className="w-full sm:w-fit h-fit rounded-md p-[2px] mt-[0.5rem]"
               style={{
                 background: "linear-gradient(to top, #474A6E, #DBB968)",
               }}
@@ -207,11 +211,10 @@ export default function SpecificArticle({
               <motion.button
                 whileHover={{ scale: 1.15 }}
                 whileTap={{ scale: 1.1 }}
-                className="bg-ft-primary-blue-300 text-bluePrimary font-semibold px-4 py-2 rounded-md hover:bg-yellowCream"
+                className="bg-ft-primary-blue-300 text-bluePrimary font-semibold px-4 py-2 rounded-md hover:bg-yellowCream w-full"
                 onClick={() => {
                   const element = document.getElementById("article");
                   if (element) {
-                    // Use the browser's built-in smooth scrolling
                     element.scrollIntoView({ behavior: "smooth" });
                   }
                 }}
@@ -220,16 +223,16 @@ export default function SpecificArticle({
               </motion.button>
             </div>
             <div
-              className="w-fit h-fit rounded-md p-[2px] mt-[0.5rem]"
+              className="w-full sm:w-fit h-fit rounded-md p-[2px] mt-[0.5rem]"
               style={{
                 background: "linear-gradient(to top, #474A6E, #DBB968)",
               }}
             >
-              <Link href="/media/article">
+              <Link href="/media/article" className="w-full">
                 <motion.button
                   whileHover={{ scale: 1.15 }}
                   whileTap={{ scale: 1.1 }}
-                  className="bg-ft-primary-blue-300 text-bluePrimary font-semibold px-4 py-2 rounded-md hover:bg-yellowCream"
+                  className="bg-ft-primary-blue-300 text-bluePrimary font-semibold px-4 py-2 rounded-md hover:bg-yellowCream w-full"
                 >
                   Back to Article Library
                 </motion.button>
@@ -237,13 +240,14 @@ export default function SpecificArticle({
             </div>
           </section>
         </div>
-        <div className="z-30">
+        {/* Image: order-1 on mobile (top), order-2 on desktop */}
+        <div className="z-30 order-1 md:order-2 mb-8 md:mb-0">
           <Image
             src={article.illustration_url}
             alt={article.title}
             width={500}
             height={500}
-            className="w-[25vw] h-auto rounded-lg"
+            className="w-[75vw] sm:w-[50vw] md:w-[25vw] h-auto rounded-lg" // Responsive width
             fetchPriority="high"
             loading="eager"
             priority={true}
@@ -258,11 +262,18 @@ export default function SpecificArticle({
           <NavigateNextIcon fontSize="small" sx={{ color: "#A28436" }} />
         }
         sx={{ color: "#000000", "& .MuiBreadcrumbs-separator": { mx: 0.5 } }}
-        className="w-full py-8 px-16"
+        className="w-full py-8 px-6 md:px-16"
       >
         <MuiLink
           underline="hover"
-          sx={{ color: "#000000", "&:hover": { color: "#A28436" } }}
+          sx={{
+            color: "#000000",
+            "&:hover": { color: "#A28436" },
+            textDecoration: "underline",
+            "@media (min-width: 768px)": {
+              textDecoration: "none",
+            },
+          }}
           component={Link}
           href="/media"
         >
@@ -270,7 +281,14 @@ export default function SpecificArticle({
         </MuiLink>
         <MuiLink
           underline="hover"
-          sx={{ color: "#000000", "&:hover": { color: "#A28436" } }}
+          sx={{
+            color: "#000000",
+            "&:hover": { color: "#A28436" },
+            textDecoration: "underline",
+            "@media (min-width: 768px)": {
+              textDecoration: "none",
+            },
+          }}
           component={Link}
           href="/media/article"
         >
@@ -278,7 +296,21 @@ export default function SpecificArticle({
         </MuiLink>
         <MuiLink
           underline="hover"
-          sx={{ color: "#000000", "&:hover": { color: "#A28436" } }}
+          sx={{
+            color: "#000000",
+            "&:hover": { color: "#A28436" },
+            display: "inline-block",
+            maxWidth: "145px",
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            textDecoration: "underline",
+            verticalAlign: "bottom",
+            "@media (min-width: 768px)": {
+              maxWidth: "none",
+              textDecoration: "none",
+            },
+          }}
           component={Link}
           href={`/media/article/${article._id}`}
         >
@@ -287,18 +319,22 @@ export default function SpecificArticle({
       </Breadcrumbs>
 
       {/* MAIN CONTENT SECTION */}
-      <div id="article" className="flex justify-center pb-12 px-16 gap-8">
-        <div className="w-full max-w-4xl">
+      {/* Stacks vertically on mobile, row on desktop */}
+      <div
+        id="article"
+        className="flex flex-col md:flex-row justify-center pb-12 px-6 md:px-16 gap-8"
+      >
+        <div className="w-full md:max-w-4xl">
           <iframe
             src={article.content_url}
             title="PDF Viewer"
-            className="w-full h-[120vh] rounded-lg shadow-lg"
+            className="w-full h-[80vh] md:h-[120vh] rounded-lg shadow-lg" // Reduced height on mobile
             aria-label="PDF article preview"
           >
             This browser does not support PDFs.
           </iframe>
           <div
-            className="w-fit h-fit rounded-md p-[2px] mt-[2rem] mb-20 mx-auto"
+            className="hidden md:block w-fit h-fit rounded-md p-[2px] mt-[2rem] mb-12 md:mb-20 mx-auto" // Reduced mobile margin
             style={{
               background: "linear-gradient(to top, #474A6E, #DBB968)",
             }}
@@ -316,7 +352,8 @@ export default function SpecificArticle({
         </div>
 
         {/* SIDEBAR */}
-        <div className="w-full max-w-[16rem] flex flex-col gap-4">
+        {/* Full width on mobile, max-w-[16rem] on desktop */}
+        <div className="w-full md:w-full md:max-w-[16rem] flex flex-col gap-4">
           {/* Author Section */}
           {article.authors?.length > 0 && (
             <div className="p-6 rounded-lg shadow-md border-2 border-[#DBB968]">
@@ -345,14 +382,15 @@ export default function SpecificArticle({
                 <Link
                   href={`/media/article/${item._id}`}
                   key={item._id}
-                  className="block rounded-lg overflow-hidden border-2 border-transparent hover:border-[#DBB968] hover:shadow-lg transition-all duration-300"
+                  className="block rounded-lg overflow-hidden border-2 border-gray-500 md:border-transparent hover:border-[#DBB968] hover:shadow-lg transition-all duration-300"
                 >
-                  <div className="relative w-full h-72">
+                  <div className="relative w-full h-56 md:h-72">
                     <Image
                       src={item.illustration_url}
                       alt={item.title}
                       layout="fill"
-                      objectFit="fill"
+                      // BEST PRACTICE: Use 'cover' to prevent image stretching/distortion
+                      objectFit="cover"
                       className="rounded-t-lg"
                     />
                   </div>
@@ -368,9 +406,26 @@ export default function SpecificArticle({
               ))}
             </div>
           </div>
+          <div
+            className="block md:hidden w-fit h-fit rounded-md p-[2px] mt-0 md:mt-[2rem] mb-0 md:mb-20 mx-auto" // Reduced mobile margin
+            style={{
+              background: "linear-gradient(to top, #474A6E, #DBB968)",
+            }}
+          >
+            <a href="/media/article">
+              <motion.button
+                whileHover={{ scale: 1.15 }}
+                whileTap={{ scale: 1.1 }}
+                className="bg-ft-primary-blue-300 text-bluePrimary font-semibold px-4 py-2 rounded-md hover:bg-yellowCream"
+              >
+                Back to Article Library
+              </motion.button>
+            </a>
+          </div>
         </div>
       </div>
-      <div className="absolute bottom-[-9rem] left-0">
+      {/* Mascot: Hide on mobile as it's decorative and clutters the layout */}
+      <div className="absolute bottom-[-9rem] left-0 hidden md:block">
         <Image
           src="https://d2uq10394z5icp.cloudfront.net/global/Mascot+-+M%E1%BA%B7t+b%C3%AAn.svg"
           alt="Mascot"
