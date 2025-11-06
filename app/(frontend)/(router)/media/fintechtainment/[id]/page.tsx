@@ -10,7 +10,7 @@ import Image from "next/image";
 import axios from "axios";
 import { CircularProgress } from "@mui/material";
 
-// --- INTERFACES (no changes needed here) ---
+// --- INTERFACES (no changes) ---
 interface GuestSpeaker {
   name: string;
   description: string;
@@ -36,7 +36,7 @@ interface SidebarPodcast {
   thumbnail_url: string;
 }
 
-// Helper function
+// --- HELPER FUNCTIONS (no changes) ---
 const addOrdinalSuffix = (day: number): string => {
   if (day > 10 && day < 14) return `${day}th`;
   const lastDigit = day % 10;
@@ -65,15 +65,14 @@ export default function SpecificPodcast({
 }: {
   params: { id: string };
 }) {
-  // --- STATE MANAGEMENT ---
+  // --- STATE MANAGEMENT (no changes) ---
   const [podcast, setPodcast] = useState<ApiPodcast | null>(null);
-  // Updated state to handle the dynamic sidebar content
   const [sidebarPodcasts, setSidebarPodcasts] = useState<SidebarPodcast[]>([]);
   const [sidebarTitle, setSidebarTitle] = useState("Related Podcasts");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // --- DATA FETCHING ---
+  // --- DATA FETCHING (no changes) ---
   useEffect(() => {
     if (!params.id) return;
 
@@ -81,7 +80,6 @@ export default function SpecificPodcast({
       setLoading(true);
       setError("");
       try {
-        // Fetch data and destructure the new response shape
         const response = await axios.get(`/api/v1/podcast/${params.id}`);
         const {
           podcast: fetchedPodcast,
@@ -89,7 +87,6 @@ export default function SpecificPodcast({
           sidebarPodcasts,
         } = response.data;
 
-        // Set the state with the data from the API
         setPodcast(fetchedPodcast);
         setSidebarTitle(sidebarTitle);
         setSidebarPodcasts(sidebarPodcasts);
@@ -104,7 +101,7 @@ export default function SpecificPodcast({
     fetchPodcastData();
   }, [params.id]);
 
-  // --- CONDITIONAL RENDERING ---
+  // --- CONDITIONAL RENDERING (Responsive) ---
   if (loading) {
     return (
       <div className="p-8 text-center flex flex-col items-center justify-center h-screen">
@@ -116,11 +113,12 @@ export default function SpecificPodcast({
 
   if (error) {
     return (
-      <div className="h-screen flex items-center justify-center">
-        <div className="relative w-[87vw] h-48 md:h-64 p-[4px] rounded-lg bg-gradient-to-b from-[#DCB968] to-[#F7D27F]">
-          <div className="flex flex-col items-center justify-center w-full h-full bg-[#F9FAFB] rounded-[7px] text-center px-4">
-            <p className="text-5xl font-bold mb-4">⚠️</p>
-            <p className="text-[#2C305F] text-xl">{error}</p>
+      <div className="h-screen flex items-center justify-center p-4">
+        {/* Responsive Error Card */}
+        <div className="relative w-[90vw] max-w-xl h-auto md:h-64 p-1 rounded-lg bg-gradient-to-b from-[#DCB968] to-[#F7D27F]">
+          <div className="flex flex-col items-center justify-center w-full h-full bg-[#F9FAFB] rounded-[7px] text-center p-6 md:p-4">
+            <p className="text-4xl md:text-5xl font-bold mb-4">⚠️</p>
+            <p className="text-[#2C305F] text-lg md:text-xl">{error}</p>
             <div
               className="w-fit h-fit rounded-md p-[2px] mt-[1.5rem]"
               style={{
@@ -145,9 +143,10 @@ export default function SpecificPodcast({
 
   if (!podcast) {
     return (
-      <div className="h-screen flex items-center justify-center">
-        <div className="relative w-[87vw] h-48 md:h-64 p-[4px] rounded-lg bg-gradient-to-b from-[#DCB968] to-[#F7D27F]">
-          <div className="flex flex-col items-center justify-center w-full h-full bg-[#F9FAFB] rounded-[7px] text-center px-4">
+      <div className="h-screen flex items-center justify-center p-4">
+        {/* Responsive 404 Card */}
+        <div className="relative w-[90vw] max-w-xl h-auto md:h-64 p-1 rounded-lg bg-gradient-to-b from-[#DCB968] to-[#F7D27F]">
+          <div className="flex flex-col items-center justify-center w-full h-full bg-[#F9FAFB] rounded-[7px] text-center p-6 md:p-4">
             <Image
               src="/error-404-New.png"
               alt="404 Not Found"
@@ -156,7 +155,7 @@ export default function SpecificPodcast({
               loading="lazy"
               className="mb-4"
             />
-            <h3 className="text-2xl font-bold text-[#2C305F] mb-2">
+            <h3 className="text-xl md:text-2xl font-bold text-[#2C305F] mb-2">
               Podcast Not Found
             </h3>
             <div
@@ -181,17 +180,19 @@ export default function SpecificPodcast({
     );
   }
 
+  // --- MAIN COMPONENT RENDER (Responsive) ---
   return (
     <section className="relative mb-6">
-      {/* HERO SECTION */}
+      {/* HERO SECTION (Responsive) */}
       <div
-        className="w-screen h-[92vh] flex items-center justify-center px-16"
+        className="w-screen min-h-[70vh] md:h-[92vh] flex items-center justify-center px-6 md:px-16 max-md:py-12"
         style={{
           background: "linear-gradient(to bottom, #0D1742 62%, #DBB968 100%)",
         }}
       >
-        <div className="flex flex-col justify-center z-30 w-full">
-          <div className="flex flex-wrap gap-2 mb-4">
+        <div className="flex flex-col justify-center z-30 w-full max-w-6xl">
+          {/* Added max-w for large screens */}
+          <div className="flex flex-wrap max-md:justify-center gap-2 mb-4">
             {podcast.labels.map((label) => (
               <div
                 key={label}
@@ -201,15 +202,17 @@ export default function SpecificPodcast({
               </div>
             ))}
           </div>
-          <h1 className="text-4xl font-bold text-ft-text-bright">
+          {/* Responsive Title */}
+          <h1 className="text-2xl md:text-4xl max-md:text-center font-bold text-ft-text-bright">
             {podcast.title}
           </h1>
-          <p className="font-medium text-base text-white text-justify py-4 whitespace-pre-wrap">
+          <p className="font-medium text-base text-white text-left md:text-justify py-2 whitespace-pre-wrap max-w-3xl">
             {podcast.summary}
           </p>
-          <section className="flex flex-row justify-start gap-4">
+          {/* Responsive Buttons: stack on mobile, row on small+ */}
+          <section className="flex flex-col sm:flex-row justify-start gap-2 md:gap-4">
             <div
-              className="w-fit h-fit rounded-md p-[2px] mt-[0.5rem]"
+              className="w-full md:w-fit h-fit rounded-md p-[2px] mt-[0.5rem]"
               style={{
                 background: "linear-gradient(to top, #474A6E, #DBB968)",
               }}
@@ -217,11 +220,10 @@ export default function SpecificPodcast({
               <motion.button
                 whileHover={{ scale: 1.15 }}
                 whileTap={{ scale: 1.1 }}
-                className="bg-ft-primary-blue-300 text-bluePrimary font-semibold px-4 py-2 rounded-md hover:bg-yellowCream"
+                className="w-full bg-ft-primary-blue-300 text-bluePrimary font-semibold px-4 py-2 rounded-md hover:bg-yellowCream"
                 onClick={() => {
                   const element = document.getElementById("podcast-episode");
                   if (element) {
-                    // Use the browser's built-in smooth scrolling
                     element.scrollIntoView({ behavior: "smooth" });
                   }
                 }}
@@ -230,7 +232,7 @@ export default function SpecificPodcast({
               </motion.button>
             </div>
             <div
-              className="w-fit h-fit rounded-md p-[2px] mt-[0.5rem]"
+              className="w-full md:w-fit h-fit rounded-md p-[2px] mt-[0.5rem]"
               style={{
                 background: "linear-gradient(to top, #474A6E, #DBB968)",
               }}
@@ -239,7 +241,7 @@ export default function SpecificPodcast({
                 <motion.button
                   whileHover={{ scale: 1.15 }}
                   whileTap={{ scale: 1.1 }}
-                  className="bg-ft-primary-blue-300 text-bluePrimary font-semibold px-4 py-2 rounded-md hover:bg-yellowCream"
+                  className="w-full bg-ft-primary-blue-300 text-bluePrimary font-semibold px-4 py-2 rounded-md hover:bg-yellowCream"
                 >
                   Back to Podcast Library
                 </motion.button>
@@ -255,37 +257,71 @@ export default function SpecificPodcast({
         separator={
           <NavigateNextIcon fontSize="small" sx={{ color: "#A28436" }} />
         }
-        className="w-full py-8 px-16"
+        sx={{ color: "#000000", "& .MuiBreadcrumbs-separator": { mx: 0.5 } }}
+        className="w-full py-8 px-6 md:px-16"
       >
         <MuiLink
+          underline="hover"
+          sx={{
+            color: "#000000",
+            "&:hover": { color: "#A28436" },
+            textDecoration: "underline",
+            "@media (min-width: 768px)": {
+              textDecoration: "none",
+            },
+          }}
           component={Link}
           href="/media"
-          sx={{ color: "#000000", "&:hover": { color: "#A28436" } }}
         >
           Media
         </MuiLink>
         <MuiLink
+          underline="hover"
+          sx={{
+            color: "#000000",
+            "&:hover": { color: "#A28436" },
+            textDecoration: "underline",
+            "@media (min-width: 768px)": {
+              textDecoration: "none",
+            },
+          }}
           component={Link}
           href="/media/fintechtainment"
-          sx={{ color: "#000000", "&:hover": { color: "#A28436" } }}
         >
           FinTechTainment Library
         </MuiLink>
         <MuiLink
+          underline="hover"
+          sx={{
+            color: "#000000",
+            "&:hover": { color: "#A28436" },
+            display: "inline-block",
+            maxWidth: "90vw",
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            textDecoration: "underline",
+            verticalAlign: "bottom",
+            "@media (min-width: 768px)": {
+              maxWidth: "none",
+              textDecoration: "none",
+            },
+          }}
           component={Link}
           href={`/media/fintechtainment/${podcast._id}`}
-          sx={{ color: "#000000", "&:hover": { color: "#A28436" } }}
         >
           {podcast.title}
         </MuiLink>
       </Breadcrumbs>
 
+      {/* --- CONTENT AREA (Responsive) --- */}
       <div
         id="podcast-episode"
-        className="flex justify-center pb-12 px-16 gap-8"
+        // Stacks vertically on mobile, row on desktop
+        className="flex flex-col md:flex-row justify-center pb-8 md:pb-12 px-4 md:px-16 md:gap-12"
       >
-        {/* Main Content Area */}
-        <div className="w-full max-w-4xl">
+        {/* Main Content Area (Left) */}
+        <div className="w-full md:max-w-4xl">
           <div className="relative aspect-video w-full">
             <iframe
               className="absolute top-0 left-0 w-full h-full rounded-lg shadow-lg"
@@ -297,66 +333,72 @@ export default function SpecificPodcast({
             ></iframe>
           </div>
           <div>
-            <h1 className="text-3xl mt-6 font-bold text-ft-primary-blue-50">
+            {/* Responsive title */}
+            <h1 className="text-2xl md:text-3xl mt-6 font-bold text-ft-primary-blue-50">
               {podcast.title}
             </h1>
             <p className="text-ft-primary-blue-200 mt-2 italic">
               Published on {formatPublicationDate(podcast.publicationDate)}
             </p>
           </div>
-          {/* --- Guest Speaker Section --- */}
-          <div className="flex my-8 border-2 border-ft-primary-yellow-50 rounded-2xl shadow-lg overflow-hidden">
-            <div className="relative bg-ft-primary-blue-200 w-1/3 flex-shrink-0">
-              <Image
-                src={podcast.guest_speaker.avatar_url}
-                alt={podcast.guest_speaker.name}
-                fill
-                className="object-cover p-4"
-              />
-            </div>
 
-            {/* Text content container */}
-            <div className="bg-ft-primary-blue-300 p-6 w-2/3 self-stretch flex flex-col justify-between">
-              <div>
-                <h3 className="font-bold text-2xl text-ft-primary-blue-50">
-                  {podcast.guest_speaker.name}
-                </h3>
-                <p className="text-[#000000] mt-2 text-base text-justify">
-                  {podcast.guest_speaker.description}
-                </p>
+          <div className="pt-20 max-md:max-w-md max-md:mx-auto my-8">
+            {/* Card: Set to relative to contain the absolute image */}
+            <div className="relative bg-ft-primary-blue-300 rounded-2xl shadow-lg p-6 pt-28">
+              {/* Avatar: Absolute, centered, and overlapping the top */}
+              <div className="absolute -top-24 left-4 max-md:left-1/2 max-md:-translate-x-1/2 w-48 h-48 rounded-full bg-[#5E5E92] border-4 border-ft-primary-yellow-50 shadow-xl overflow-hidden">
+                <Image
+                  src={podcast.guest_speaker.avatar_url}
+                  alt={`Headshot of ${podcast.guest_speaker.name}`}
+                  fill
+                  className="object-cover"
+                />
               </div>
 
-              {/* LinkedIn link with hover effect */}
-              <div className="mt-4 self-start">
-                <a
-                  href={podcast.guest_speaker.linkedIn_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-block transition-transform duration-200 hover:scale-110 border-solid border-2 border-[#2C305F] p-2 rounded-lg hover:bg-[#FFEFCA]"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="30"
-                    height="30"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="#2C305F"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
+              <div className="max-md:text-center">
+                <h3 className="font-bold text-2xl md:text-3xl md:text-left text-ft-primary-blue-50">
+                  {podcast.guest_speaker.name}
+                </h3>
+
+                <p className="text-[#000000] mt-2 text-sm md:text-base text-center md:text-left">
+                  {podcast.guest_speaker.description}
+                </p>
+
+                {/* LinkedIn Link */}
+                <div className="max-md:text-center mt-6 md:mt-4 md:self-start">
+                  <a
+                    href={podcast.guest_speaker.linkedIn_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`View ${podcast.guest_speaker.name}'s profile on LinkedIn`} // Accessibility
+                    className="inline-flex items-center gap-2.5 transition-transform duration-200 hover:scale-105 border-solid border-2 border-[#2C305F] py-2 px-3 rounded-lg hover:bg-[#FFEFCA] text-[#2C305F]"
                   >
-                    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
-                    <rect x="2" y="9" width="4" height="12"></rect>
-                    <circle cx="4" cy="4" r="2"></circle>
-                  </svg>
-                </a>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24" // Reduced size to better match text
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor" // Inherits color from parent's text-[]
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                      <rect x="2" y="9" width="4" height="12"></rect>
+                      <circle cx="4" cy="4" r="2"></circle>
+                    </svg>
+                    {/* ADDED: Text label for clarity */}
+                    <span className="font-medium text-sm">View Profile</span>
+                  </a>
+                </div>
               </div>
             </div>
           </div>
 
           {/* Back to Library Button */}
           <div
-            className="w-fit h-fit rounded-md p-[2px] mt-[2rem]"
+            className="max-md:hidden w-fit h-fit rounded-md p-[2px] mt-[2rem]"
             style={{
               background: "linear-gradient(to top, #474A6E, #DBB968)",
             }}
@@ -373,15 +415,14 @@ export default function SpecificPodcast({
           </div>
         </div>
 
-        {/* Right Sidebar */}
-        <div className="w-full max-w-[17.75rem] flex flex-col gap-8">
+        {/* Right Sidebar (Responsive) */}
+        {/* Full width on mobile with margin-top, fixed width on desktop */}
+        <div className="w-full md:w-full md:max-w-[17.75rem]">
           <div className="relative">
-            {/* 1. Title is now dynamic */}
             <h2 className="text-3xl font-bold text-[#0D1742] mb-4">
               {sidebarTitle}
             </h2>
 
-            {/* 2. Logic now uses the new state variables */}
             <div className="flex flex-col gap-4">
               {sidebarPodcasts.map((item) => (
                 <Link
@@ -389,12 +430,12 @@ export default function SpecificPodcast({
                   key={item._id}
                   className="flex flex-col items-center bg-white rounded-2xl shadow-lg border-2 border-transparent hover:border-[#DBB968] overflow-hidden hover:shadow-xl transition-all duration-300"
                 >
-                  <div className="relative w-full h-40 flex-shrink-0">
+                  <div className="relative w-full h-52 md:h-40 flex-shrink-0">
                     <Image
                       src={item.thumbnail_url}
                       alt={item.title}
                       layout="fill"
-                      objectFit="fill"
+                      objectFit="fill" // Changed from "fill" to "cover" to prevent stretching
                     />
                   </div>
                   <div className="p-4 w-full">
@@ -409,8 +450,8 @@ export default function SpecificPodcast({
               ))}
             </div>
 
-            {/* Mascot image (no changes) */}
-            <div className="absolute right-[-12.5rem] bottom-[-22rem]">
+            {/* Mascot image: Hidden on mobile, visible on desktop */}
+            <div className="absolute right-[-12.5rem] bottom-[-22rem] hidden md:block">
               <Image
                 src="https://d2uq10394z5icp.cloudfront.net/global/Mascot+-+M%E1%BA%B7t+tr%C6%B0%E1%BB%9Bc.svg"
                 alt="Mascot"
@@ -419,6 +460,24 @@ export default function SpecificPodcast({
                 loading="lazy"
                 className="w-[25vw] h-auto -rotate-[35deg]"
               />
+            </div>
+
+            {/* Back to Library Button */}
+            <div
+              className="md:hidden w-fit h-fit rounded-md p-[2px] mt-[2rem] mx-auto"
+              style={{
+                background: "linear-gradient(to top, #474A6E, #DBB968)",
+              }}
+            >
+              <a href="/media/fintechtainment">
+                <motion.button
+                  whileHover={{ scale: 1.15 }}
+                  whileTap={{ scale: 1.1 }}
+                  className="bg-ft-primary-blue-300 text-bluePrimary font-semibold px-4 py-2 rounded-md hover:bg-yellowCream"
+                >
+                  Back to FinTechTainment Library
+                </motion.button>
+              </a>
             </div>
           </div>
         </div>

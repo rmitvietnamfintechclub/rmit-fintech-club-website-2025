@@ -177,7 +177,7 @@ export default function SpecificArticle({
     <section className="relative">
       {/* HERO SECTION */}
       <div
-        className="w-screen h-auto md:h-[92vh] flex flex-col md:flex-row items-center justify-center md:justify-between px-6 md:px-16 py-12 md:py-0"
+        className="w-screen h-auto md:h-[92vh] flex flex-col md:flex-row items-center justify-center md:justify-between px-6 md:px-16 max-md:pb-12 max-md:pt-4"
         style={{
           background: "linear-gradient(to bottom, #0D1742 62%, #DBB968 100%)",
         }}
@@ -247,7 +247,7 @@ export default function SpecificArticle({
             alt={article.title}
             width={500}
             height={500}
-            className="w-[75vw] sm:w-[50vw] md:w-[25vw] h-auto rounded-lg" // Responsive width
+            className="max-md:hidden md:w-[25vw] h-auto rounded-lg" // Responsive width
             fetchPriority="high"
             loading="eager"
             priority={true}
