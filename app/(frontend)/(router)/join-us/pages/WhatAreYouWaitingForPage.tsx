@@ -53,7 +53,7 @@ const WhatAreYouWaitingFor = ({ id }: WhatAreYouWaitingForProps) => {
             }}
           >
             <a
-              href="https://forms.office.com/r/Z55Yha5E10"
+              href="https://bit.ly/2025C_FTC_RecruitmentForm"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-center w-full h-full px-6 py-3 bg-yellowPrimary text-black font-semibold rounded-lg transition duration-600 ease-in-out hover:bg-yellowEarth hover:text-white text-center"
@@ -68,7 +68,7 @@ const WhatAreYouWaitingFor = ({ id }: WhatAreYouWaitingForProps) => {
             }}
           >
             <a
-              href="https://bit.ly/FTC_Recruitment_Booklet_2024C"
+              href="https://bit.ly/2025C_FTC_Booklet"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-center px-6 py-3 bg-blueMist text-black font-semibold rounded-lg transition duration-600 ease-in-out hover:bg-blueSlate hover:text-white text-center"
