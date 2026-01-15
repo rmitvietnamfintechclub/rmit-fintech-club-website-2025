@@ -2,7 +2,6 @@ import connectMongoDB from "@/app/(backend)/libs/mongodb";
 import User from "@/app/(backend)/models/user";
 import bcryptjs from "bcryptjs";
 import { SignJWT } from "jose";
-// import jwt from "jsonwebtoken";
 import { type NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
