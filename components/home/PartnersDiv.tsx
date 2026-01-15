@@ -1,6 +1,6 @@
 import { PartnerItem } from "@/app/(frontend)/(router)/(home_page)/components/partners";
 import Image from "next/image";
-import { useState, useEffect } from "react"; // Removed useRef
+import { useState, useEffect } from "react";
 import clsx from "clsx";
 import styles from "@/styles/partners.module.css";
 interface PartnerLogo {
