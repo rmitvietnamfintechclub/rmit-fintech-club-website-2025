@@ -1,21 +1,29 @@
 "use client";
 import Image from "next/image";
-import { motion, useMotionValue, useTransform, animate } from "framer-motion";
-import React, { Dispatch, SetStateAction, useState } from "react";
+import {
+  motion,
+  useMotionValue,
+  useTransform,
+  animate,
+  PanInfo,
+} from "framer-motion";
+import {
+  Flame,
+  MousePointerClick,
+  Star,
+  Megaphone,
+  Lightbulb,
+} from "lucide-react";
+import React, { useState, useEffect } from "react";
 
-type CardStackProps = {
-  id: number;
-  image: string;
-};
-
-const achievementData = [
+const bestClubImages = [
   {
-    id: 1,
+    id: 5,
     image:
       "https://d2uq10394z5icp.cloudfront.net/home/achievement/BestClubSemA-2021.png",
   },
   {
-    id: 2,
+    id: 4,
     image:
       "https://d2uq10394z5icp.cloudfront.net/home/achievement/BestClubSemB-2021.png",
   },
@@ -25,244 +33,403 @@ const achievementData = [
       "https://d2uq10394z5icp.cloudfront.net/home/achievement/BestClubSemA-2023.png",
   },
   {
-    id: 4,
+    id: 2,
     image:
       "https://d2uq10394z5icp.cloudfront.net/home/achievement/BestClubSemB-2023.png",
   },
   {
-    id: 5,
+    id: 1,
     image:
       "https://d2uq10394z5icp.cloudfront.net/home/achievement/BestClubSemC-2024.png",
   },
 ];
 
-const Achievements = () => {
-  const [cards, setCards] = useState<CardStackProps[]>(achievementData);
+const NEW_AWARDS = {
+  academic:
+    "https://d2uq10394z5icp.cloudfront.net/home/achievement/AcademicClubOfTheYear-2025.jpg",
+  eternal:
+    "https://d2uq10394z5icp.cloudfront.net/home/achievement/EternalFlameAward-2025.jpg",
+  innovation:
+    "https://d2uq10394z5icp.cloudfront.net/home/achievement/InnovationAward-2023.png",
+  publicity:
+    "https://d2uq10394z5icp.cloudfront.net/home/achievement/PublicityAward-2024.png",
+};
+
+const CardStack = () => {
+  const [cards, setCards] = useState(bestClubImages);
+
+  const moveToEnd = (fromIndex: number) => {
+    setCards((prev) => {
+      const newCards = [...prev];
+      const item = newCards.splice(fromIndex, 1)[0];
+      newCards.unshift(item);
+      return newCards;
+    });
+  };
 
   return (
-    <section className="w-full pt-4 md:pt-16 pb-8 relative overflow-hidden">
-      {/* --- Decorative Elements --- */}
-      <Image
-        src="https://d2uq10394z5icp.cloudfront.net/global/Mascot+-+M%E1%BA%B7t+b%C3%AAn.svg"
-        alt="Bear mascot"
-        className="absolute right-[-10rem] top-[17rem] rotate-[-25deg] z-30 hidden md:block"
-        width={400}
-        height={400}
-        loading="lazy"
-      />
-
-      {/* All decorative dots hidden on mobile */}
-      <div className="absolute top-0 right-[8rem] w-[4.5rem] h-[4.5rem] bg-[#5E5E92] rounded-full z-20 hidden md:block"></div>
-      <div className="absolute top-[4.3rem] right-[6rem] w-[1.7rem] h-[1.7rem] bg-[#5E5E92] rounded-full z-20 hidden md:block"></div>
-      
-      <div className="absolute top-[27rem] left-[3rem] w-[4rem] h-[4rem] bg-[#2C305F] rounded-full z-10 hidden md:block"></div>
-      <div className="absolute top-[33rem] left-[-2rem] w-[4rem] h-[4rem] bg-[#C9D6EA] rounded-full z-20 hidden md:block"></div>
-      <div className="absolute top-[35rem] left-[1.25rem] w-[4rem] h-[4rem] bg-[#DBB968] rounded-full z-10 hidden md:block"></div>
-      <div className="absolute top-[30rem] left-[-2.5rem] w-[4rem] h-[4rem] bg-[#2C305F] rounded-full z-10 hidden md:block"></div>
-      <div className="absolute top-[34rem] left-[7rem] w-[1rem] h-[1rem] bg-[#DBB968] rounded-full z-10 hidden md:block"></div>
-      <div className="absolute top-[26rem] left-[7rem] w-[0.8rem] h-[0.8rem] bg-[#2C305F] rounded-full z-10 hidden md:block"></div>
-      
-      <div className="absolute bottom-[4rem] right-[14rem] w-[8rem] h-[8rem] bg-[#2C305F] rounded-full z-10 hidden md:block"></div>
-      <div className="absolute bottom-[27rem] right-[-2.7rem] w-[8rem] h-[8rem] bg-[#DCB968] rounded-full z-20 hidden md:block"></div>
-      <div className="absolute bottom-[6.5rem] right-[-5rem] w-[20rem] h-[20rem] bg-[#F7D27F] rounded-full z-10 hidden md:block"></div>
-      <div className="absolute bottom-[7rem] right-[10.5rem] w-[5rem] h-[5rem] bg-[#5E5E92] rounded-full z-10 hidden md:block"></div>
-      <div className="absolute bottom-[34rem] right-[6rem] w-[2rem] h-[2rem] bg-[#97ABD6] rounded-full z-10 hidden md:block"></div>
-
-      <div className="px-4 md:pl-[7rem] md:px-0">
-        <div className="text-[1.875rem] md:text-[3rem] max-md:relative max-md:text-center font-bold text-[#2C305F] drop-shadow-[0_4px_4px_rgba(255,204,102,0.6)]">
-          Our Achievement
-          <Image
-            src="/Achievement_Decoration.svg"
-            alt="Left Achievement Decoration"
-            className="absolute -left-5 -top-2 z-10 md:hidden block"
-            width={70}
-            height={70}
-            loading="lazy"
-          />
-          <Image
-            src="/Achievement_Decoration.svg"
-            alt="Left Achievement_Decoration"
-            className="absolute -right-5 -top-2 z-10 rotate-180 md:hidden block"
-            width={70}
-            height={70}
-            loading="lazy"
-          />
-        </div>
-        <h3 className="text-[2rem] md:text-[3.5rem] max-md:mt-8 font-bold text-[#DCB968] leading-tight md:leading-[6rem] [text-shadow:_0_3px_4px_rgba(0,0,0,0.5)]">
-          Best Club of Semester
-        </h3>
-        {/* Removed horizontal padding for mobile, restored for desktop */}
-        <p className="text-[1.25rem] md:text-[2.5rem] max-md:mt-1 max-md:text-right font-bold text-[#5E5E92] md:pl-[44rem]">
-          5 times
-        </p>
-
-        <div className="-mt-16 md:mt-[5rem] md:pb-[9rem] md:-ml-[14rem]">
-          {/* Set a min-height for mobile to contain the absolute cards */}
-          <div className="min-h-[400px] md:min-h-[200px] flex justify-center items-center max-md:pl-12 relative">
-            {cards.map((card) => (
-              <CARD_STACK
-                key={card.id}
-                id={card.id}
-                image={card.image}
-                cards={cards}
-                setCards={setCards}
-              />
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Innovation Award Section */}
-      <div className="flex flex-col-reverse md:items-center md:flex-row md:justify-between gap-2 md:gap-8 px-4 md:px-20 max-md:-mt-[5rem]">
-        <Image
-          src="https://d2uq10394z5icp.cloudfront.net/home/achievement/InnovationAward-2023.png"
-          className="object-cover w-full md:w-[35vw] h-auto rounded-lg shadow-lg hover:scale-105 transition-transform duration-200"
-          width={400} 
-          height={600}
-          alt="Innovation Award"
-          priority={true}
+    <div className="relative w-full h-[240px] md:h-[340px] flex items-center justify-center md:mt-4 mt-8 perspective-1000 pb-8 md:pl-8 pl-12">
+      {cards.map((card, index) => (
+        <Card
+          key={card.id}
+          card={card}
+          index={index}
+          total={cards.length}
+          moveToEnd={moveToEnd}
         />
-        <div className="flex flex-col">
-          <h3 className="text-[2rem] md:text-[3.5rem] font-bold text-[#DCB968] leading-tight md:leading-[3rem] [text-shadow:_0_3px_4px_rgba(0,0,0,0.5)]">
-            Innovation Award
-          </h3>
-          <div className="text-[1.25rem] md:text-[2.5rem] max-md:text-right max-md:mt-1 font-bold text-[#5E5E92] md:leading-[5rem]">
-            2023
-          </div>
-        </div>
-      </div>
+      ))}
 
-      {/* Publicity Award Section */}
-      <div className="px-4 md:pl-20 mt-4 md:mt-[2rem]">
-        <h3 className="pt-4 md:pt-[2rem] text-[2rem] md:text-[3.5rem] font-bold text-[#DCB968] leading-tight md:leading-[3rem] [text-shadow:_0_3px_4px_rgba(0,0,0,0.5)]">
-          Publicity Award
-        </h3>
-        <p className="mt-0 max-md:mb-1 text-[1.25rem] md:text-[2.5rem] max-md:text-right font-bold text-[#5E5E92] md:leading-[5rem]">
-          2024
-        </p>
-        {/* Centered items on mobile */}
-        <div className="flex flex-col md:flex-row gap-8 md:gap-[7rem] relative items-center md:items-start">
-          <div className="absolute z-10 left-[36.5rem] top-[-7rem] rotate-[-5deg] hidden md:block">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="70"
-              height="70"
-              viewBox="0 0 158 170"
-              fill="none"
-            >
-              <path
-                d="M109.947 114.433L153.358 93.6823L154.111 93.2659C155.229 92.5574 156.138 91.5529 156.745 90.3549C157.353 89.1569 157.637 87.8083 157.57 86.4469C157.502 85.0854 157.085 83.76 156.36 82.6058C155.636 81.4516 154.63 80.5101 153.446 79.8773L110.323 56.761L103.743 7.4808L103.587 6.6406C103.262 5.31202 102.602 4.0894 101.673 3.0979C100.744 2.1064 99.5806 1.38168 98.3014 0.99792C97.0222 0.614161 95.6734 0.585176 94.393 0.913908C93.1126 1.24264 91.9467 1.91729 91.0146 2.86879L57.0972 37.4625L9.72125 27.7465L8.90419 27.6253C7.5802 27.5057 6.25586 27.7501 5.06705 28.3333C3.87823 28.9166 2.86772 29.8178 2.13921 30.9444C1.41069 32.0711 0.990361 33.3826 0.921367 34.7445C0.852378 36.1063 1.13721 37.4695 1.74663 38.6942L23.8802 83.2145L1.06692 126.517L0.702629 127.315C0.217939 128.571 0.0680532 129.943 0.268231 131.291C0.468409 132.64 1.0115 133.916 1.84217 134.991C2.67284 136.066 3.7614 136.9 4.99694 137.409C6.2325 137.918 7.57089 138.084 8.87575 137.889L56.4669 130.799L89.8606 167.233C90.8273 168.288 92.057 169.05 93.4102 169.432C94.7635 169.814 96.1864 169.8 97.5178 169.393C98.8493 168.985 100.036 168.2 100.944 167.127C101.852 166.053 102.444 164.733 102.655 163.317L109.947 114.433Z"
-                fill="#F7D27F"
-              />
-            </svg>
-          </div>
-          <div className="absolute z-10 left-[41rem] top-[-3rem] rotate-[-5deg] hidden md:block">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="30"
-              height="30"
-              viewBox="0 0 158 170"
-              fill="none"
-            >
-              <path
-                d="M109.947 114.433L153.358 93.6823L154.111 93.2659C155.229 92.5574 156.138 91.5529 156.745 90.3549C157.353 89.1569 157.637 87.8083 157.57 86.4469C157.502 85.0854 157.085 83.76 156.36 82.6058C155.636 81.4516 154.63 80.5101 153.446 79.8773L110.323 56.761L103.743 7.4808L103.587 6.6406C103.262 5.31202 102.602 4.0894 101.673 3.0979C100.744 2.1064 99.5806 1.38168 98.3014 0.99792C97.0222 0.614161 95.6734 0.585176 94.393 0.913908C93.1126 1.24264 91.9467 1.91729 91.0146 2.86879L57.0972 37.4625L9.72125 27.7465L8.90419 27.6253C7.5802 27.5057 6.25586 27.7501 5.06705 28.3333C3.87823 28.9166 2.86772 29.8178 2.13921 30.9444C1.41069 32.0711 0.990361 33.3826 0.921367 34.7445C0.852378 36.1063 1.13721 37.4695 1.74663 38.6942L23.8802 83.2145L1.06692 126.517L0.702629 127.315C0.217939 128.571 0.0680532 129.943 0.268231 131.291C0.468409 132.64 1.0115 133.916 1.84217 134.991C2.67284 136.066 3.7614 136.9 4.99694 137.409C6.2325 137.918 7.57089 138.084 8.87575 137.889L56.4669 130.799L89.8606 167.233C90.8273 168.288 92.057 169.05 93.4102 169.432C94.7635 169.814 96.1864 169.8 97.5178 169.393C98.8493 168.985 100.036 168.2 100.944 167.127C101.852 166.053 102.444 164.733 102.655 163.317L109.947 114.433Z"
-                fill="#F7D27F"
-              />
-            </svg>
-          </div>
-          <Image
-            src="https://d2uq10394z5icp.cloudfront.net/home/achievement/PublicityAward-2024.png"
-            className="max-md:self-start object-cover w-full max-md:max-w-md md:w-[32rem] md:ml-[9rem] rounded-lg shadow-lg hover:scale-105 transition-transform duration-200"
-            width={400}
-            height={300}
-            alt="Publicity Award"
-            priority={true}
-          />
-        </div>
+      {/* Hint */}
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 flex items-center gap-2 text-[#5E5E92]/60 text-xs font-medium z-0 animate-pulse select-none">
+        <MousePointerClick size={14} /> Tap or Swipe to view history
       </div>
-    </section>
+    </div>
   );
 };
 
-const CARD_STACK = ({
-  id,
-  image,
-  cards,
-  setCards,
-}: {
-  id: number;
-  image: string;
-  cards: CardStackProps[];
-  setCards: Dispatch<SetStateAction<CardStackProps[]>>;
-}) => {
+const Card = ({ card, index, total, moveToEnd }: any) => {
   const x = useMotionValue(0);
-  const rotate = useTransform(x, [-150, 150], [-18, 18]);
+  const isFront = index === total - 1;
+  const [multiplier, setMultiplier] = useState(22);
 
-  const index = cards.findIndex((c) => c.id === id);
-  const isFront = index === cards.length - 1;
-  const offset = cards.length - 1 - index;
-  const cardX = isFront ? x : -offset * 15;
-  const cardY = -offset * 15;
+  useEffect(() => {
+    const handleResize = () => {
+      setMultiplier(window.innerWidth >= 768 ? 27 : 22);
+    };
 
-  // Reduced hover effect
-  const hoverTranslateY = isFront ? "0" : "-20px"; // Was -35px
+    handleResize();
 
-  const handleDragEnd = () => {
-    const threshold = 100; // Swipe threshold in pixels
-    if (Math.abs(x.get()) > threshold) {
-      const direction = x.get() > 0 ? 1 : -1;
-      animate(x, direction * 1000, {
-        duration: 0.35,
-        ease: "easeInOut",
-        onComplete: () => {
-          setCards((prev) => {
-            const swiped = prev[prev.length - 1];
-            const rest = prev.slice(0, -1);
-            return [swiped, ...rest];
-          });
-          x.set(0);
-        },
-      });
-    } else {
-      animate(x, 0, { duration: 0.125, ease: "linear" });
-    }
-  };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
-  React.useEffect(() => {
+  const offset = total - 1 - index; 
+  
+  const xOffset = -offset * multiplier; 
+  const yOffset = -offset * multiplier; 
+  
+  const scale = 1 - offset * 0.05;
+  const zIndex = total - offset;
+
+  const rotate = useTransform(x, [-200, 200], [-18, 18]);
+  const opacity = useTransform(x, [-200, -100, 0, 100, 200], [0, 1, 1, 1, 0]);
+
+  useEffect(() => {
     if (!isFront) {
       x.set(0);
     }
   }, [isFront, x]);
 
+  const handleDragEnd = (_: any, info: PanInfo) => {
+    const threshold = 50;
+    if ((Math.abs(info.offset.x) > threshold || Math.abs(info.velocity.x) > 400) && isFront) {
+      const direction = info.offset.x > 0 ? 1 : -1;
+      
+      animate(x, direction * 500, {
+        duration: 0.4,
+        ease: "easeIn",
+        onComplete: () => {
+          moveToEnd(index);
+        },
+      });
+    } else {
+      // Trả về
+      animate(x, 0, { type: "spring", stiffness: 300, damping: 25 });
+    }
+  };
+
+  const handleClick = () => {
+    if (isFront) {
+      animate(x, 250, {
+        duration: 0.3,
+        ease: "easeIn",
+        onComplete: () => {
+          moveToEnd(index);
+        },
+      });
+    }
+  };
+
   return (
-    <motion.img
-      src={image}
-      alt={`Achievement ${id}`}
-      className="object-cover w-full max-w-[18rem] md:w-[32rem] md:max-w-none hover:cursor-grab active:cursor-grabbing rounded-lg"
+    <motion.div
       style={{
-        position: "absolute",
-        x: cardX,
-        y: cardY,
+        x: isFront ? x : 0, 
+        zIndex: zIndex,
         rotate: isFront ? rotate : 0,
-        transition: "0.125s transform",
-        boxShadow: isFront
-          ? "0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5)"
-          : "0 10px 15px -3px rgba(0, 0, 0, 0.3)",
-        zIndex: cards.length - offset,
+        opacity: isFront ? opacity : 1,
+        top: "10%", 
+        position: "absolute",
+        transformOrigin: "center bottom"
+      }}
+      animate={{
+        x: isFront ? 0 : xOffset, 
+        y: yOffset,
+        scale: scale,
+        opacity: index === 0 ? [0, 1] : 1 
+      }}
+      transition={{
+        type: "spring",
+        stiffness: 260,
+        damping: 20,
       }}
       drag={isFront ? "x" : false}
-      dragConstraints={{
-        left: 0,
-        right: 0,
-      }}
+      dragConstraints={{ left: 0, right: 0 }}
+      dragElastic={0.1}
       onDragEnd={handleDragEnd}
+      onClick={handleClick}
       whileHover={{
-        scale: isFront ? 1.05 : 1,
-        transition: { duration: 0.2 },
-        translateY: hoverTranslateY,
-        rotate: isFront ? 7 : 0,
+        scale: isFront ? 1.05 : scale,
+        cursor: isFront ? "grab" : "default",
       }}
-    />
+      whileTap={{ cursor: isFront ? "grabbing" : "default" }}
+      className={`
+        w-[260px] md:w-[420px] aspect-[16/10] rounded-xl shadow-xl 
+        bg-white border-[4px] border-white overflow-hidden
+        ${isFront ? "shadow-[0_20px_25px_-5px_rgba(0,0,0,0.3)]" : "shadow-sm"}
+      `}
+    >
+      <Image
+        src={card.image}
+        alt="Achievement"
+        fill
+        className="object-fill pointer-events-none select-none"
+        draggable={false}
+      />
+    </motion.div>
+  );
+};
+
+const BentoItem = ({
+  children,
+  className,
+  delay = 0,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  delay?: number;
+}) => (
+  <motion.div
+    initial={{ opacity: 0, y: 30 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true, margin: "-50px" }}
+    transition={{ duration: 0.6, delay, ease: "easeOut" }}
+    className={`relative rounded-[2rem] overflow-hidden ${className}`}
+  >
+    {children}
+  </motion.div>
+);
+
+// --- Main Component ---
+const Achievements = () => {
+  return (
+    <section className="w-full py-8 md:py-16 relative overflow-hidden bg-[#FDFBF7]">
+      {/* Background Decor */}
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+        <div className="absolute top-[-10%] left-[-5%] w-[500px] h-[500px] bg-[#DBB968] opacity-5 blur-[120px] rounded-full" />
+        <div className="absolute bottom-[-10%] right-[-5%] w-[600px] h-[600px] bg-[#2C305F] opacity-5 blur-[120px] rounded-full" />
+      </div>
+
+      <div className="container mx-auto px-4 md:px-8 relative z-10">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="text-4xl md:text-6xl font-bold text-[#2C305F] mb-4 drop-shadow-sm"
+          >
+            Our <span className="text-[#DBB968]">Achievements</span>
+          </motion.h2>
+          <p className="text-[#5E5E92] text-lg md:text-xl font-medium max-w-2xl mx-auto">
+            Milestones that mark our journey of dedication, innovation, and
+            continuous growth at RMIT.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 auto-rows-auto">
+          {/* ===================================================================================== */}
+          {/* 1. ACADEMIC CLUB (Hero - Full Overlay on Hover) */}
+          {/* ===================================================================================== */}
+          <BentoItem className="md:col-span-8 bg-[#2C305F] text-white min-h-[450px] md:min-h-[500px] group shadow-2xl relative overflow-hidden cursor-default">
+            {/* 1. LAYER ẢNH NỀN (Giữ nguyên) */}
+            <div className="absolute inset-0 z-0">
+              <Image
+                src={NEW_AWARDS.academic}
+                alt="Academic Club of the Year Team"
+                fill
+                className="object-cover object-bottom transition-transform duration-700 group-hover:scale-105"
+              />
+              {/* Gradient nền tối luôn hiển thị để chữ dễ đọc */}
+              <div className="absolute inset-0 bg-gradient-to-t from-[#2C305F] via-[#2C305F]/60 to-transparent opacity-90" />
+            </div>
+
+            {/* 2. LAYER CONTENT */}
+            <div className="absolute inset-0 z-10 flex flex-col justify-end p-8 md:p-10">
+              <div className="flex flex-col justify-end">
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                  <div className="max-w-2xl transition-all duration-500 ease-in-out">
+                    {/* Badge & Title */}
+                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#DBB968] text-[#2C305F] font-bold text-xs rounded uppercase tracking-wider mb-3 shadow-lg">
+                      <Star size={12} fill="#2C305F" /> Most Prestigious
+                    </div>
+
+                    <h3 className="text-3xl md:text-5xl font-bold mb-3 leading-tight text-white drop-shadow-lg">
+                      Academic Club
+                      <br className="hidden md:block" /> Of The Year{" "}
+                      <span className="md:hidden">2025</span>
+                    </h3>
+                  </div>
+
+                  <div className="hidden md:flex flex-col items-end shrink-0">
+                    <span
+                      className="text-8xl font-black drop-shadow-sm leading-none"
+                      style={{
+                        background:
+                          "linear-gradient(to bottom, #F7D27F, #DBB968)",
+                        WebkitBackgroundClip: "text",
+                        backgroundClip: "text",
+                        color: "transparent",
+                      }}
+                    >
+                      2025
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </BentoItem>
+
+          {/* 2. ETERNAL FLAME */}
+          <BentoItem
+            delay={0.1}
+            className="md:col-span-4 bg-gradient-to-br from-[#FFFDF5] to-[#fceeb5] border border-[#DBB968]/30 min-h-[450px] flex flex-col relative group shadow-xl"
+          >
+            <div className="absolute top-0 right-0 p-6 opacity-5 pointer-events-none">
+              <Flame size={180} />
+            </div>
+
+            <div className="p-8 pb-4 z-10">
+              <div className="flex justify-between items-start mb-4">
+                <div className="inline-flex items-center justify-center p-3 bg-white rounded-full shadow-md group-hover:scale-110 transition-transform duration-300">
+                  <Flame
+                    size={28}
+                    className="text-[#DBB968] animate-pulse"
+                    fill="#DBB968"
+                  />
+                </div>
+                <div
+                  className="text-white text-xs font-bold px-3 py-1 rounded-full shadow-md"
+                  style={{
+                    background: "linear-gradient(to bottom, #F7D27F, #DBB968)",
+                  }}
+                >
+                  SINCE 2020
+                </div>
+              </div>
+
+              <h3 className="text-2xl md:text-3xl font-bold text-[#2C305F] mb-2 leading-tight">
+                Eternal Flame Award
+              </h3>
+              <p className="text-[#5E5E92] font-medium text-sm">
+                5 Years of Continuous Dedication. Keeping the passion alive.
+              </p>
+            </div>
+
+            <div className="flex-1 relative mx-6 mb-6 rounded-xl overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.12)] border-4 border-white rotate-2 group-hover:rotate-0 transition-transform duration-500">
+              <Image
+                src={NEW_AWARDS.eternal}
+                alt="Eternal Flame Award Team"
+                fill
+                className="object-cover"
+              />
+            </div>
+          </BentoItem>
+
+          {/* 3. BEST CLUB */}
+          <BentoItem
+            delay={0.2}
+            className="md:col-span-6 bg-white border border-[#2C305F]/10 shadow-lg p-0 overflow-visible min-h-[420px] flex flex-col"
+          >
+            <div className="p-8 pb-0 flex flex-col md:flex-row md:items-start justify-between md:gap-4">
+              <div>
+                <h3 className="text-2xl md:text-3xl font-bold text-[#2C305F]">
+                  Best Club of Semester
+                </h3>
+              </div>
+              <div className="flex self-end items-center w-fit gap-2 md:px-4 md:py-2 md:bg-[#F7D27F]/20 md:rounded-lg">
+                <span className="text-4xl font-bold text-[#DBB968]">5</span>
+                <span className="text-[#2C305F] font-bold text-sm uppercase flex flex-col leading-none text-left">
+                  <span>Times</span>
+                </span>
+              </div>
+            </div>
+            <div className="flex-1 w-full md:pb-4">
+              <CardStack />
+            </div>
+          </BentoItem>
+
+          {/* 4. OTHER AWARDS */}
+          <div className="md:col-span-6 flex flex-col gap-6 h-full">
+            {/* ================= INOVATION AWARD ================= */}
+            <BentoItem
+              delay={0.3}
+              className="flex-[1.4] bg-white border border-gray-200 shadow-sm p-6 flex items-center gap-6"
+            >
+              <div className="w-32 h-full md:w-40 relative flex-shrink-0 rounded-xl overflow-hidden shadow-inner border border-gray-100">
+                <Image
+                  src={NEW_AWARDS.innovation}
+                  alt="Innovation Award Front"
+                  fill
+                  className="object-cover z-10"
+                />
+              </div>
+
+              <div className="flex-1 flex flex-col justify-center py-2">
+                <div className="p-2 w-fit bg-[#2C305F]/10 rounded-lg mb-3">
+                  <Lightbulb size={24} className="text-[#2C305F]" />
+                </div>
+                <h4 className="text-xl md:text-3xl font-bold text-[#2C305F] mb-2">
+                  Innovation Award
+                </h4>
+                <span className="text-3xl font-black text-[#2C305F]/80 mt-auto">
+                  2023
+                </span>
+              </div>
+            </BentoItem>
+
+            {/* ================= PUBLICITY AWARD ================= */}
+            <BentoItem
+              delay={0.4}
+              className="flex-[1] bg-white border border-gray-200 shadow-sm p-6 flex items-center gap-6"
+            >
+              <div className="flex-1 flex flex-col justify-center py-2">
+                {/* Icon & Title: Màu Vàng */}
+                <div className="p-2 w-fit bg-[#DBB968]/15 rounded-lg mb-3">
+                  <Megaphone size={24} className="text-[#DBB968]" />
+                </div>
+                <h4 className="text-xl md:text-3xl font-bold text-[#2C305F] mb-2">
+                  Publicity Award
+                </h4>
+                {/* Năm: Màu Vàng luôn */}
+                <span className="text-3xl font-black text-[#DBB968] mt-auto">
+                  2024
+                </span>
+              </div>
+
+              <div className="w-48 md:w-56 h-full relative flex-shrink-0 rounded-xl overflow-hidden shadow-inner border border-gray-100">
+                <Image
+                  src={NEW_AWARDS.publicity}
+                  alt="Publicity Award Front"
+                  fill
+                  className="object-cover z-10"
+                />
+              </div>
+            </BentoItem>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 };
 

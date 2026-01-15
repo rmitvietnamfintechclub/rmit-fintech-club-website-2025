@@ -6,7 +6,6 @@ import { motion, useInView } from "framer-motion";
 import "./styles.css"; 
 import Link from "next/link";
 import axios from "axios";
-import { CircularProgress } from "@mui/material";
 import useMediaQuery from "./useMediaQuery";
 
 // --- Type Definition ---
@@ -207,13 +206,12 @@ const ManagementBoard = () => {
     return (
       <section className="relative max-md:pb-0 md:py-24 min-h-screen px-6 md:px-20">
         <DecorativeElements />
-        {/* Responsive padding */}
         <main className="mx-6 md:mx-16 2xl:mx-[10rem]">
           <PageHeader />
           <div className="p-8 text-center flex flex-col items-center justify-center h-64">
-            <CircularProgress sx={{ color: "#DCB968" }} />
-            <p className="mt-4 text-lg md:text-xl text-[#5E5E92]">
-              Loading Management Board
+            <div className="w-12 h-12 border-[5px] border-[#F0EDFF] border-t-[#DCB968] rounded-full animate-spin"></div>
+            <p className="mt-4 text-lg md:text-xl text-[#5E5E92] animate-pulse">
+              Loading Management Board...
             </p>
           </div>
         </main>

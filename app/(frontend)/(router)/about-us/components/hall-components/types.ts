@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 export interface HallOfFameMember {
   name: string;
   achievement?: string;
@@ -12,6 +13,8 @@ export type HallDisplayProps = {
   categories: string[];
   semesters: string[];
   onCategorySelect?: (category: string) => void;
+  isEmpty?: boolean;
+  emptyComponent?: ReactNode;
 };
 
 // For the filtered category view

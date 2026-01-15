@@ -2,8 +2,6 @@
 import Image from "next/image";
 import React, { useState } from "react";
 import { Button } from "@heroui/react";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 
 // =================================================================
 // 1. DATA & TYPES (Moved outside component for scalability)

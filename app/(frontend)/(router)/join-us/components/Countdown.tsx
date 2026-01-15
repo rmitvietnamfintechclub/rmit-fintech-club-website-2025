@@ -1,245 +1,197 @@
 "use client";
-import { Box, Center, Flex, HStack, Text } from "@chakra-ui/react";
 import { motion, useAnimationControls } from "framer-motion";
 import { memo, useEffect, useMemo, useState } from "react";
-import ReactCountdown, { CountdownProps, CountdownRendererFn } from "react-countdown";
+import Image from "next/image";
+import ReactCountdown, {
+  CountdownProps,
+  CountdownRendererFn,
+} from "react-countdown";
 
-/* ----------------------------- Static Half Card ----------------------------- */
-const StaticCard = ({
-  position,
+// --- Types ---
+type UnitType = "days" | "hours" | "mins" | "secs";
+
+const FlipCardHalf = ({
   unit,
+  position,
+  animateProps,
 }: {
-  position: "upper" | "lower";
-  unit: number | string;
+  unit: string | number;
+  position: "top" | "bottom";
+  animateProps?: any; // Framer motion props
 }) => {
-  const translateY =
-    position === "upper" ? "translateY(50%)" : "translateY(-50%)";
+  const isTop = position === "top";
 
   return (
-    <Flex
-      pos="relative"
-      justifyContent="center"
-      w="100%"
-      h="50%"
-      overflow="hidden"
-      alignItems={position === "upper" ? "flex-end" : "flex-start"}
-      bgColor="#2C305F"
-      borderTopRadius={position === "upper" ? 18.51 : undefined}
-      borderBottomRadius={position === "lower" ? 18.51 : undefined}
-      borderBottom={
-        position === "upper" ? `4.12px solid #C0C4DC` : undefined
-      }
-      borderTop={
-        position === "lower" ? `4.12px solid #C0C4DC` : undefined
-      }
+    <motion.div
+      {...animateProps}
+      className={`
+        absolute left-0 w-full h-[50%] flex justify-center overflow-hidden bg-[#2C305F]
+        ${
+          isTop
+            ? "top-0 items-end rounded-t-[10px] sm:rounded-t-[18px] border-b-[2px] sm:border-b-[4px]"
+            : "bottom-0 items-start rounded-b-[10px] sm:rounded-b-[18px] border-t-[2px] sm:border-t-[4px]"
+        }
+        border-[#C0C4DC]
+      `}
+      style={{
+        backfaceVisibility: "hidden",
+        transformStyle: "preserve-3d",
+        transformOrigin: isTop ? "50% 100%" : "50% 0%",
+        ...animateProps?.style,
+      }}
     >
-      <Text
-        fontWeight="normal"
-        transform={translateY}
-        color="#FFFFFF"
-        className="text-[80px] sm:text-[80px] md:text-[100px] lg:text-[150px] xl:text-[180px] 2xl:text-[200px] shadow-md"
-        style={{
-          textShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
-        }}
+      <span
+        className={`
+          font-mono font-normal text-white leading-none shadow-md
+          text-[40px] sm:text-[80px] md:text-[100px] lg:text-[120px] xl:text-[150px]
+          ${isTop ? "translate-y-[50%]" : "-translate-y-[50%]"}
+        `}
+        style={{ textShadow: "0 2px 4px rgba(0, 0, 0, 0.2)" }}
       >
         {unit}
-      </Text>
-    </Flex>
+      </span>
+    </motion.div>
   );
 };
 
-/* ---------------------------- Motion Flex Wrapper --------------------------- */
-const MotionFlex = motion.create(Flex);
-
-/* --------------------------- Animated Upper Card --------------------------- */
-const UpperAnimatedCard = memo(
+// --- Animated Components ---
+const AnimatedTopHalf = memo(
   ({
     current,
     previous,
   }: {
-    current: number | string;
-    previous: number | string;
+    current: string | number;
+    previous: string | number;
   }) => {
     const [displayUnit, setDisplayUnit] = useState(previous);
     const controls = useAnimationControls();
 
     useEffect(() => {
-      controls.start({
-        rotateX: [0, -180],
-        transition: { duration: 0.9, ease: "easeInOut" },
-      });
-      setDisplayUnit(previous);
-    }, [previous]);
-
-    return (
-      <MotionFlex
-        animate={controls}
-        justifyContent="center"
-        pos="absolute"
-        w="100%"
-        h="50%"
-        overflow="hidden"
-        alignItems="flex-end"
-        sx={{
-          backfaceVisibility: "hidden",
-          transformStyle: "preserve-3d",
-        }}
-        top={0}
-        transformOrigin="50% 100%"
-        transform="rotateX(0deg)"
-        bgColor="#2C305F"
-        borderTopRadius={18.51}
-        borderBottom="4.12px solid #C0C4DC"
-        onAnimationComplete={() => {
+      controls
+        .start({
+          rotateX: [0, -180],
+          transition: { duration: 0.6, ease: "easeInOut" },
+        })
+        .then(() => {
           setDisplayUnit(current);
           controls.set({ rotateX: 0 });
-        }}
-      >
-        <Text
-          fontWeight="normal"
-          transform="translateY(50%)"
-          color="#FFFFFF"
-          className="text-[80px] sm:text-[80px] md:text-[100px] lg:text-[150px] xl:text-[180px] 2xl:text-[200px]"
-        >
-          {displayUnit}
-        </Text>
-      </MotionFlex>
+        });
+    }, [previous, current, controls]);
+
+    return (
+      <FlipCardHalf
+        position="top"
+        unit={displayUnit}
+        animateProps={{ animate: controls, initial: { rotateX: 0 } }}
+      />
     );
   }
 );
+AnimatedTopHalf.displayName = "AnimatedTopHalf";
 
-/* --------------------------- Animated Bottom Card -------------------------- */
-const BottomAnimatedCard = ({ unit }: { unit: number | string }) => {
-  const [displayUnit, setDisplayUnit] = useState(unit);
+const AnimatedBottomHalf = memo(({ unit }: { unit: string | number }) => {
   const controls = useAnimationControls();
 
   useEffect(() => {
     controls.start({
       rotateX: [180, 0],
-      transition: { duration: 0.9, ease: "easeInOut" },
+      transition: { duration: 0.6, ease: "easeInOut" },
     });
-    setDisplayUnit(unit);
-  }, [unit]);
+  }, [unit, controls]);
 
   return (
-    <MotionFlex
-      animate={controls}
-      justifyContent="center"
-      pos="absolute"
-      left={0}
-      w="100%"
-      h="50%"
-      overflow="hidden"
-      alignItems="flex-start"
-      sx={{ backfaceVisibility: "hidden", transformStyle: "preserve-3d" }}
-      top="50%"
-      transformOrigin="50% 0%"
-      transform="rotateX(180deg)"
-      bgColor="#2C305F"
-      borderBottomRadius={18.51}
-      borderTop="4.12px solid #C0C4DC"
-    >
-      <Text
-        fontWeight="normal"
-        transform="translateY(-50%)"
-        color="#FFFFFF"
-        className="text-[80px] sm:text-[80px] md:text-[100px] lg:text-[150px] xl:text-[180px] 2xl:text-[200px]"
-      >
-        {displayUnit}
-      </Text>
-    </MotionFlex>
+    <FlipCardHalf
+      position="bottom"
+      unit={unit}
+      animateProps={{ animate: controls, initial: { rotateX: 180 } }}
+    />
   );
-};
+});
+AnimatedBottomHalf.displayName = "AnimatedBottomHalf";
 
-/* ------------------------------ Flip Container ----------------------------- */
-const FlipContainer = ({
-  number,
-  title,
-}: {
-  number: number;
-  title: "days" | "hours" | "mins" | "secs";
-}) => {
+// --- Flip Digit Container ---
+const FlipDigit = ({ number, title }: { number: number; title: UnitType }) => {
   const { current, previous } = useMemo(() => {
-    const currentDigit = number;
-    const previousDigit = number + 1;
+    const currentStr = number < 10 ? `0${number}` : number;
+    const prevNum =
+      title === "days" ? number + 1 : number === 59 ? 0 : number + 1;
+    const prevStr = prevNum < 10 ? `0${prevNum}` : prevNum;
 
-    const current =
-      currentDigit < 10
-        ? `0${currentDigit}`
-        : (title === "secs" || title === "mins") && currentDigit === 60
-        ? "00"
-        : currentDigit;
-
-    const previous =
-      previousDigit < 10
-        ? `0${previousDigit}`
-        : (title === "secs" || title === "mins") && previousDigit === 60
-        ? "00"
-        : previousDigit;
-
-    return { current, previous };
-  }, [number]);
+    return { current: currentStr, previous: prevStr };
+  }, [number, title]);
 
   return (
-    <Box className="cols-span-1">
-      <Box
-        display="block"
-        pos="relative"
-        bgColor="#2C305F"
-        rounded="18.51px"
-        className="xl:w-[250px] xl:h-[200px] lg:w-[200px] lg:h-[170px] md:w-[170px] md:h-[160px] max-md:w-[150px] max-md:h-[160px] shadow-lg"
-        sx={{ perspective: "800px", perspectiveOrigin: "50% 50%" }}
-        style={{
-          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-        }}
+    <div className="flex flex-col items-center gap-4 sm:gap-8">
+      {/* Card Container */}
+      <div
+        className="relative w-[70px] h-[80px] sm:w-[140px] sm:h-[160px] md:w-[160px] md:h-[180px] lg:w-[200px] lg:h-[220px] bg-[#2C305F]/20 rounded-[10px] sm:rounded-[18px] shadow-2xl"
+        style={{ perspective: "1000px" }}
       >
-        <StaticCard position="upper" unit={current} />
-        <StaticCard position="lower" unit={previous} />
-        <UpperAnimatedCard current={current} previous={previous} />
-        <BottomAnimatedCard unit={current} />
-      </Box>
+        <FlipCardHalf position="top" unit={current} />
+        <FlipCardHalf position="bottom" unit={previous} />
+        <AnimatedTopHalf current={current} previous={previous} />
+        <AnimatedBottomHalf unit={current} />
+      </div>
 
-      <Center py={20}>
-        <Text
-          fontWeight="light"
-          textTransform="uppercase"
-          color="black"
-          className="lg:text-3xl md:text-4xl text-2xl font-sans font-semibold"
-          style={{
-            textShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
-          }}
-        >
-          {title}
-        </Text>
-      </Center>
-    </Box>
+      {/* Label */}
+      <span className="text-black font-bold text-sm sm:text-2xl md:text-3xl uppercase tracking-widest opacity-80">
+        {title}
+      </span>
+    </div>
   );
 };
 
-/* ----------------------------- Countdown Renderer ----------------------------- */
-const renderer: CountdownRendererFn = ({
-  hours,
-  minutes,
-  seconds,
-  completed,
-  days,
-}) => {
-  if (completed) return null;
+// --- Main Renderer ---
+const renderer: CountdownRendererFn = ({ days, hours, minutes, seconds, completed }) => {
+  if (completed) {
   return (
-    <Center>
-      <HStack>
-        <div className="grid md:grid-cols-4 gap-5 max-md:grid-cols-2 md:mt-[30px] max-md:mt-[40px] max-md:gap-x-[40px]">
-          <FlipContainer number={days} title="days" />
-          <FlipContainer number={hours} title="hours" />
-          <FlipContainer number={minutes} title="mins" />
-          <FlipContainer number={seconds} title="secs" />
-        </div>
-      </HStack>
-    </Center>
+    <div className="flex flex-col items-center justify-center animate-in zoom-in-95 duration-700 px-4">
+      {/* Glass Card Container */}
+      <div className="max-w-4xl text-center">
+        
+        <div className="relative w-40 h-40 md:w-56 md:h-56 mb-6 mx-auto drop-shadow-2xl">
+         <Image 
+           src="https://d2uq10394z5icp.cloudfront.net/global/Mascot+-+M%E1%BA%B7t+tr%C6%B0%E1%BB%9Bc.svg" 
+           alt="Mascot"
+           fill
+           className="object-contain"
+         />
+      </div>
+
+        <h1 className="text-3xl md:text-5xl font-extrabold text-white tracking-wide drop-shadow-md mb-4 uppercase">
+          Applications Closed
+        </h1>
+        
+        <p className="text-lg md:text-xl text-white/90 font-medium leading-relaxed mb-8">
+          The recruitment form is officially closed. Thank you for your enthusiasm! 
+          <br className="hidden md:block"/>
+          Missed the chance? Don't worry, we'll be back soon.
+        </p>
+      </div>
+    </div>
+  );
+}
+
+  return (
+    <div className="flex flex-col items-center gap-8 w-full">
+      <h1 className="text-4xl md:text-6xl font-extrabold text-center text-white mt-8 drop-shadow-md tracking-tight leading-tight">
+        COUNTDOWN TO FORM CLOSED
+      </h1>
+
+      <div
+        className="flex flex-wrap justify-center gap-4 sm:gap-6 md:gap-8"
+        role="timer"
+        aria-label={`Countdown: ${days} days ${hours} hours ${minutes} minutes ${seconds} seconds`}
+      >
+        <FlipDigit number={days} title="days" />
+        <FlipDigit number={hours} title="hours" />
+        <FlipDigit number={minutes} title="mins" />
+        <FlipDigit number={seconds} title="secs" />
+      </div>
+    </div>
   );
 };
 
-/* ---------------------------- Hydration-Safe Export --------------------------- */
 export default function Countdown({ date }: Pick<CountdownProps, "date">) {
   const [mounted, setMounted] = useState(false);
 
@@ -247,21 +199,7 @@ export default function Countdown({ date }: Pick<CountdownProps, "date">) {
     setMounted(true);
   }, []);
 
-  if (!mounted) {
-    // SSR fallback (safe HTML, no mismatch)
-    return (
-      <Center>
-        <HStack>
-          <div className="grid md:grid-cols-4 gap-5 max-md:grid-cols-2 md:mt-[30px] max-md:mt-[40px] max-md:gap-x-[40px]">
-            <FlipContainer number={0} title="days" />
-            <FlipContainer number={0} title="hours" />
-            <FlipContainer number={0} title="mins" />
-            <FlipContainer number={0} title="secs" />
-          </div>
-        </HStack>
-      </Center>
-    );
-  }
+  if (!mounted) return null; // Or a static loading skeleton to prevent hydration mismatch
 
   return <ReactCountdown date={date} renderer={renderer} />;
 }

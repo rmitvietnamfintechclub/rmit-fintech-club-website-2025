@@ -1,11 +1,7 @@
 "use client";
 
-import React from "react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import Breadcrumbs from "@mui/material/Breadcrumbs";
-import MuiLink from "@mui/material/Link";
-import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import LabelSort from "./components/labelSort";
 import PodcastCard from "./components/podcastCard";
 import ReelPlayer from "./components/reelPlayer";
@@ -14,7 +10,6 @@ import { motion } from "framer-motion";
 import PaginationRounded from "./components/pagination";
 import Image from "next/image";
 import axios from "axios";
-import { CircularProgress } from "@mui/material";
 
 // --- TYPE DEFINITIONS ---
 interface ApiPodcast {
@@ -70,6 +65,39 @@ const formatPodcastDate = (isoString: string): string => {
   return `${month} ${day}, ${year}`;
 };
 
+// --- ICONS (SVG Thuần) ---
+const ChevronRightIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="#A28436"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className="mx-2"
+  >
+    <polyline points="9 18 15 12 9 6"></polyline>
+  </svg>
+);
+
+const ArrowLeftIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    className="h-5 w-5 mr-2"
+    viewBox="0 0 20 20"
+    fill="currentColor"
+  >
+    <path
+      fillRule="evenodd"
+      d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
+      clipRule="evenodd"
+    />
+  </svg>
+);
+
 export default function PodcastLibrary() {
   // --- STATE ---
   const [activeTab, setActiveTab] = useState("podcast");
@@ -103,7 +131,6 @@ export default function PodcastLibrary() {
   );
 
   // --- EFFECTS ---
-  // Fetch labels for both content types on initial load
   useEffect(() => {
     const fetchAllPodcastLabels = async () => {
       try {
@@ -133,7 +160,7 @@ export default function PodcastLibrary() {
     fetchAllReelLabels();
   }, []);
 
-  // Fetch podcasts when relevant state changes
+  // Fetch podcasts
   useEffect(() => {
     if (activeTab === "podcast") {
       const fetchPodcasts = async () => {
@@ -177,7 +204,7 @@ export default function PodcastLibrary() {
     }
   }, [podcastPage, selectedPodcastLabel, activeTab]);
 
-  // Fetch reels when relevant state changes
+  // Fetch reels
   useEffect(() => {
     if (activeTab === "fintech101") {
       const fetchReels = async () => {
@@ -191,9 +218,7 @@ export default function PodcastLibrary() {
           if (selectedReelLabel && selectedReelLabel !== "All") {
             params.append("labels", selectedReelLabel);
           }
-          const response = await axios.get(
-            `/api/v1/reel?${params.toString()}`
-          );
+          const response = await axios.get(`/api/v1/reel?${params.toString()}`);
           const {
             reels: fetchedReels = [],
             totalPages: fetchedTotalPages = 1,
@@ -226,8 +251,11 @@ export default function PodcastLibrary() {
     if (podcastsLoading) {
       return (
         <div className="p-8 text-center flex flex-col items-center justify-center h-64">
-          <CircularProgress sx={{ color: "#DCB968" }} />
-          <p className="mt-4 text-lg text-[#5E5E92]">Loading Podcasts</p>
+          {/* ✅ Tailwind Spinner thay thế CircularProgress */}
+          <div className="w-12 h-12 border-[5px] border-[#F0EDFF] border-t-[#DCB968] rounded-full animate-spin"></div>
+          <p className="mt-4 text-lg text-[#5E5E92] animate-pulse">
+            Loading Podcasts...
+          </p>
         </div>
       );
     }
@@ -236,9 +264,7 @@ export default function PodcastLibrary() {
         <div className="relative w-[90vw] max-w-4xl h-48 mx-auto my-10 md:h-64 p-[4px] rounded-lg bg-gradient-to-b from-[#DCB968] to-[#F7D27F]">
           <div className="flex flex-col items-center justify-center w-full h-full bg-[#F9FAFB] rounded-[7px] text-center px-4">
             <p className="text-5xl font-bold mb-4">⚠️</p>
-            <p className="text-[#2C305F] text-lg md:text-xl">
-              {podcastsError}
-            </p>
+            <p className="text-[#2C305F] text-lg md:text-xl">{podcastsError}</p>
           </div>
         </div>
       );
@@ -272,8 +298,11 @@ export default function PodcastLibrary() {
     if (reelsLoading) {
       return (
         <div className="p-8 text-center flex flex-col items-center justify-center h-64">
-          <CircularProgress sx={{ color: "#DCB968" }} />
-          <p className="mt-4 text-lg text-[#5E5E92]">Loading FinTech101</p>
+          {/* ✅ Tailwind Spinner thay thế CircularProgress */}
+          <div className="w-12 h-12 border-[5px] border-[#F0EDFF] border-t-[#DCB968] rounded-full animate-spin"></div>
+          <p className="mt-4 text-lg text-[#5E5E92] animate-pulse">
+            Loading FinTech101...
+          </p>
         </div>
       );
     }
@@ -356,9 +385,7 @@ export default function PodcastLibrary() {
           >
             <Link href="/media">
               <motion.button
-                whileHover={{ scale: 1.15 }}
-                whileTap={{ scale: 1.1 }}
-                className="bg-ft-primary-blue-300 text-bluePrimary font-semibold px-4 py-2 rounded-md hover:bg-yellowCream"
+                className="bg-ft-primary-blue-300 text-bluePrimary font-semibold px-4 py-2 rounded-md hover:bg-yellowCream transition-colors duration-200"
               >
                 Back to Media
               </motion.button>
@@ -367,51 +394,39 @@ export default function PodcastLibrary() {
         </div>
       </div>
 
-      {/* Conditionally show Breadcrumbs OR the Back button */}
       {selectedReelIndex === null ? (
-        <Breadcrumbs
-          aria-label="breadcrumb"
-          separator={
-            <NavigateNextIcon fontSize="small" sx={{ color: "#A28436" }} />
-          }
-          sx={{ color: "#000000", "& .MuiBreadcrumbs-separator": { mx: 0.5 } }}
+        <nav
+          aria-label="Breadcrumb"
           className="w-full py-8 max-md:py-4 px-6 md:pl-16"
         >
-          <MuiLink
-            underline="hover"
-            sx={{ color: "#000000", "&:hover": { color: "#A28436" } }}
-            component={Link}
-            href="/media"
-          >
-            Media
-          </MuiLink>
-          <MuiLink
-            underline="hover"
-            sx={{ color: "#000000", "&:hover": { color: "#A28436" } }}
-            component={Link}
-            href="/media/fintechtainment"
-          >
-            FinTechTainment Library
-          </MuiLink>
-        </Breadcrumbs>
+          <ol className="flex items-center">
+            <li>
+              <Link
+                href="/media"
+                className="text-black hover:text-[#A28436] transition-colors underline-offset-4 hover:underline"
+              >
+                Media
+              </Link>
+            </li>
+            <li className="flex items-center">
+              <ChevronRightIcon />
+            </li>
+            <li>
+             <span 
+              className="text-black font-semibold truncate max-w-[150px] md:max-w-none cursor-default"
+            >
+              FinTechTainment Library
+            </span>
+            </li>
+          </ol>
+        </nav>
       ) : (
         <div className="w-full pt-8 pb-4 px-6 md:pl-16">
           <button
             onClick={() => setSelectedReelIndex(null)}
             className="flex items-center text-gray-700 font-semibold hover:text-black transition-colors"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5 mr-2"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                fillRule="evenodd"
-                d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
-                clipRule="evenodd"
-              />
-            </svg>
+            <ArrowLeftIcon />
             Back to FinTech 101 Library
           </button>
         </div>
@@ -426,7 +441,7 @@ export default function PodcastLibrary() {
               className={`w-1/2 py-2.5 px-2 text-sm md:text-base rounded-md font-semibold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#A28436] focus:ring-opacity-50 ${
                 activeTab === "podcast"
                   ? "bg-[#DBB968] text-[#1E264A] shadow-md"
-                  : "bg-transparent text-gray-500 hover:bg-gray-200"
+                  : "bg-transparent text-gray-500 hover:bg-gray-200 hover:text-gray-700"
               }`}
             >
               FinTechTainment Podcast
@@ -436,7 +451,7 @@ export default function PodcastLibrary() {
               className={`w-1/2 py-2.5 px-2 text-sm md:text-base rounded-md font-semibold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#A28436] focus:ring-opacity-50 ${
                 activeTab === "fintech101"
                   ? "bg-[#DBB968] text-[#1E264A] shadow-md"
-                  : "bg-transparent text-gray-500 hover:bg-gray-200"
+                  : "bg-transparent text-gray-500 hover:bg-gray-200 hover:text-gray-700"
               }`}
             >
               FinTech 101

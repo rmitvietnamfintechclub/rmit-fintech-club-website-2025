@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useParams } from "next/navigation";
 import axios from "axios";
-import { CircularProgress } from "@mui/material";
 
 // --- Type Imports ---
 // Import the component-specific prop types
@@ -105,7 +104,7 @@ export default function ProjectDetail() {
   if (loading) {
     return (
       <div className="p-8 text-center flex flex-col items-center justify-center h-screen">
-        <CircularProgress sx={{ color: "#DCB968" }} />
+        <div className="w-12 h-12 border-[5px] border-[#F0EDFF] border-t-[#DCB968] rounded-full animate-spin"></div>
         <p className="mt-4 text-lg text-[#5E5E92]">Loading</p>
       </div>
     );
@@ -207,7 +206,9 @@ export default function ProjectDetail() {
 
       {project.product_link && <ProductCta productUrl={project.product_link} />}
 
-      {project.details_link && <CompetitionCta detailsUrl={project.details_link} />}
+      {project.details_link && (
+        <CompetitionCta detailsUrl={project.details_link} />
+      )}
     </div>
   );
 }

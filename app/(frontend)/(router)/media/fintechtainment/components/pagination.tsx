@@ -1,10 +1,8 @@
 "use client";
 
-import * as React from "react";
-import Pagination from "@mui/material/Pagination";
-import Stack from "@mui/material/Stack";
+import React from "react";
+import { Pagination } from "@heroui/react";
 
-// Interface for component props remains the same, it's already correct.
 interface PaginationRoundedProps {
   page: number;
   onPageChange: (value: number) => void;
@@ -16,48 +14,40 @@ export default function PaginationRounded({
   onPageChange,
   count,
 }: PaginationRoundedProps) {
-  // The handler correctly calls the parent state update function.
-  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
-    onPageChange(value);
-  };
-
   return (
-    <Stack
-      spacing={2}
-      className="bg-[#F7D27F] p-2 mb-8 rounded-lg text-[#2C305F] font-bold"
-    >
-      <Pagination
-        // Use the 'count' prop passed from the parent instead of a hardcoded value.
-        count={count}
-        page={page}
-        onChange={handleChange}
-        variant="outlined"
-        shape="rounded"
-        siblingCount={0}
-        boundaryCount={1}
-        sx={{
-          "& .MuiPaginationItem-root": {
-            color: "#2C305F",
-            borderColor: "#F7D27F",
-            borderRadius: "8px",
-            margin: "0 8px",
-            "&:hover": {
-              backgroundColor: "#FFEFCA",
-            },
-          },
-          "& .Mui-selected": {
-            backgroundColor: "#2C305F",
-            color: "white",
-            boxShadow: "0 3px 5px rgba(0, 0, 0, 0.2)",
-            "&:hover": {
-              backgroundColor: "#2C305F",
-            },
-          },
-          "& .MuiPaginationItem-ellipsis": {
-            margin: "0 8px",
-          },
-        }}
-      />
-    </Stack>
+    <div className="flex justify-center w-full">
+      <div className="bg-[#F7D27F] p-2 mb-8 rounded-lg w-fit">
+        <Pagination
+          total={count}
+          page={page}
+          onChange={onPageChange}
+          initialPage={1}
+          siblings={0}
+          boundaries={1}
+          variant="light"
+          radius="md"
+          showControls
+          loop={false} 
+          classNames={{
+            wrapper: "gap-2 overflow-visible",
+            
+            item: "w-8 h-8 text-[#2C305F] font-bold bg-transparent hover:bg-[#FFEFCA] data-[hover=true]:bg-[#FFEFCA] transition-colors rounded-lg",
+            
+            cursor:
+              "w-8 h-8 bg-[#2C305F] text-white font-bold shadow-[0_3px_5px_rgba(0,0,0,0.2)] rounded-lg",
+            
+            prev: [
+              "text-[#2C305F] hover:bg-[#FFEFCA] rounded-lg",
+              "data-[disabled=true]:text-[#2C305F] data-[disabled=true]:opacity-30 data-[disabled=true]:cursor-not-allowed hover:data-[disabled=true]:bg-transparent",
+            ].join(" "),
+
+            next: [
+              "text-[#2C305F] hover:bg-[#FFEFCA] rounded-lg",
+              "data-[disabled=true]:text-[#2C305F] data-[disabled=true]:opacity-30 data-[disabled=true]:cursor-not-allowed hover:data-[disabled=true]:bg-transparent",
+            ].join(" "),
+          }}
+        />
+      </div>
+    </div>
   );
 }

@@ -2,15 +2,11 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import Breadcrumbs from "@mui/material/Breadcrumbs";
-import MuiLink from "@mui/material/Link";
-import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import axios from "axios";
-import { CircularProgress } from "@mui/material";
 
-// --- INTERFACES (no changes) ---
+// --- INTERFACES (Giữ nguyên) ---
 interface GuestSpeaker {
   name: string;
   description: string;
@@ -36,7 +32,7 @@ interface SidebarPodcast {
   thumbnail_url: string;
 }
 
-// --- HELPER FUNCTIONS (no changes) ---
+// --- HELPER FUNCTIONS (Giữ nguyên) ---
 const addOrdinalSuffix = (day: number): string => {
   if (day > 10 && day < 14) return `${day}th`;
   const lastDigit = day % 10;
@@ -60,19 +56,52 @@ const formatPublicationDate = (isoString: string): string => {
   return `${month} ${day}, ${year}`;
 };
 
+// --- COMPONENTS CON (Icons & Button) ---
+const ChevronRightIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="#A28436"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className="mx-2 flex-shrink-0"
+  >
+    <polyline points="9 18 15 12 9 6"></polyline>
+  </svg>
+);
+
+const ActionButton = ({
+  text,
+  onClick,
+}: {
+  text: string;
+  onClick?: () => void;
+}) => (
+  <motion.button
+    className="bg-ft-primary-blue-300 text-bluePrimary font-semibold px-4 py-2 rounded-md hover:bg-yellowCream w-full transition-colors duration-200"
+    onClick={onClick}
+  >
+    {text}
+  </motion.button>
+);
+
 export default function SpecificPodcast({
   params,
 }: {
   params: { id: string };
 }) {
-  // --- STATE MANAGEMENT (no changes) ---
+  // --- STATE MANAGEMENT ---
   const [podcast, setPodcast] = useState<ApiPodcast | null>(null);
   const [sidebarPodcasts, setSidebarPodcasts] = useState<SidebarPodcast[]>([]);
   const [sidebarTitle, setSidebarTitle] = useState("Related Podcasts");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // --- DATA FETCHING (no changes) ---
+  // --- DATA FETCHING ---
   useEffect(() => {
     if (!params.id) return;
 
@@ -101,20 +130,21 @@ export default function SpecificPodcast({
     fetchPodcastData();
   }, [params.id]);
 
-  // --- CONDITIONAL RENDERING (Responsive) ---
+  // --- LOADING STATE ---
   if (loading) {
     return (
       <div className="p-8 text-center flex flex-col items-center justify-center h-screen">
-        <CircularProgress sx={{ color: "#DCB968" }} />
-        <p className="mt-4 text-lg text-[#5E5E92]">Loading</p>
+        {/* ✅ Tailwind Spinner */}
+        <div className="w-12 h-12 border-[5px] border-[#F0EDFF] border-t-[#DCB968] rounded-full animate-spin"></div>
+        <p className="mt-4 text-lg text-[#5E5E92] animate-pulse">Loading...</p>
       </div>
     );
   }
 
+  // --- ERROR STATE ---
   if (error) {
     return (
       <div className="h-screen flex items-center justify-center p-4">
-        {/* Responsive Error Card */}
         <div className="relative w-[90vw] max-w-xl h-auto md:h-64 p-1 rounded-lg bg-gradient-to-b from-[#DCB968] to-[#F7D27F]">
           <div className="flex flex-col items-center justify-center w-full h-full bg-[#F9FAFB] rounded-[7px] text-center p-6 md:p-4">
             <p className="text-4xl md:text-5xl font-bold mb-4">⚠️</p>
@@ -126,13 +156,7 @@ export default function SpecificPodcast({
               }}
             >
               <Link href="/media/fintechtainment">
-                <motion.button
-                  whileHover={{ scale: 1.15 }}
-                  whileTap={{ scale: 1.1 }}
-                  className="bg-ft-primary-blue-300 text-bluePrimary font-semibold px-4 py-2 rounded-md hover:bg-yellowCream"
-                >
-                  Back to Fintechtainment Library
-                </motion.button>
+                <ActionButton text="Back to Fintechtainment Library" />
               </Link>
             </div>
           </div>
@@ -141,10 +165,10 @@ export default function SpecificPodcast({
     );
   }
 
+  // --- NOT FOUND STATE ---
   if (!podcast) {
     return (
       <div className="h-screen flex items-center justify-center p-4">
-        {/* Responsive 404 Card */}
         <div className="relative w-[90vw] max-w-xl h-auto md:h-64 p-1 rounded-lg bg-gradient-to-b from-[#DCB968] to-[#F7D27F]">
           <div className="flex flex-col items-center justify-center w-full h-full bg-[#F9FAFB] rounded-[7px] text-center p-6 md:p-4">
             <Image
@@ -165,13 +189,7 @@ export default function SpecificPodcast({
               }}
             >
               <Link href="/media/fintechtainment">
-                <motion.button
-                  whileHover={{ scale: 1.15 }}
-                  whileTap={{ scale: 1.1 }}
-                  className="bg-ft-primary-blue-300 text-bluePrimary font-semibold px-4 py-2 rounded-md hover:bg-yellowCream"
-                >
-                  Back to Fintechtainment Library
-                </motion.button>
+                <ActionButton text="Back to Fintechtainment Library" />
               </Link>
             </div>
           </div>
@@ -180,10 +198,10 @@ export default function SpecificPodcast({
     );
   }
 
-  // --- MAIN COMPONENT RENDER (Responsive) ---
+  // --- MAIN COMPONENT RENDER ---
   return (
-    <section className="relative mb-6">
-      {/* HERO SECTION (Responsive) */}
+    <section className="relative mb-6 overflow-hidden">
+      {/* HERO SECTION */}
       <div
         className="w-screen min-h-[70vh] md:h-[92vh] flex items-center justify-center px-6 md:px-16 max-md:py-12"
         style={{
@@ -191,7 +209,6 @@ export default function SpecificPodcast({
         }}
       >
         <div className="flex flex-col justify-center z-30 w-full max-w-6xl">
-          {/* Added max-w for large screens */}
           <div className="flex flex-wrap max-md:justify-center gap-2 mb-4">
             {podcast.labels.map((label) => (
               <div
@@ -202,123 +219,83 @@ export default function SpecificPodcast({
               </div>
             ))}
           </div>
-          {/* Responsive Title */}
+          
           <h1 className="text-2xl md:text-4xl max-md:text-center font-bold text-ft-text-bright">
             {podcast.title}
           </h1>
           <p className="font-medium text-base text-white text-left md:text-justify py-2 whitespace-pre-wrap max-w-3xl">
             {podcast.summary}
           </p>
-          {/* Responsive Buttons: stack on mobile, row on small+ */}
-          <section className="flex flex-col sm:flex-row justify-start gap-2 md:gap-4">
+          
+          {/* Buttons Section */}
+          <section className="flex flex-col sm:flex-row justify-start gap-2 md:gap-4 mt-2">
             <div
-              className="w-full md:w-fit h-fit rounded-md p-[2px] mt-[0.5rem]"
+              className="w-full md:w-fit h-fit rounded-md p-[2px]"
               style={{
                 background: "linear-gradient(to top, #474A6E, #DBB968)",
               }}
             >
-              <motion.button
-                whileHover={{ scale: 1.15 }}
-                whileTap={{ scale: 1.1 }}
-                className="w-full bg-ft-primary-blue-300 text-bluePrimary font-semibold px-4 py-2 rounded-md hover:bg-yellowCream"
+              <ActionButton 
+                text="View Podcast"
                 onClick={() => {
                   const element = document.getElementById("podcast-episode");
                   if (element) {
                     element.scrollIntoView({ behavior: "smooth" });
                   }
                 }}
-              >
-                View Podcast
-              </motion.button>
+              />
             </div>
             <div
-              className="w-full md:w-fit h-fit rounded-md p-[2px] mt-[0.5rem]"
+              className="w-full md:w-fit h-fit rounded-md p-[2px]"
               style={{
                 background: "linear-gradient(to top, #474A6E, #DBB968)",
               }}
             >
-              <Link href="/media/fintechtainment">
-                <motion.button
-                  whileHover={{ scale: 1.15 }}
-                  whileTap={{ scale: 1.1 }}
-                  className="w-full bg-ft-primary-blue-300 text-bluePrimary font-semibold px-4 py-2 rounded-md hover:bg-yellowCream"
-                >
-                  Back to Podcast Library
-                </motion.button>
+              <Link href="/media/fintechtainment" className="w-full">
+                <ActionButton text="Back to Podcast Library" />
               </Link>
             </div>
           </section>
         </div>
       </div>
 
-      {/* BREADCRUMBS */}
-      <Breadcrumbs
-        aria-label="breadcrumb"
-        separator={
-          <NavigateNextIcon fontSize="small" sx={{ color: "#A28436" }} />
-        }
-        sx={{ color: "#000000", "& .MuiBreadcrumbs-separator": { mx: 0.5 } }}
-        className="w-full py-8 px-6 md:px-16"
-      >
-        <MuiLink
-          underline="hover"
-          sx={{
-            color: "#000000",
-            "&:hover": { color: "#A28436" },
-            textDecoration: "underline",
-            "@media (min-width: 768px)": {
-              textDecoration: "none",
-            },
-          }}
-          component={Link}
-          href="/media"
-        >
-          Media
-        </MuiLink>
-        <MuiLink
-          underline="hover"
-          sx={{
-            color: "#000000",
-            "&:hover": { color: "#A28436" },
-            textDecoration: "underline",
-            "@media (min-width: 768px)": {
-              textDecoration: "none",
-            },
-          }}
-          component={Link}
-          href="/media/fintechtainment"
-        >
-          FinTechTainment Library
-        </MuiLink>
-        <MuiLink
-          underline="hover"
-          sx={{
-            color: "#000000",
-            "&:hover": { color: "#A28436" },
-            display: "inline-block",
-            maxWidth: "90vw",
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            textDecoration: "underline",
-            verticalAlign: "bottom",
-            "@media (min-width: 768px)": {
-              maxWidth: "none",
-              textDecoration: "none",
-            },
-          }}
-          component={Link}
-          href={`/media/fintechtainment/${podcast._id}`}
-        >
-          {podcast.title}
-        </MuiLink>
-      </Breadcrumbs>
+      {/* --- BREADCRUMBS (Native Tailwind Implementation) --- */}
+      <nav aria-label="Breadcrumb" className="w-full py-8 px-6 md:px-16 max-w-7xl mx-auto">
+        <ol className="flex items-center flex-wrap">
+          <li className="flex items-center">
+            <Link 
+              href="/media" 
+              className="text-black hover:text-[#A28436] transition-colors hover:underline underline-offset-4"
+            >
+              Media
+            </Link>
+            <ChevronRightIcon />
+          </li>
+          <li className="flex items-center">
+            <Link 
+              href="/media/fintechtainment" 
+              className="text-black hover:text-[#A28436] transition-colors hover:underline underline-offset-4"
+            >
+              FinTechTainment Library
+            </Link>
+            <ChevronRightIcon />
+          </li>
+          <li className="flex items-center min-w-0">
+             {/* UX: Truncate title on small screens */}
+             <span 
+              className="text-black font-semibold truncate max-w-[200px] md:max-w-md cursor-default"
+              title={podcast.title}
+            >
+              {podcast.title}
+            </span>
+          </li>
+        </ol>
+      </nav>
 
-      {/* --- CONTENT AREA (Responsive) --- */}
+      {/* --- CONTENT AREA --- */}
       <div
         id="podcast-episode"
-        // Stacks vertically on mobile, row on desktop
-        className="flex flex-col md:flex-row justify-center pb-8 md:pb-12 px-4 md:px-16 md:gap-12"
+        className="flex flex-col md:flex-row justify-center pb-8 md:pb-12 px-4 md:px-16 md:gap-12 max-w-7xl mx-auto"
       >
         {/* Main Content Area (Left) */}
         <div className="w-full md:max-w-4xl">
@@ -333,7 +310,6 @@ export default function SpecificPodcast({
             ></iframe>
           </div>
           <div>
-            {/* Responsive title */}
             <h1 className="text-2xl md:text-3xl mt-6 font-bold text-ft-primary-blue-50">
               {podcast.title}
             </h1>
@@ -343,9 +319,8 @@ export default function SpecificPodcast({
           </div>
 
           <div className="pt-20 max-md:max-w-md max-md:mx-auto my-8">
-            {/* Card: Set to relative to contain the absolute image */}
             <div className="relative bg-ft-primary-blue-300 rounded-2xl shadow-lg p-6 pt-28">
-              {/* Avatar: Absolute, centered, and overlapping the top */}
+              {/* Avatar */}
               <div className="absolute -top-24 left-4 max-md:left-1/2 max-md:-translate-x-1/2 w-48 h-48 rounded-full bg-[#5E5E92] border-4 border-ft-primary-yellow-50 shadow-xl overflow-hidden">
                 <Image
                   src={podcast.guest_speaker.avatar_url}
@@ -370,16 +345,16 @@ export default function SpecificPodcast({
                     href={podcast.guest_speaker.linkedIn_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label={`View ${podcast.guest_speaker.name}'s profile on LinkedIn`} // Accessibility
-                    className="inline-flex items-center gap-2.5 transition-transform duration-200 hover:scale-105 border-solid border-2 border-[#2C305F] py-2 px-3 rounded-lg hover:bg-[#FFEFCA] text-[#2C305F]"
+                    aria-label={`View ${podcast.guest_speaker.name}'s profile on LinkedIn`}
+                    className="inline-flex items-center gap-2.5 transition-transform duration-200 border-solid border-2 border-[#2C305F] py-2 px-3 rounded-lg hover:bg-[#FFEFCA] text-[#2C305F]"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      width="24" // Reduced size to better match text
-                      height="24"
+                      width="20"
+                      height="20"
                       viewBox="0 0 24 24"
                       fill="none"
-                      stroke="currentColor" // Inherits color from parent's text-[]
+                      stroke="currentColor"
                       strokeWidth="1.5"
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -388,7 +363,6 @@ export default function SpecificPodcast({
                       <rect x="2" y="9" width="4" height="12"></rect>
                       <circle cx="4" cy="4" r="2"></circle>
                     </svg>
-                    {/* ADDED: Text label for clarity */}
                     <span className="font-medium text-sm">View Profile</span>
                   </a>
                 </div>
@@ -396,27 +370,20 @@ export default function SpecificPodcast({
             </div>
           </div>
 
-          {/* Back to Library Button */}
+          {/* Back to Library Button (Desktop) */}
           <div
             className="max-md:hidden w-fit h-fit rounded-md p-[2px] mt-[2rem]"
             style={{
               background: "linear-gradient(to top, #474A6E, #DBB968)",
             }}
           >
-            <a href="/media/fintechtainment">
-              <motion.button
-                whileHover={{ scale: 1.15 }}
-                whileTap={{ scale: 1.1 }}
-                className="bg-ft-primary-blue-300 text-bluePrimary font-semibold px-4 py-2 rounded-md hover:bg-yellowCream"
-              >
-                Back to FinTechTainment Library
-              </motion.button>
-            </a>
+            <Link href="/media/fintechtainment">
+              <ActionButton text="Back to FinTechTainment Library" />
+            </Link>
           </div>
         </div>
 
-        {/* Right Sidebar (Responsive) */}
-        {/* Full width on mobile with margin-top, fixed width on desktop */}
+        {/* Right Sidebar */}
         <div className="w-full md:w-full md:max-w-[17.75rem]">
           <div className="relative">
             <h2 className="text-3xl font-bold text-[#0D1742] mb-4">
@@ -428,18 +395,19 @@ export default function SpecificPodcast({
                 <Link
                   href={`/media/fintechtainment/${item._id}`}
                   key={item._id}
-                  className="flex flex-col items-center bg-white rounded-2xl shadow-lg border-2 border-transparent hover:border-[#DBB968] overflow-hidden hover:shadow-xl transition-all duration-300"
+                  className="group flex flex-col items-center bg-white rounded-2xl shadow-lg border-2 border-transparent hover:border-[#DBB968] overflow-hidden hover:shadow-xl transition-all duration-300"
                 >
-                  <div className="relative w-full h-52 md:h-40 flex-shrink-0">
+                  <div className="relative w-full h-52 md:h-40 flex-shrink-0 overflow-hidden">
                     <Image
                       src={item.thumbnail_url}
                       alt={item.title}
                       layout="fill"
-                      objectFit="fill" // Changed from "fill" to "cover" to prevent stretching
+                      objectFit="fill" 
+                      className="transition-transform duration-500 group-hover:scale-105"
                     />
                   </div>
                   <div className="p-4 w-full">
-                    <p className="font-bold text-sm text-[#0D1742] leading-tight">
+                    <p className="font-bold text-sm text-[#0D1742] leading-tight line-clamp-2">
                       {item.title}
                     </p>
                     <p className="text-xs text-gray-500 mt-1">
@@ -450,8 +418,8 @@ export default function SpecificPodcast({
               ))}
             </div>
 
-            {/* Mascot image: Hidden on mobile, visible on desktop */}
-            <div className="absolute right-[-12.5rem] bottom-[-22rem] hidden md:block">
+            {/* Mascot image */}
+            <div className="absolute right-[-12.5rem] bottom-[-22rem] hidden md:block pointer-events-none">
               <Image
                 src="https://d2uq10394z5icp.cloudfront.net/global/Mascot+-+M%E1%BA%B7t+tr%C6%B0%E1%BB%9Bc.svg"
                 alt="Mascot"
@@ -462,22 +430,16 @@ export default function SpecificPodcast({
               />
             </div>
 
-            {/* Back to Library Button */}
+            {/* Back to Library Button (Mobile) */}
             <div
               className="md:hidden w-fit h-fit rounded-md p-[2px] mt-[2rem] mx-auto"
               style={{
                 background: "linear-gradient(to top, #474A6E, #DBB968)",
               }}
             >
-              <a href="/media/fintechtainment">
-                <motion.button
-                  whileHover={{ scale: 1.15 }}
-                  whileTap={{ scale: 1.1 }}
-                  className="bg-ft-primary-blue-300 text-bluePrimary font-semibold px-4 py-2 rounded-md hover:bg-yellowCream"
-                >
-                  Back to FinTechTainment Library
-                </motion.button>
-              </a>
+              <Link href="/media/fintechtainment">
+                <ActionButton text="Back to FinTechTainment Library" />
+              </Link>
             </div>
           </div>
         </div>

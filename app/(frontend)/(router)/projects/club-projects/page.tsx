@@ -3,7 +3,6 @@
 import { Button } from "@heroui/react";
 import { useState, useEffect, useRef, useCallback } from "react";
 import axios from "axios";
-import { CircularProgress } from "@mui/material";
 
 type ProjectData = {
   labels: string[];
@@ -122,8 +121,10 @@ const ClubwideProjects = () => {
   if (loading) {
     return (
       <div className="p-8 text-center flex flex-col items-center justify-center h-screen">
-        <CircularProgress sx={{ color: "#DCB968" }} />
-        <p className="mt-4 text-lg text-[#5E5E92]">Loading Clubwide Projects</p>
+        <div className="w-12 h-12 border-[5px] border-[#F0EDFF] border-t-[#DCB968] rounded-full animate-spin"></div>
+        <p className="mt-4 text-lg text-[#5E5E92] animate-pulse">
+          Loading Clubwide Projects...
+        </p>
       </div>
     );
   }
@@ -216,13 +217,16 @@ const ClubwideProjects = () => {
               <div className="w-[30rem] h-[22rem] rounded-[30px] bg-gradient-to-b from-[rgba(240,237,255,1)] to-[rgba(94,94,146,1)] z-0">
                 <div
                   className="absolute inset-0 m-[10px] bg-cover bg-center bg-no-repeat rounded-3xl transition-all duration-700 ease-in-out z-10"
-                  style={{ backgroundImage: `url(${currentProject.image})`, backgroundSize: '100% 100%', }}
+                  style={{
+                    backgroundImage: `url(${currentProject.image})`,
+                    backgroundSize: "100% 100%",
+                  }}
                 ></div>
                 <div
                   className="w-[16rem] h-[16rem] right-[-20rem] bottom-0 absolute ml-[10px] bg-cover bg-center bg-no-repeat rounded-3xl transition-all duration-700 ease-in-out z-10"
                   style={{
                     backgroundImage: `url(${nextProject!.image})`,
-                    backgroundSize: '100% 100%',
+                    backgroundSize: "100% 100%",
                   }}
                 ></div>
               </div>

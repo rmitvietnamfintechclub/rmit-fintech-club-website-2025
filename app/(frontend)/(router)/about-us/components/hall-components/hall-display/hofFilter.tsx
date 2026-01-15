@@ -12,11 +12,14 @@ export default function HoFFilter({
 }: SemesterFilterProps) {
   const [open, setOpen] = useState(false);
   const [clicked, setClicked] = useState(false);
+  const contextYear = selectedLabel 
+    ? selectedLabel.substring(0, 4) 
+    : new Date().getFullYear().toString();
 
   const getSemesterValue = (label: string): string => {
     const letter = label.split(" ")[1];
-    const year = new Date().getFullYear();
-    return `${year}${letter}`;
+    
+    return `${contextYear}${letter}`;
   };
 
   const handleSelect = (label: string) => {
@@ -30,9 +33,13 @@ export default function HoFFilter({
     }
   }, [clicked]);
 
+  const displayLabel = selectedLabel
+    ? `Semester ${selectedLabel.slice(4)}`
+    : "Select semester...";
+
   return (
     <Select.Root
-      value={selectedLabel}
+      value={displayLabel}
       onValueChange={handleSelect}
       open={open}
       onOpenChange={(isOpen) => {
@@ -45,77 +52,43 @@ export default function HoFFilter({
           <motion.button
             whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.94 }}
-            transition={{
-              type: "spring",
-              stiffness: 300,
-              damping: 16,
-            }}
             className="
               bg-[#DCB968] text-[#2C305F] font-semibold
-              pr-8 pl-4 py-2 rounded-md w-40 xl:text-lg
+              pr-8 pl-4 py-2 rounded-md w-44 xl:text-lg 
               appearance-none inline-flex items-center justify-between
-              focus:outline-none focus:ring-0 focus:ring-offset-0
-              cursor-pointer
+              focus:outline-none shadow-md
             "
           >
-            <Select.Value className="text-sm xl:text-lg font-semibold text-[#2C305F]">
-              {selectedLabel
-                ? `Semester ${selectedLabel.charAt(selectedLabel.length - 1)}`
-                : "Select semester..."}
-            </Select.Value>
+            <Select.Value>{displayLabel}</Select.Value>
           </motion.button>
         </Select.Trigger>
 
-        {/* Triangle arrow */}
-        <div
-          className="
-            pointer-events-none
-            absolute right-3 top-1/2 -translate-y-1/2
-            w-0 h-0
-            border-l-[6px] border-l-transparent
-            border-r-[6px] border-r-transparent
-            border-t-[6px] border-t-[#2C305F]
-          "
-        ></div>
+        {/* Triangle Arrow giữ nguyên */}
+        <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[6px] border-t-[#2C305F]"></div>
 
-        {/* Dropdown content */}
         <AnimatePresence>
           {open && (
             <Select.Portal>
-              <Select.Content asChild>
+              <Select.Content asChild position="popper" sideOffset={5}>
                 <motion.div
-                  initial={{ opacity: 0, y: -5, scale: 0.95 }}
-                  animate={{ opacity: 1, y: 0, scale: 1.04 }}
-                  exit={{ opacity: 0, y: -5, scale: 0.95 }}
-                  transition={{
-                    type: "spring",
-                    stiffness: 360,
-                    damping: 20,
-                  }}
-                  className="
-                              z-50 mt-1 w-40 rounded-md bg-[#DCB968] text-[#2C305F]
-                              shadow-lg border border-[#2C305F]
-                            "
+                  initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                  className="z-50 w-44 rounded-md bg-[#DCB968] text-[#2C305F] shadow-xl border border-[#2C305F] overflow-hidden"
                 >
                   <Select.Viewport className="p-1">
                     {semesters.map((label) => (
                       <Select.Item
                         key={label}
-                        value={label}
+                        value={label} // Value ở đây là "Semester A"
                         className="
-              relative cursor-pointer select-none rounded
-              px-4 py-2 text-sm
-              hover:bg-[#2C305F]/10
-              focus:bg-[#2C305F]/20 focus:outline-none
-            "
+                          relative cursor-pointer select-none rounded px-4 py-2 text-sm font-semibold outline-none
+                          data-[highlighted]:bg-[#2C305F]/20
+                          data-[state=checked]:bg-[#2C305F] data-[state=checked]:text-[#DCB968]
+                        "
                       >
-                        <Select.ItemText>
-                          <span className="text-sm xl:text-lg font-semibold text-[#2C305F]">
-                            {label}
-                          </span>
-                        </Select.ItemText>
-
-                        <Select.ItemIndicator className="absolute right-3 top-1/2 -translate-y-1/2">
+                        <Select.ItemText>{label}</Select.ItemText>
+                        <Select.ItemIndicator className="absolute right-2 top-1/2 -translate-y-1/2">
                           <CheckIcon />
                         </Select.ItemIndicator>
                       </Select.Item>

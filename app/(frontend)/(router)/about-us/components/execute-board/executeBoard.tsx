@@ -1,13 +1,11 @@
 import { Card, CardBody, CardHeader } from "@heroui/react";
 import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
-import "./styles.css"; // Assuming this contains base styles
 import Link from "next/link";
 import { IconBrandLinkedin } from "@tabler/icons-react";
 import { motion, useInView } from "framer-motion";
 import axios from "axios";
-import { CircularProgress } from "@mui/material";
-import useMediaQuery from "./useMediaQuery"; 
+import useMediaQuery from "./useMediaQuery";
 
 // --- Type Definition ---
 type ExecutiveBoardMember = {
@@ -60,7 +58,7 @@ function ExecutiveBoardCard({
 }: ExecutiveBoardMember & { index: number }) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
-  
+
   // Tailwind's `md` breakpoint is 768px
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
@@ -133,7 +131,10 @@ function ExecutiveBoardCard({
                 />
               </Link>
             ) : (
-              <div className="flex-shrink-0 my-auto" title="LinkedIn not available">
+              <div
+                className="flex-shrink-0 my-auto"
+                title="LinkedIn not available"
+              >
                 <IconBrandLinkedin
                   size={40}
                   color="#9CA3AF"
@@ -194,9 +195,9 @@ const ExecutiveBoard = () => {
         <main>
           <PageHeader />
           <div className="p-8 text-center flex flex-col items-center justify-center h-64">
-            <CircularProgress sx={{ color: "#DCB968" }} />
-            <p className="mt-4 text-lg md:text-xl text-[#5E5E92]">
-              Loading Executive Board
+            <div className="w-12 h-12 border-[5px] border-[#F0EDFF] border-t-[#DCB968] rounded-full animate-spin"></div>
+            <p className="mt-4 text-lg md:text-xl text-[#5E5E92] animate-pulse">
+              Loading Executive Board...
             </p>
           </div>
         </main>

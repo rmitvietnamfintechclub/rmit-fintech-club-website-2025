@@ -4,34 +4,33 @@ import * as React from "react";
 import DepartmentAccordion from "./components/DepartmentAccordion";
 import DeptSection from "./components/DeptContentSection";
 import { useDepartmentData } from "./hooks/useDepartmentData";
-import { CircularProgress } from "@mui/material";
 import type { DeptItemBase } from "./components/types";
 
 const DEPT_TABS = [
- {
-   value: "technology",
-   label: "TECHNOLOGY",
-   color: "bg-[#DBB968]",
-   apiDept: "Technology",
- },
- {
-   value: "business",
-   label: "BUSINESS",
-   color: "bg-[#2C305F]",
-   apiDept: "Business",
- },
- {
-   value: "marketing",
-   label: "MARKETING",
-   color: "bg-[#DBB968]",
-   apiDept: "Marketing",
- },
- {
-   value: "human-resources",
-   label: "HUMAN RESOURCES",
-   color: "bg-[#2C305F]",
-   apiDept: "Human Resources",
- },
+  {
+    value: "technology",
+    label: "TECHNOLOGY",
+    color: "bg-[#DBB968]",
+    apiDept: "Technology",
+  },
+  {
+    value: "business",
+    label: "BUSINESS",
+    color: "bg-[#2C305F]",
+    apiDept: "Business",
+  },
+  {
+    value: "marketing",
+    label: "MARKETING",
+    color: "bg-[#DBB968]",
+    apiDept: "Marketing",
+  },
+  {
+    value: "human-resources",
+    label: "HUMAN RESOURCES",
+    color: "bg-[#2C305F]",
+    apiDept: "Human Resources",
+  },
 ] as const;
 
 const departmentApiNames = Array.from(new Set(DEPT_TABS.map((d) => d.apiDept)));
@@ -43,7 +42,7 @@ export default function DeptProjectsPage() {
   if (loading) {
     return (
       <div className="p-8 text-center flex flex-col items-center justify-center h-64">
-        <CircularProgress sx={{ color: "#DCB968" }} />
+        <div className="w-12 h-12 border-[5px] border-[#F0EDFF] border-t-[#DCB968] rounded-full animate-spin"></div>
         <p className="mt-4 text-lg text-[#5E5E92]">
           Loading Department Projects
         </p>

@@ -33,7 +33,7 @@ export default function CountdownPage() {
     <div className="flex flex-col">
       {/* Hero Section with Yellow background */}
       <div
-        className="relative flex flex-col items-center justify-center rounded-b-[80px]"
+        className="relative flex flex-col items-center justify-center md:rounded-b-[80px]"
         style={{
           minHeight: `calc(90vh - ${navbarHeight}px)`,
           backgroundColor: "#DBB968",
@@ -43,13 +43,6 @@ export default function CountdownPage() {
           backgroundPosition: "center",
         }}
       >
-        <h1
-          className={`text-4xl md:text-5xl lg:text-6xl font-bold text-center text-[white] z-10 ${
-            isShortHeight ? "mt-8" : ""
-          }`}
-        >
-          COUNT DOWN TO FORM CLOSED
-        </h1>
         <div className={`${isShortHeight ? "mb-8" : ""}`}>
           <Countdown date={new Date("2025-11-10T23:59:00")} />
         </div>

@@ -2,12 +2,8 @@ import "@styles/globals.css";
 import Navbar from "@/components/navbar";
 import { fontSans } from "@/config/fonts";
 import { siteConfig } from "@/config/site";
-import "react-toastify/dist/ReactToastify.css";
-import "@styles/carousel.css";
 import clsx from "clsx";
 import type { Metadata, Viewport } from "next";
-import "slick-carousel/slick/slick-theme.css";
-import "slick-carousel/slick/slick.css";
 import { Providers } from "../providers";
 import FooterWrapper from "./footer-wrapper";
 

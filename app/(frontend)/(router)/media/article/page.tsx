@@ -2,16 +2,12 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import Breadcrumbs from "@mui/material/Breadcrumbs";
-import MuiLink from "@mui/material/Link";
-import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import LabelSort from "./components/labelSort";
 import ArticleCard from "./components/articleCard";
 import { motion } from "framer-motion";
 import PaginationRounded from "./components/pagination";
 import Image from "next/image";
 import axios from "axios";
-import { CircularProgress } from "@mui/material";
 
 // Interface for the raw data from the API
 interface ApiArticle {
@@ -58,6 +54,23 @@ const formatArticleDate = (isoString: string): string => {
   return `${month} ${day}, ${year}`;
 };
 
+// --- Component Icon Mũi tên (Thay thế NavigateNextIcon) ---
+const ChevronRightIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="#A28436" // Màu vàng gold của bạn
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <polyline points="9 18 15 12 9 6"></polyline>
+  </svg>
+);
+
 export default function ArticleLibrary() {
   // State for managing API data, loading, and errors
   const [articles, setArticles] = useState<DisplayArticle[]>([]);
@@ -78,28 +91,21 @@ export default function ArticleLibrary() {
   useEffect(() => {
     const fetchAllLabels = async () => {
       try {
-        // Assuming the API without params returns all articles
         const response = await axios.get(`/api/v1/article`);
         const allArticles: ApiArticle[] =
           response.data.articles || response.data || [];
 
-        // Use a Set to get only unique labels
-        const allLabelsFlat = allArticles.flatMap(
-          (article) => article.labels
-        );
+        const allLabelsFlat = allArticles.flatMap((article) => article.labels);
         const uniqueLabels = Array.from(new Set(allLabelsFlat)).sort();
-
-        // Add "All" option to the beginning
         setAvailableLabels(["All", ...uniqueLabels]);
       } catch (err) {
         console.error("Failed to fetch unique labels:", err);
-        // Set a default or handle the error
         setAvailableLabels(["All"]);
       }
     };
 
     fetchAllLabels();
-  }, []); // Empty dependency array ensures this runs only once
+  }, []);
 
   // Effect to fetch paginated/filtered articles when page or selectedLabel changes
   useEffect(() => {
@@ -153,21 +159,18 @@ export default function ArticleLibrary() {
 
   const handleLabelSelect = (label: string) => {
     setSelectedLabel(label);
-    setPage(1); // Reset to first page when filter changes
-  };
-
-  const handleBreadcrumbClick = (
-    event: React.MouseEvent<HTMLAnchorElement, MouseEvent>
-  ) => {
-    console.info("You clicked a breadcrumb.");
+    setPage(1);
   };
 
   const renderArticleContent = () => {
     if (loading) {
       return (
         <div className="p-8 text-center flex flex-col items-center justify-center h-64">
-          <CircularProgress sx={{ color: "#DCB968" }} />
-          <p className="mt-4 text-lg text-[#5E5E92]">Loading Articles</p>
+          {/* ✅ Thay thế CircularProgress bằng Tailwind Spinner */}
+          <div className="w-12 h-12 border-[5px] border-[#F0EDFF] border-t-[#DCB968] rounded-full animate-spin"></div>
+          <p className="mt-4 text-lg text-[#5E5E92] animate-pulse">
+            Loading Articles...
+          </p>
         </div>
       );
     }
@@ -185,7 +188,6 @@ export default function ArticleLibrary() {
 
     return (
       <>
-        {/* Responsive padding for the article list */}
         <div className="py-6 px-6 md:px-12 lg:px-24">
           {articles.map((article) => (
             <Link href={`/media/article/${article._id}`} key={article._id}>
@@ -214,7 +216,6 @@ export default function ArticleLibrary() {
   };
 
   return (
-    // Use `overflow-x-hidden` on the parent to avoid horizontal scroll
     <section className="overflow-x-hidden">
       {/* --- Responsive Hero Section --- */}
       <div
@@ -232,7 +233,6 @@ export default function ArticleLibrary() {
             className="object-cover opacity-15"
           />
         </div>
-        {/* Stars: Hidden on mobile, visible on desktop */}
         <div className="absolute w-screen h-screen top-[-20vh] left-[2vw] z-20 hidden md:block">
           <Image
             src="https://d2uq10394z5icp.cloudfront.net/media/YellowStars.png"
@@ -244,11 +244,9 @@ export default function ArticleLibrary() {
           />
         </div>
         <div className="flex flex-col items-center justify-center z-30 mt-[2vh] md:mt-[17vh] px-6">
-          {/* Responsive title */}
           <h1 className="text-4xl md:text-7xl lg:text-[9vh] font-bold text-center text-[#2C305F] drop-shadow-[1.5px_1.5px_0_#DCB968]">
             Bi-weekly Article
           </h1>
-          {/* Responsive paragraph */}
           <p className="leading-6 font-medium text-base text-white w-[90vw] md:w-[50vw] text-justify py-6 max-md:py-4">
             Welcome to the Bi-weekly Article Series, where curiosity meets
             analysis at the intersection of finance and technology. Our
@@ -266,9 +264,8 @@ export default function ArticleLibrary() {
           >
             <Link href="/media">
               <motion.button
-                whileHover={{ scale: 1.15 }}
-                whileTap={{ scale: 1.1 }}
-                className="bg-ft-primary-blue-300 text-bluePrimary font-semibold px-4 py-2 rounded-md hover:bg-yellowCream"
+                whileHover={{ scale: 1.05 }}
+                className="bg-[#2C305F] text-[#DBB968] font-semibold px-4 py-2 rounded-md hover:bg-[#F0EDFF] hover:text-[#2C305F] transition-colors duration-200 border border-transparent hover:border-[#2C305F]"
               >
                 Back to Media
               </motion.button>
@@ -277,44 +274,32 @@ export default function ArticleLibrary() {
         </div>
       </div>
 
-      {/* --- Responsive Breadcrumbs --- */}
-      <Breadcrumbs
-        aria-label="breadcrumb"
-        separator={
-          <NavigateNextIcon fontSize="small" sx={{ color: "#A28436" }} />
-        }
-        sx={{
-          color: "#000000",
-          "& .MuiBreadcrumbs-separator": { mx: 0.5 },
-        }}
-        // Responsive padding
+      {/* --- Responsive Breadcrumbs (Native Tailwind) --- */}
+      <nav
+        aria-label="Breadcrumb"
         className="w-full py-8 max-md:py-4 px-6 md:pl-16"
       >
-        <MuiLink
-          underline="hover"
-          sx={{
-            color: "#000000",
-            "&:hover": { color: "#A28436" },
-          }}
-          component={Link}
-          href="/media"
-          onClick={handleBreadcrumbClick}
-        >
-          Media
-        </MuiLink>
-        <MuiLink
-          underline="hover"
-          sx={{
-            color: "#000000",
-            "&:hover": { color: "#A28436" },
-          }}
-          component={Link}
-          href="/media/article"
-          onClick={handleBreadcrumbClick}
-        >
-          Article Library
-        </MuiLink>
-      </Breadcrumbs>
+        <ol className="flex items-center space-x-2">
+          <li>
+            <Link
+              href="/media"
+              className="text-black hover:text-[#A28436] transition-colors underline-offset-4 hover:underline"
+            >
+              Media
+            </Link>
+          </li>
+          <li className="flex items-center">
+            <ChevronRightIcon />
+          </li>
+          <li>
+            <span 
+              className="text-black font-semibold truncate max-w-[150px] md:max-w-none cursor-default"
+            >
+              Article Library
+            </span>
+          </li>
+        </ol>
+      </nav>
 
       {/* --- Responsive LabelSort --- */}
       <div className="relative pb-4 max-md:pb-0 px-6 md:pl-24">
