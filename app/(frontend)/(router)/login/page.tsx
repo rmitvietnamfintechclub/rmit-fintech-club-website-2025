@@ -1,5 +1,4 @@
 "use client";
-import { Image } from "@heroui/image";
 import { Button, Checkbox, Input } from "@heroui/react";
 import axios from "axios";
 import type React from "react";
