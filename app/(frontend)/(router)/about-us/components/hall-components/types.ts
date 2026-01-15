@@ -15,6 +15,7 @@ export type HallDisplayProps = {
   onCategorySelect?: (category: string) => void;
   isEmpty?: boolean;
   emptyComponent?: ReactNode;
+  isLoading?: boolean;
 };
 
 // For the filtered category view

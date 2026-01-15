@@ -51,13 +51,13 @@ const historyData = [
 
 const slideVariants = {
   enter: (direction: number) => ({
-    x: direction > 0 ? 100 : -100,
+    x: direction > 0 ? 50 : -50,
     opacity: 0,
   }),
   center: { zIndex: 1, x: 0, opacity: 1 },
   exit: (direction: number) => ({
     zIndex: 0,
-    x: direction < 0 ? 100 : -100,
+    x: direction < 0 ? 50 : -50,
     opacity: 0,
   }),
 };
@@ -340,11 +340,11 @@ export default function HistorySection() {
             type: "spring",
             stiffness: 300,
             damping: 30,
-            duration: 0.3,
+            duration: 0.15,
           }}
           className="relative max-w-3xl mx-auto md:h-[320px] z-40"
         >
-          <AnimatePresence initial={false} custom={direction} mode="wait">
+          <AnimatePresence initial={false} custom={direction} mode="popLayout">
             <motion.div
               key={centerSlideIndex}
               custom={direction}
@@ -353,7 +353,7 @@ export default function HistorySection() {
               animate="center"
               exit="exit"
               transition={{
-                x: { type: "spring", stiffness: 300, damping: 30 },
+                x: { type: "spring", stiffness: 400, damping: 30 },
                 opacity: { duration: 0.2 },
               }}
               className="w-full px-0 md:px-[3rem]

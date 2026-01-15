@@ -7,7 +7,6 @@ import HonoreePage from "./hall-components/honoreePage";
 import HallPage from "./hall-components/hallPage";
 import { useSemester } from "./hall-components/hooks/useSemester";
 import HallRevealSection from "./hall-components/hall-display/HallRevealSection";
-import HeaderTitle from "./hall-components/headerTitle";
 import Image from "next/image";
 import { motion } from "framer-motion";
 
@@ -33,7 +32,7 @@ const EmptyHallState = ({ semester }: { semester: string }) => {
           />
         </motion.div>
 
-        {/* CARD NỘI DUNG */}
+        {/* CONTENT CARD */}
         <div
           className="
             relative z-0 w-full text-center 
@@ -41,7 +40,7 @@ const EmptyHallState = ({ semester }: { semester: string }) => {
             rounded-3xl border border-[#DCB968]/40 shadow-sm
             pt-12 pb-8 px-6 md:px-10 md:pt-16 md:pb-10
             mt-4
-        "
+          "
         >
           <h3 className="text-2xl md:text-4xl font-extrabold text-[#2C305F] mb-3 tracking-tight">
             Coming Soon!
@@ -86,7 +85,7 @@ export default function HallOfFamePage() {
   ];
   const semesters = ["Semester A", "Semester B", "Semester C"];
 
-  const { semester } = useSemester(); // Giá trị ví dụ: "2025C"
+  const { semester } = useSemester(); // Example value: "2025C"
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [members, setMembers] = useState<HallOfFameMember[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -126,69 +125,45 @@ export default function HallOfFamePage() {
   }, [semester]);
 
   // --- RENDER ---
+  
+  // If a sub-category is selected, show the detail page
+  if (selectedCategory && !loading) {
+    return (
+      <HonoreePage
+        members={members}
+        category={selectedCategory}
+        semester={semester}
+        onBack={() => setSelectedCategory(null)}
+      />
+    );
+  }
+
   return (
     <>
-      {/* Loading Spinner */}
-      {loading && (
-        <section className="relative py-12 overflow-hidden">
-          <div className="flex flex-col items-center py-10">
-            <div className="flex flex-col lg:flex-row lg:justify-between lg:items-end items-center w-full lg:w-8/12">
-              <HeaderTitle text="Hall of Fame" />
-            </div>
-            <div className="p-8 text-center flex flex-col items-center justify-center h-64">
-              <div className="w-12 h-12 border-[5px] border-[#F0EDFF] border-t-[#DCB968] rounded-full animate-spin"></div>
-              <p className="mt-4 text-lg text-[#5E5E92]">
-                Loading Hall of Fame...
-              </p>
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Error Alert (Chỉ hiện khi lỗi mạng thực sự) */}
+      {/* Error Alert (Only show on real network error) */}
       {error && !loading && (
-        <div className="relative w-[87vw] h-48 mx-auto mt-20 mb-10 md:h-64 p-[4px] rounded-lg bg-gradient-to-b from-[#DCB968] to-[#F7D27F]">
-          <div className="flex flex-col items-center justify-center w-full h-full bg-[#F9FAFB] rounded-[7px] text-center px-4">
-            <p className="text-5xl font-bold mb-4">⚠️</p>
-            <p className="text-[#2C305F] text-xl">{error}</p>
-          </div>
+        <div className="fixed top-24 left-1/2 -translate-x-1/2 z-50 w-[90vw] md:w-auto p-4 rounded-lg bg-red-100 border border-red-400 text-red-700 shadow-lg animate-in fade-in slide-in-from-top-4">
+          <p className="flex items-center gap-2 text-center font-medium">⚠️ {error}</p>
         </div>
       )}
 
-      {/* Success State */}
-      {!loading && !error && (
-        <>
-          {members.length === 0 ? (
-            <HallRevealSection>
-              <div className="flex flex-col items-center w-full">
-                <HallPage
-                  categories={categories}
-                  semesters={semesters}
-                  onCategorySelect={setSelectedCategory}
-                  isEmpty={true}
-                  emptyComponent={<EmptyHallState semester={semester} />}
-                />
-              </div>
-            </HallRevealSection>
-          ) : selectedCategory ? (
-            <HonoreePage
-              members={members}
-              category={selectedCategory}
-              semester={semester}
-              onBack={() => setSelectedCategory(null)}
-            />
-          ) : (
-            <HallRevealSection>
-              <HallPage
-                categories={categories}
-                semesters={semesters}
-                onCategorySelect={setSelectedCategory}
-                isEmpty={false}
-              />
-            </HallRevealSection>
-          )}
-        </>
-      )}
+      {/* MAIN CHANGE: 
+        Always render HallRevealSection -> HallPage.
+        Pass 'isLoading' prop down so HallPage handles the spinner internally.
+        This prevents the Header & Filter from unmounting/remounting (causing flash).
+      */}
+      <HallRevealSection>
+        <div className="flex flex-col items-center w-full">
+          <HallPage
+            categories={categories}
+            semesters={semesters}
+            onCategorySelect={setSelectedCategory}
+            isEmpty={members.length === 0}
+            isLoading={loading} // Pass loading state down
+            emptyComponent={<EmptyHallState semester={semester} />}
+          />
+        </div>
+      </HallRevealSection>
     </>
   );
 }
