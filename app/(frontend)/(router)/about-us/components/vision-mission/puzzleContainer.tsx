@@ -2,7 +2,7 @@ import PuzzleItem from "./puzzleItem";
 
 const PuzzleContainer = () => {
 	return (
-		<div className="absolute -rotate-90 flex flex-col md:rotate-0 max-md:translate-y-1">
+		<div className="absolute -rotate-90 flex flex-col md:rotate-0 max-md:-translate-y-2">
 			<PuzzleItem
 				bgColor={"bg-ft-primary-blue"}
 				circleColor={"bg-ft-primary-yellow"}

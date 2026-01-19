@@ -15,9 +15,8 @@ type ExecutiveBoardMember = {
   linkedin_url: string;
 };
 
-// --- Reusable UI Components ---
+// --- Reusable UI Components (Giữ nguyên) ---
 const DecorativeCircles = () => (
-  // ... (This component remains unchanged)
   <>
     <div className="absolute top-[4.3rem] right-[1.8rem] w-[4rem] h-[4rem] bg-[#C9D6EA] rounded-full hidden md:block"></div>
     <div className="absolute top-[11rem] right-[5rem] w-[2.5rem] h-[2.5rem] bg-[#DBB968] rounded-full hidden md:block"></div>
@@ -32,7 +31,6 @@ const DecorativeCircles = () => (
 );
 
 const PageHeader = () => (
-  // ... (This component remains unchanged)
   <div className="content grid">
     <h2 className="leading-tight text-[#5E5E92] text-3xl md:text-4xl font-bold">
       Meet Our
@@ -58,25 +56,16 @@ function ExecutiveBoardCard({
 }: ExecutiveBoardMember & { index: number }) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
-
-  // Tailwind's `md` breakpoint is 768px
   const isDesktop = useMediaQuery("(min-width: 768px)");
-
-  // Priority-load the first row of images (4) for best LCP
   const isPriority = index < 4;
 
-  // Define variants for animation
   const cardVariants = {
-    hidden: {
-      opacity: 0,
-      y: 20, // Start all cards slightly down for a slide-up effect
-    },
+    hidden: { opacity: 0, y: 20 },
     visible: {
       opacity: 1,
-      // Apply "bobbing" Y only on desktop, otherwise just slide to y: 0
       y: isDesktop ? (index % 2 === 0 ? -25 : 25) : 0,
       transition: {
-        duration: isDesktop ? 1 : 0.7, // Faster animation on mobile
+        duration: isDesktop ? 1 : 0.7,
         ease: "easeOut",
       },
     },
@@ -88,74 +77,121 @@ function ExecutiveBoardCard({
       variants={cardVariants}
       initial="hidden"
       animate={isInView ? "visible" : "hidden"}
-      // No custom prop needed here as `isDesktop` is in scope
+      className="h-full"
     >
-      <Card className="relative mt-[1.5rem] rounded-2xl border-[4px] border-[#F7D27F] border-solid overflow-hidden">
-        <CardHeader className="pb-0 pt-0 max-md:h-72 md:h-56">
-          <div className="z-0">
-            <Image
-              alt={`${name} profile`}
-              src={photo_url}
-              className="object-cover w-full h-full translate-y-[13%]"
-              width={400}
-              height={400}
-              fetchPriority={isPriority ? "high" : "auto"}
-              loading={isPriority ? "eager" : "lazy"}
-              priority={isPriority}
-            />
+      <Card
+        className="
+          relative overflow-hidden w-full h-full
+          rounded-xl border-0 shadow-sm mt-0
+          md:rounded-2xl md:border-[4px] md:border-[#F7D27F] md:border-solid
+        "
+      >
+        {/* === MOBILE LAYOUT (PREMIUM STYLE) === */}
+        <div className="md:hidden relative w-full h-56">
+          <Image
+            alt={`${name} profile`}
+            src={photo_url}
+            className="object-cover w-full h-full"
+            width={300}
+            height={400}
+            fetchPriority={isPriority ? "high" : "auto"}
+            loading={isPriority ? "eager" : "lazy"}
+          />
+          
+          {/* Gradient Overlay */}
+          <div
+            className="absolute inset-0 z-10"
+            style={{
+              background:
+                "linear-gradient(to top, rgba(44, 48, 95, 0.95) 0%, rgba(44, 48, 95, 0.6) 35%, transparent 100%)",
+            }}
+          />
+
+          {/* Text Content Mobile - Cân chỉnh lại font size cho thẻ nhỏ */}
+          <div className="absolute bottom-0 left-0 w-full p-2.5 z-20 flex flex-col justify-end">
+            <h6 className="font-bold text-white text-[0.85rem] leading-tight line-clamp-2 drop-shadow-sm">
+              {name}
+            </h6>
+            <div className="h-0.5 w-5 bg-[#DBB968] my-1"></div>
+            <p className="text-[#F7D27F] text-[0.65rem] font-medium leading-tight line-clamp-2">
+              {position}
+            </p>
           </div>
-        </CardHeader>
-        <CardBody className="relative z-10 overflow-visible pb-2 max-md:px-5 md:pl-3 md:pr-2 pt-4 bg-[#F7D27F] rounded-t-3xl">
-          <div className="flex justify-between items-start space-x-2">
-            <div className="flex-1">
-              <h6 className="leading-6 font-semibold text-xl md:text-[0.9rem] text-[#2C305F]">
-                {name}
-              </h6>
-              <p className="leading-5 text-[#2C305F] text-base max-md:mt-2 md:text-[0.8rem]">
-                {position}
-              </p>
-            </div>
-            {linkedin_url && linkedin_url.trim() ? (
+
+          {/* LinkedIn Mobile - Thu nhỏ icon lại chút */}
+          <div className="absolute top-2 right-2 z-20">
+            {linkedin_url && (
               <Link
                 href={linkedin_url}
                 target="_blank"
-                rel="noopener noreferrer"
-                title="Visit LinkedIn"
-                className="flex-shrink-0 my-auto"
+                className="bg-white/20 p-1 rounded-full backdrop-blur-sm block"
               >
-                <IconBrandLinkedin
-                  size={40}
-                  color="#2C305F"
-                  strokeWidth={0.8}
-                  className="max-md:w-14 h-auto transition duration-300 transform hover:scale-110 hover:brightness-150 hover:drop-shadow-[0_0_6px_#2C305F]"
-                />
+                <IconBrandLinkedin size={14} color="white" strokeWidth={1.5} />
               </Link>
-            ) : (
-              <div
-                className="flex-shrink-0 my-auto"
-                title="LinkedIn not available"
-              >
-                <IconBrandLinkedin
-                  size={40}
-                  color="#9CA3AF"
-                  strokeWidth={0.8}
-                  className="opacity-50 cursor-not-allowed"
-                />
-              </div>
             )}
           </div>
-        </CardBody>
+        </div>
+
+        {/* === DESKTOP LAYOUT (CLASSIC STYLE - GIỮ NGUYÊN) === */}
+        <div className="hidden md:block">
+          <CardHeader className="pb-0 pt-0 h-[17rem]">
+            <div className="z-0 w-full h-full">
+              <Image
+                alt={`${name} profile`}
+                src={photo_url}
+                className="object-cover w-full h-full"
+                width={400}
+                height={400}
+                fetchPriority={isPriority ? "high" : "auto"}
+                loading={isPriority ? "eager" : "lazy"}
+              />
+            </div>
+          </CardHeader>
+          <CardBody className="relative z-10 overflow-visible pb-2 pl-3 pr-2 pt-4 bg-[#F7D27F] rounded-t-3xl">
+            <div className="flex justify-between items-start">
+              <div className="flex-1">
+                <h6 className="leading-6 font-semibold text-[0.9rem] text-[#2C305F]">
+                  {name}
+                </h6>
+                <p className="leading-5 text-[#2C305F] text-[0.8rem] mt-1">
+                  {position}
+                </p>
+              </div>
+              {linkedin_url && linkedin_url.trim() ? (
+                <Link
+                  href={linkedin_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-shrink-0 my-auto"
+                >
+                  <IconBrandLinkedin
+                    size={40}
+                    color="#2C305F"
+                    strokeWidth={0.8}
+                    className="h-auto transition duration-300 transform hover:scale-110 hover:brightness-150 hover:drop-shadow-[0_0_6px_#2C305F]"
+                  />
+                </Link>
+              ) : (
+                <div className="flex-shrink-0 my-auto">
+                  <IconBrandLinkedin
+                    size={40}
+                    color="#9CA3AF"
+                    strokeWidth={0.8}
+                    className="opacity-50 cursor-not-allowed"
+                  />
+                </div>
+              )}
+            </div>
+          </CardBody>
+        </div>
       </Card>
     </motion.div>
   );
 }
 
-// 👆 ================== [ END OF MODIFICATIONS ] ================== 👆
-
 // --- Main Component ---
 
 const ExecutiveBoard = () => {
-  // ... (This component logic remains unchanged)
   const [members, setMembers] = useState<ExecutiveBoardMember[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
@@ -167,20 +203,11 @@ const ExecutiveBoard = () => {
         if (response.data.status === 200 && response.data.members) {
           setMembers(response.data.members);
         } else {
-          setError(
-            response.data.message ||
-              "Failed to load executive board data. Please try again later."
-          );
+          setError("Failed to load executive board data.");
         }
       } catch (err: any) {
         console.error("Error fetching executive board: ", err);
-        if (err.response?.status === 404) {
-          setError("Executive board API not found");
-        } else if (err.code === "ERR_NETWORK") {
-          setError("Network error. Please check your connection.");
-        } else {
-          setError("Failed to load executive board data.");
-        }
+        setError("Failed to load executive board data.");
       } finally {
         setLoading(false);
       }
@@ -196,9 +223,7 @@ const ExecutiveBoard = () => {
           <PageHeader />
           <div className="p-8 text-center flex flex-col items-center justify-center h-64">
             <div className="w-12 h-12 border-[5px] border-[#F0EDFF] border-t-[#DCB968] rounded-full animate-spin"></div>
-            <p className="mt-4 text-lg md:text-xl text-[#5E5E92] animate-pulse">
-              Loading Executive Board...
-            </p>
+            <p className="mt-4 text-lg text-[#5E5E92]">Loading Executive Board...</p>
           </div>
         </main>
       </section>
@@ -209,9 +234,10 @@ const ExecutiveBoard = () => {
     <section className="relative max-md:pt-16 max-md:pb-12 md:py-24 px-6 md:px-20">
       <DecorativeCircles />
       <main>
-        <PageHeader />
+        <div className="mb-4 md:mb-0">
+          <PageHeader />
+        </div>
 
-        {/* Display error message if any */}
         {error && (
           <div className="relative w-full max-w-4xl h-48 mx-auto my-10 md:h-64 p-[4px] rounded-lg bg-gradient-to-b from-[#DCB968] to-[#F7D27F]">
             <div className="flex flex-col items-center justify-center w-full h-full bg-[#F9FAFB] rounded-[7px] text-center px-4">
@@ -220,9 +246,12 @@ const ExecutiveBoard = () => {
             </div>
           </div>
         )}
-
-        {/* Responsive Grid for Members */}
-        <div className="max-md:py-4 md:pt-12 md:pb-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="
+            md:pt-12 md:pb-8 
+            w-full 
+            grid grid-cols-2 gap-3 
+            md:grid-cols-2 lg:grid-cols-4 md:gap-8
+        ">
           {members.map((item, index) => (
             <ExecutiveBoardCard key={index} {...item} index={index} />
           ))}

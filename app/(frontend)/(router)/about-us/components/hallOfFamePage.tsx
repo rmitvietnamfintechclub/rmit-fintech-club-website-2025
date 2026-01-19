@@ -15,38 +15,26 @@ const EmptyHallState = ({ semester }: { semester: string }) => {
   const displayYear = semester.slice(0, 4);
 
   return (
-    <section className="flex flex-col items-center justify-center py-12 px-4 w-full">
-      <div className="flex flex-col items-center w-full max-w-lg mx-auto">
-        <motion.div
-          initial={{ y: 0 }}
-          animate={{ y: [0, -10, 0] }}
-          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-          className="relative w-36 h-36 md:w-56 md:h-56 mb-[-2rem] z-10"
-        >
-          <Image
-            src="https://d2uq10394z5icp.cloudfront.net/global/Mascot+-+M%E1%BA%B7t+tr%C6%B0%E1%BB%9Bc.svg"
-            alt="Waiting Mascot"
-            fill
-            className="object-contain drop-shadow-xl"
-            priority
-          />
-        </motion.div>
-
-        {/* CONTENT CARD */}
+    <section className="flex flex-col items-center justify-center px-4 w-full">
+      <div className="flex flex-col items-center w-full md:max-w-lg mx-auto">
         <div
           className="
             relative z-0 w-full text-center 
             bg-white/60 backdrop-blur-md 
             rounded-3xl border border-[#DCB968]/40 shadow-sm
-            pt-12 pb-8 px-6 md:px-10 md:pt-16 md:pb-10
-            mt-4
+            py-8 px-4 md:px-10 md:pt-16 md:pb-10
           "
         >
           <h3 className="text-2xl md:text-4xl font-extrabold text-[#2C305F] mb-3 tracking-tight">
             Coming Soon!
           </h3>
 
-          <p className="text-base md:text-xl text-[#5E5E92] leading-relaxed max-w-xs md:max-w-md mx-auto">
+          <p
+            className="
+            text-base md:text-xl text-[#5E5E92] leading-relaxed 
+            w-full md:max-w-lg mx-auto
+          "
+          >
             The Hall of Fame for{" "}
             <span className="inline-block font-bold text-[#DBB968] bg-[#2C305F]/5 px-2 rounded-md">
               Semester {displaySemester} {displayYear}
@@ -125,7 +113,7 @@ export default function HallOfFamePage() {
   }, [semester]);
 
   // --- RENDER ---
-  
+
   // If a sub-category is selected, show the detail page
   if (selectedCategory && !loading) {
     return (
@@ -143,15 +131,12 @@ export default function HallOfFamePage() {
       {/* Error Alert (Only show on real network error) */}
       {error && !loading && (
         <div className="fixed top-24 left-1/2 -translate-x-1/2 z-50 w-[90vw] md:w-auto p-4 rounded-lg bg-red-100 border border-red-400 text-red-700 shadow-lg animate-in fade-in slide-in-from-top-4">
-          <p className="flex items-center gap-2 text-center font-medium">⚠️ {error}</p>
+          <p className="flex items-center gap-2 text-center font-medium">
+            ⚠️ {error}
+          </p>
         </div>
       )}
 
-      {/* MAIN CHANGE: 
-        Always render HallRevealSection -> HallPage.
-        Pass 'isLoading' prop down so HallPage handles the spinner internally.
-        This prevents the Header & Filter from unmounting/remounting (causing flash).
-      */}
       <HallRevealSection>
         <div className="flex flex-col items-center w-full">
           <HallPage

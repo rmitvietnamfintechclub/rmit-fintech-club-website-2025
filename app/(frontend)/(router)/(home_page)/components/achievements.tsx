@@ -68,7 +68,7 @@ const CardStack = () => {
   };
 
   return (
-    <div className="relative w-full h-[240px] md:h-[340px] flex items-center justify-center md:mt-4 mt-8 perspective-1000 pb-8 md:pl-8 pl-12">
+    <div className="relative w-full h-[240px] md:h-[340px] flex items-center justify-center mt-4 perspective-1000 pb-8 md:pl-8 pl-12">
       {cards.map((card, index) => (
         <Card
           key={card.id}
@@ -80,7 +80,7 @@ const CardStack = () => {
       ))}
 
       {/* Hint */}
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 flex items-center gap-2 text-[#5E5E92]/60 text-xs font-medium z-0 animate-pulse select-none">
+      <div className="min-w-[50vw] md:min-w-0 absolute bottom-[0.75rem] md:bottom-0 left-1/2 -translate-x-1/2 flex justify-center items-center gap-2 text-[#5E5E92]/60 text-xs md:text-sm font-medium z-0 animate-pulse select-none">
         <MousePointerClick size={14} /> Tap or Swipe to view history
       </div>
     </div>
@@ -90,11 +90,11 @@ const CardStack = () => {
 const Card = ({ card, index, total, moveToEnd }: any) => {
   const x = useMotionValue(0);
   const isFront = index === total - 1;
-  const [multiplier, setMultiplier] = useState(22);
+  const [multiplier, setMultiplier] = useState(18);
 
   useEffect(() => {
     const handleResize = () => {
-      setMultiplier(window.innerWidth >= 768 ? 27 : 22);
+      setMultiplier(window.innerWidth >= 768 ? 27 : 18);
     };
 
     handleResize();
@@ -133,7 +133,6 @@ const Card = ({ card, index, total, moveToEnd }: any) => {
         },
       });
     } else {
-      // Trả về
       animate(x, 0, { type: "spring", stiffness: 300, damping: 25 });
     }
   };
@@ -222,7 +221,7 @@ const BentoItem = ({
 // --- Main Component ---
 const Achievements = () => {
   return (
-    <section className="w-full py-8 md:py-16 relative overflow-hidden bg-[#FDFBF7]">
+    <section className="w-full py-8 md:py-16 relative overflow-hidden">
       {/* Background Decor */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
         <div className="absolute top-[-10%] left-[-5%] w-[500px] h-[500px] bg-[#DBB968] opacity-5 blur-[120px] rounded-full" />
@@ -231,7 +230,7 @@ const Achievements = () => {
 
       <div className="container mx-auto px-4 md:px-8 relative z-10">
         {/* Header */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-8 md:mb-12">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -251,8 +250,7 @@ const Achievements = () => {
           {/* ===================================================================================== */}
           {/* 1. ACADEMIC CLUB (Hero - Full Overlay on Hover) */}
           {/* ===================================================================================== */}
-          <BentoItem className="md:col-span-8 bg-[#2C305F] text-white min-h-[450px] md:min-h-[500px] group shadow-2xl relative overflow-hidden cursor-default">
-            {/* 1. LAYER ẢNH NỀN (Giữ nguyên) */}
+          <BentoItem className="md:col-span-8 bg-[#2C305F] text-white min-h-[350px] md:min-h-[500px] group shadow-2xl relative overflow-hidden cursor-default">
             <div className="absolute inset-0 z-0">
               <Image
                 src={NEW_AWARDS.academic}
@@ -260,12 +258,11 @@ const Achievements = () => {
                 fill
                 className="object-cover object-bottom transition-transform duration-700 group-hover:scale-105"
               />
-              {/* Gradient nền tối luôn hiển thị để chữ dễ đọc */}
               <div className="absolute inset-0 bg-gradient-to-t from-[#2C305F] via-[#2C305F]/60 to-transparent opacity-90" />
             </div>
 
             {/* 2. LAYER CONTENT */}
-            <div className="absolute inset-0 z-10 flex flex-col justify-end p-8 md:p-10">
+            <div className="absolute inset-0 z-10 flex flex-col justify-end px-8 py-2 md:px-10 md:py-10">
               <div className="flex flex-col justify-end">
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                   <div className="max-w-2xl transition-all duration-500 ease-in-out">
@@ -349,7 +346,7 @@ const Achievements = () => {
           {/* 3. BEST CLUB */}
           <BentoItem
             delay={0.2}
-            className="md:col-span-6 bg-white border border-[#2C305F]/10 shadow-lg p-0 overflow-visible min-h-[420px] flex flex-col"
+            className="md:col-span-6 bg-white border border-[#2C305F]/10 shadow-lg p-0 overflow-visible h-fit pb-4 flex flex-col"
           >
             <div className="p-8 pb-0 flex flex-col md:flex-row md:items-start justify-between md:gap-4">
               <div>
@@ -376,12 +373,12 @@ const Achievements = () => {
               delay={0.3}
               className="flex-[1.4] bg-white border border-gray-200 shadow-sm p-6 flex items-center gap-6"
             >
-              <div className="w-32 h-full md:w-40 relative flex-shrink-0 rounded-xl overflow-hidden shadow-inner border border-gray-100">
+              <div className="w-40 h-full md:w-48 relative flex-shrink-0 rounded-xl overflow-hidden shadow-inner border border-gray-100">
                 <Image
                   src={NEW_AWARDS.innovation}
                   alt="Innovation Award Front"
                   fill
-                  className="object-cover z-10"
+                  className="object-fill z-10"
                 />
               </div>
 

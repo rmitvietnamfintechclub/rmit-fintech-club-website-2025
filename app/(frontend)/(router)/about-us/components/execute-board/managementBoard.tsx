@@ -3,7 +3,6 @@ import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
 import { IconBrandLinkedin } from "@tabler/icons-react";
 import { motion, useInView } from "framer-motion";
-import "./styles.css"; 
 import Link from "next/link";
 import axios from "axios";
 import useMediaQuery from "./useMediaQuery";
@@ -16,11 +15,10 @@ type ManagementBoardMember = {
   linkedin_url: string;
 };
 
-// --- Reusable UI Components ---
+// --- Reusable UI Components (Giữ nguyên của Management Board) ---
 
 /**
- * 🎨 Renders the decorative mascot and circles.
- * Hidden on mobile (max-md) for a cleaner UI.
+ * 🎨 Decorative elements specific to Management Board (Bear mascot)
  */
 const DecorativeElements = () => (
   <>
@@ -43,7 +41,7 @@ const DecorativeElements = () => (
 );
 
 /**
- * 📄 Renders the responsive page header (text-aligned right).
+ * 📄 Page Header (Right Aligned - Giữ nguyên style cũ)
  */
 const PageHeader = () => (
   <div className="content grid text-right">
@@ -60,9 +58,8 @@ const PageHeader = () => (
   </div>
 );
 
-/**
- * 🧑‍ Renders a single, animated management board member card.
- */
+// 👇 ================== [ MODIFIED CARD COMPONENT ] ================== 👇
+
 function ManagementBoardCard({
   photo_url,
   name,
@@ -72,25 +69,18 @@ function ManagementBoardCard({
 }: ManagementBoardMember & { index: number }) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
-
-  // Tailwind's `md` breakpoint is 768px
+  
+  // Logic responsive & priority loading
   const isDesktop = useMediaQuery("(min-width: 768px)");
-
-  // Priority-load the first row of images (4) for best LCP
   const isPriority = index < 4;
 
-  // Define variants for animation
   const cardVariants = {
-    hidden: {
-      opacity: 0,
-      y: 20, // Start all cards slightly down for a slide-up effect
-    },
+    hidden: { opacity: 0, y: 20 },
     visible: {
       opacity: 1,
-      // Apply "bobbing" Y only on desktop, otherwise just slide to y: 0
       y: isDesktop ? (index % 2 === 0 ? 25 : -25) : 0,
       transition: {
-        duration: isDesktop ? 1 : 0.7, // Faster animation on mobile
+        duration: isDesktop ? 1 : 0.7,
         ease: "easeOut",
       },
     },
@@ -102,60 +92,116 @@ function ManagementBoardCard({
       variants={cardVariants}
       initial="hidden"
       animate={isInView ? "visible" : "hidden"}
+      className="h-full"
     >
-      <Card className="relative mt-[1.5rem] rounded-2xl border-[4px] border-[#F7D27F] border-solid overflow-hidden">
-        {/* Responsive card height */}
-        <CardHeader className="pb-0 pt-0 h-72 md:h-56">
-          <div className="z-0">
-            <Image
-              alt={`${name} profile`}
-              src={photo_url}
-              className="object-cover w-full h-full translate-y-[13%]"
-              width={400}
-              height={400}
-              fetchPriority={isPriority ? "high" : "auto"}
-              loading={isPriority ? "eager" : "lazy"}
-              priority={isPriority}
-            />
+      <Card
+        className="
+          relative overflow-hidden w-full h-full
+          rounded-xl border-0 shadow-sm mt-0
+          md:rounded-2xl md:border-[4px] md:border-[#F7D27F] md:border-solid
+        "
+      >
+        {/* =================================================================
+            1. MOBILE LAYOUT (Premium Style - Giống Executive Board)
+           ================================================================= */}
+        <div className="md:hidden relative w-full aspect-[4/5]">
+          <Image
+            alt={`${name} profile`}
+            src={photo_url}
+            className="object-cover w-full h-full"
+            width={300}
+            height={400}
+            fetchPriority={isPriority ? "high" : "auto"}
+            loading={isPriority ? "eager" : "lazy"}
+          />
+          
+          {/* Gradient Overlay */}
+          <div
+            className="absolute inset-0 z-10"
+            style={{
+              background:
+                "linear-gradient(to top, rgba(44, 48, 95, 0.95) 0%, rgba(44, 48, 95, 0.6) 35%, transparent 100%)",
+            }}
+          />
+
+          {/* Text Content */}
+          <div className="absolute bottom-0 left-0 w-full p-2.5 z-20 flex flex-col justify-end">
+            <h6 className="font-bold text-white text-[0.85rem] leading-tight line-clamp-2 drop-shadow-sm">
+              {name}
+            </h6>
+            <div className="h-0.5 w-5 bg-[#DBB968] my-1"></div>
+            <p className="text-[#F7D27F] text-[0.65rem] font-medium leading-tight line-clamp-2">
+              {position}
+            </p>
           </div>
-        </CardHeader>
-        {/* Responsive padding and text */}
-        <CardBody className="relative z-10 overflow-visible pb-2 max-md:px-5 md:pl-3 md:pr-2 pt-4 bg-[#F7D27F] rounded-t-3xl">
-          <div className="flex justify-between items-start space-x-2">
-            <div className="flex-1">
-              {/* Responsive text sizes */}
-              <h6 className="leading-6 font-semibold text-xl md:text-[0.9rem] text-[#2C305F]">
-                {name}
-              </h6>
-              <p className="leading-5 text-[#2C305F] text-base md:text-[0.8rem] max-md:mt-2">
-                {position}
-              </p>
-            </div>
-            {linkedin_url && linkedin_url.trim() ? (
+
+          {/* LinkedIn Icon */}
+          <div className="absolute top-2 right-2 z-20">
+            {linkedin_url && (
               <Link
                 href={linkedin_url}
                 target="_blank"
-                rel="noopener noreferrer"
-                title="Visit LinkedIn"
-                className="flex-shrink-0 my-auto"
+                className="bg-white/20 p-1 rounded-full backdrop-blur-sm block"
               >
-                <IconBrandLinkedin
-                  color="#2C305F"
-                  strokeWidth={0.8}
-                  className="w-10 h-10 md:w-10 md:h-10 transition duration-300 transform hover:scale-110 hover:brightness-150 hover:drop-shadow-[0_0_6px_#2C305F]"
-                />
+                <IconBrandLinkedin size={14} color="white" strokeWidth={1.5} />
               </Link>
-            ) : (
-              <div className="flex-shrink-0 my-auto" title="LinkedIn not available">
-                <IconBrandLinkedin
-                  color="#9CA3AF"
-                  strokeWidth={0.8}
-                  className="w-10 h-10 md:w-10 md:h-10 opacity-50 cursor-not-allowed"
-                />
-              </div>
             )}
           </div>
-        </CardBody>
+        </div>
+
+        {/* =================================================================
+            2. DESKTOP LAYOUT
+           ================================================================= */}
+        <div className="hidden md:block">
+          <CardHeader className="pb-0 pt-0 h-[17rem]">
+            <div className="z-0 w-full h-full">
+              <Image
+                alt={`${name} profile`}
+                src={photo_url}
+                className="object-cover w-full h-full"
+                width={400}
+                height={400}
+                fetchPriority={isPriority ? "high" : "auto"}
+                loading={isPriority ? "eager" : "lazy"}
+              />
+            </div>
+          </CardHeader>
+          <CardBody className="relative z-10 overflow-visible pb-2 pl-3 pr-2 pt-4 bg-[#F7D27F] rounded-t-3xl">
+            <div className="flex justify-between items-start space-x-2">
+              <div className="flex-1">
+                <h6 className="leading-6 font-semibold text-[0.9rem] text-[#2C305F]">
+                  {name}
+                </h6>
+                <p className="leading-5 text-[#2C305F] text-[0.8rem] mt-1">
+                  {position}
+                </p>
+              </div>
+              {linkedin_url && linkedin_url.trim() ? (
+                <Link
+                  href={linkedin_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title="Visit LinkedIn"
+                  className="flex-shrink-0 my-auto"
+                >
+                  <IconBrandLinkedin
+                    color="#2C305F"
+                    strokeWidth={0.8}
+                    className="w-10 h-10 transition duration-300 transform hover:scale-110 hover:brightness-150 hover:drop-shadow-[0_0_6px_#2C305F]"
+                  />
+                </Link>
+              ) : (
+                <div className="flex-shrink-0 my-auto">
+                  <IconBrandLinkedin
+                    color="#9CA3AF"
+                    strokeWidth={0.8}
+                    className="w-10 h-10 opacity-50 cursor-not-allowed"
+                  />
+                </div>
+              )}
+            </div>
+          </CardBody>
+        </div>
       </Card>
     </motion.div>
   );
@@ -168,13 +214,10 @@ const ManagementBoard = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
 
-  // Fetch data on component mount
   useEffect(() => {
     const fetchManagementBoard = async () => {
       try {
-        // Updated API endpoint
         const response = await axios.get("/api/v1/managementBoard");
-
         if (response.data.status === 200 && response.data.members) {
           setMembers(response.data.members);
         } else {
@@ -185,15 +228,7 @@ const ManagementBoard = () => {
         }
       } catch (err: any) {
         console.error("Error fetching management board: ", err);
-
-        // Updated error messages
-        if (err.response?.status === 404) {
-          setError("Management board API not found");
-        } else if (err.code === "ERR_NETWORK") {
-          setError("Network error. Please check your connection.");
-        } else {
-          setError("Failed to load management board data.");
-        }
+        setError("Failed to load management board data.");
       } finally {
         setLoading(false);
       }
@@ -201,7 +236,6 @@ const ManagementBoard = () => {
     fetchManagementBoard();
   }, []);
 
-  // Loading state
   if (loading) {
     return (
       <section className="relative max-md:pb-0 md:py-24 min-h-screen px-6 md:px-20">
@@ -222,11 +256,11 @@ const ManagementBoard = () => {
   return (
     <section className="relative max-md:pb-0 md:py-24 px-6 md:px-20">
       <DecorativeElements />
-      {/* Responsive padding */}
       <main>
-        <PageHeader />
+        <div className="mb-4 md:mb-0">
+           <PageHeader />
+        </div>
 
-        {/* Display error message */}
         {error && (
           <div className="relative w-full max-w-4xl h-48 mx-auto my-10 md:h-64 p-[4px] rounded-lg bg-gradient-to-b from-[#DCB968] to-[#F7D27F]">
             <div className="flex flex-col items-center justify-center w-full h-full bg-[#F9FAFB] rounded-[7px] text-center px-4">
@@ -236,8 +270,12 @@ const ManagementBoard = () => {
           </div>
         )}
 
-        {/* Responsive Grid for Members */}
-        <div className="max-md:py-4 md:pt-12 md:pb-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="
+            md:pt-12 md:pb-8 
+            w-full 
+            grid grid-cols-2 gap-3 
+            md:grid-cols-2 lg:grid-cols-4 md:gap-8
+        ">
           {members.map((item, index) => (
             <ManagementBoardCard key={index} {...item} index={index} />
           ))}

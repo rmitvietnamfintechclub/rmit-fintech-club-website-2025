@@ -8,7 +8,7 @@ export default function FinTechInTheEyes() {
       <Image
         src="https://d2uq10394z5icp.cloudfront.net/global/Mascot+-+M%E1%BA%B7t+tr%C6%B0%E1%BB%9Bc.svg"
         alt="Bear mascot"
-        className="absolute w-[190px] -top-[5rem] right-[-4.75rem] rotate-[-50deg] z-30
+        className="absolute w-[190px] -top-[5rem] right-[-5.5rem] rotate-[-50deg] z-30
                    md:w-[368px] md:-top-[12rem] md:right-[-8rem]"
         width={400}
         height={400}

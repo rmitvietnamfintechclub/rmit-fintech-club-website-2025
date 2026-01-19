@@ -143,7 +143,7 @@ export default function Partners() {
   };
 
   return (
-    <div className="w-[100vw] h-fit min-h-[35vh] bg-[#F9FAFB] max-md:pb-8 md:pb-20 md:pt-24 relative flex flex-col md:flex-row items-center">
+    <div className="w-[100vw] h-fit min-h-[35vh] max-md:pb-8 md:pb-20 md:pt-24 relative flex flex-col md:flex-row items-center">
       <div className="absolute z-30 left-[40rem] top-[1rem] rotate-[-5deg] max-md:hidden">
         <svg
           xmlns="http://www.w3.org/2000/svg"

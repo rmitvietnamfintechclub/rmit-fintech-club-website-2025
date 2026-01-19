@@ -11,7 +11,7 @@ const mentorData = [
       type: "linkedin",
       href: "http://linkedin.com/in/dr-binh-nguyen-thanh",
     },
-    isPriority: true, // Mark only the first one as priority for LCP
+    isPriority: true,
   },
   {
     name: "Dr. HUY PHAM",
@@ -38,15 +38,14 @@ const mentorData = [
 ];
 
 // --- Icon Components ---
-// Reusable icon components for cleanliness
+// Giảm size SVG nhẹ trên mobile bằng class w/h hoặc scale
 
-const LinkedInIcon = () => (
+const LinkedInIcon = ({ className }: { className?: string }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="65"
-    height="65"
     viewBox="0 0 77 77"
     fill="none"
+    className={className} // Cho phép override size từ bên ngoài
   >
     <path
       d="M12.8333 19.25C12.8333 17.5482 13.5094 15.9161 14.7127 14.7127C15.9161 13.5094 17.5482 12.8333 19.25 12.8333H57.75C59.4518 12.8333 61.0839 13.5094 62.2872 14.7127C63.4906 15.9161 64.1666 17.5482 64.1666 19.25V57.75C64.1666 59.4518 63.4906 61.0839 62.2872 62.2872C61.0839 63.4906 59.4518 64.1666 57.75 64.1666H19.25C17.5482 64.1666 15.9161 63.4906 14.7127 62.2872C13.5094 61.0839 12.8333 59.4518 12.8333 57.75V19.25Z"
@@ -86,14 +85,15 @@ const LinkedInIcon = () => (
   </svg>
 );
 
-const OutlookIcon = () => (
-  <div className="p-[0.3rem] border-[2px] border-[#2C305F] rounded-md">
+const OutlookIcon = ({ className }: { className?: string }) => (
+  <div className={`p-[0.3rem] border-[2px] border-[#2C305F] rounded-md ${className}`}>
     <Image
       src="/outlook.svg"
       alt="Outlook"
       width={35}
       height={35}
       loading="lazy"
+      className="w-full h-full object-contain"
     />
   </div>
 );
@@ -109,37 +109,47 @@ const MentorCard = ({
   isPriority,
 }: MentorCardProps) => {
   return (
-    <div className="flex flex-col items-center w-full md:max-w-xs max-md:px-6">
-      <div className="font-bold text-2xl text-[#2C305F] text-center mb-4">
+    <div className="flex flex-col items-center w-full max-w-[280px] md:max-w-[21rem] mx-auto">
+      
+      <div className="font-bold text-xl md:text-2xl text-[#2C305F] text-center mb-3 md:mb-4 px-2">
         <span>{name}</span>
       </div>
-      <div className="w-full h-auto object-cover overflow-hidden rounded-[50px] border-[#2C305F] border-5">
+
+      {/* Container ảnh */}
+      <div className="w-full aspect-square relative object-cover overflow-hidden rounded-[40px] md:rounded-[50px] border-[#2C305F] border-4 md:border-5">
         <Image
           src={imageUrl}
           alt={`Mentor ${name}`}
-          className="w-full h-auto object-cover"
-          width={400}
-          height={400}
+          className="object-cover"
+          fill // Dùng fill để ảnh tự động cover container
+          sizes="(max-width: 768px) 280px, 320px"
           priority={isPriority}
-          loading={isPriority ? "eager" : "lazy"}
-          fetchPriority={isPriority ? "high" : undefined}
         />
       </div>
-      <div className="relative w-full mt-6">
-        {/* This container uses flexbox for robust, responsive layout */}
-        <div className="relative z-0 rounded-[50px] w-full min-h-[100px] bg-[#DBB968] flex justify-between items-center px-6 py-4">
-          <div className="flex-1 text-center text-sm font-medium text-[#2C305F] mr-4">
+
+      <div className="relative w-full mt-4 md:mt-6">
+        {/* Box thông tin */}
+        <div className="relative z-0 rounded-[30px] md:rounded-[50px] w-full min-h-[80px] md:min-h-[100px] bg-[#DBB968] flex justify-between items-center px-4 py-3 md:px-6 md:py-4 shadow-sm">
+          {/* Title: Giảm font size mobile một chút */}
+          <div className="flex-1 text-center text-xs md:text-sm font-medium text-[#2C305F] mr-2 md:mr-4 leading-tight">
             {title}
           </div>
+          
+          {/* Social Icon Container */}
           <div className="flex-shrink-0">
             <a
               href={social.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="transition duration-300 transform hover:scale-110 hover:brightness-150 hover:drop-shadow-[0_0_6px_#FFEFCA]"
+              className="block transition duration-300 transform hover:scale-110 hover:brightness-150 hover:drop-shadow-[0_0_6px_#FFEFCA]"
             >
-              {social.type === "linkedin" && <LinkedInIcon />}
-              {social.type === "email" && <OutlookIcon />}
+              {/* Change 3: Điều chỉnh size icon responsive */}
+              {social.type === "linkedin" && (
+                 <LinkedInIcon className="w-[50px] h-[50px] md:w-[65px] md:h-[65px]" />
+              )}
+              {social.type === "email" && (
+                 <OutlookIcon className="w-[50px] h-[50px]" />
+              )}
             </a>
           </div>
         </div>
@@ -152,14 +162,12 @@ const MentorCard = ({
 
 export const ClubMentors = () => {
   return (
-    <div className="md:px-20">
+    <div className="px-4 md:px-20">
       <div className="container mx-auto">
         <div className="text-center pt-8 font-sans font-bold text-4xl md:text-6xl text-[#2C305F]">
           OUR CLUB <span className="text-[#DBB968]"> MENTORS</span>
         </div>
-
-        {/* Responsive flex container */}
-        <div className="flex flex-col md:flex-row justify-center md:justify-between items-center md:items-start flex-wrap gap-12 pt-8 md:pt-20">
+        <div className="flex flex-col md:flex-row justify-center md:justify-between items-center md:items-start flex-wrap gap-10 md:gap-12 pt-4 md:pt-20">
           {mentorData.map((mentor) => (
             <MentorCard key={mentor.name} {...mentor} />
           ))}
