@@ -219,14 +219,14 @@ export default function SpecificPodcast({
               </div>
             ))}
           </div>
-          
+
           <h1 className="text-2xl md:text-4xl max-md:text-center font-bold text-ft-text-bright">
             {podcast.title}
           </h1>
-          <p className="font-medium text-base text-white text-left md:text-justify py-2 whitespace-pre-wrap max-w-3xl">
+          <p className="font-medium text-base text-white text-left md:text-justify py-2 whitespace-pre-wrap">
             {podcast.summary}
           </p>
-          
+
           {/* Buttons Section */}
           <section className="flex flex-col sm:flex-row justify-start gap-2 md:gap-4 mt-2">
             <div
@@ -235,7 +235,7 @@ export default function SpecificPodcast({
                 background: "linear-gradient(to top, #474A6E, #DBB968)",
               }}
             >
-              <ActionButton 
+              <ActionButton
                 text="View Podcast"
                 onClick={() => {
                   const element = document.getElementById("podcast-episode");
@@ -260,11 +260,14 @@ export default function SpecificPodcast({
       </div>
 
       {/* --- BREADCRUMBS (Native Tailwind Implementation) --- */}
-      <nav aria-label="Breadcrumb" className="w-full py-8 px-6 md:px-16 max-w-7xl mx-auto">
+      <nav
+        aria-label="Breadcrumb"
+        className="w-full py-8 px-6 md:px-16 max-w-7xl mx-auto"
+      >
         <ol className="flex items-center flex-wrap">
           <li className="flex items-center">
-            <Link 
-              href="/media" 
+            <Link
+              href="/media"
               className="text-black hover:text-[#A28436] transition-colors hover:underline underline-offset-4"
             >
               Media
@@ -272,8 +275,8 @@ export default function SpecificPodcast({
             <ChevronRightIcon />
           </li>
           <li className="flex items-center">
-            <Link 
-              href="/media/fintechtainment" 
+            <Link
+              href="/media/fintechtainment"
               className="text-black hover:text-[#A28436] transition-colors hover:underline underline-offset-4"
             >
               FinTechTainment Library
@@ -281,8 +284,8 @@ export default function SpecificPodcast({
             <ChevronRightIcon />
           </li>
           <li className="flex items-center min-w-0">
-             {/* UX: Truncate title on small screens */}
-             <span 
+            {/* UX: Truncate title on small screens */}
+            <span
               className="text-black font-semibold truncate max-w-[200px] md:max-w-md cursor-default"
               title={podcast.title}
             >
@@ -383,64 +386,65 @@ export default function SpecificPodcast({
           </div>
         </div>
 
-        {/* Right Sidebar */}
-        <div className="w-full md:w-full md:max-w-[17.75rem]">
-          <div className="relative">
-            <h2 className="text-3xl font-bold text-[#0D1742] mb-4">
-              {sidebarTitle}
-            </h2>
+        {/* Right Sidebar / Bottom Carousel (Mobile) */}
+        <div className="w-full md:w-full md:max-w-[17.75rem] mt-8 md:mt-0">
+          <h2 className="text-2xl md:text-3xl font-bold text-[#0D1742] mb-4 md:mb-6">
+            {sidebarTitle}
+          </h2>
 
-            <div className="flex flex-col gap-4">
-              {sidebarPodcasts.map((item) => (
-                <Link
-                  href={`/media/fintechtainment/${item._id}`}
-                  key={item._id}
-                  className="group flex flex-col items-center bg-white rounded-2xl shadow-lg border-2 border-transparent hover:border-[#DBB968] overflow-hidden hover:shadow-xl transition-all duration-300"
-                >
-                  <div className="relative w-full h-52 md:h-40 flex-shrink-0 overflow-hidden">
-                    <Image
-                      src={item.thumbnail_url}
-                      alt={item.title}
-                      layout="fill"
-                      objectFit="fill" 
-                      className="transition-transform duration-500 group-hover:scale-105"
-                    />
-                  </div>
-                  <div className="p-4 w-full">
-                    <p className="font-bold text-sm text-[#0D1742] leading-tight line-clamp-2">
-                      {item.title}
-                    </p>
-                    <p className="text-xs text-gray-500 mt-1">
-                      {formatPublicationDate(item.publicationDate)}
-                    </p>
-                  </div>
-                </Link>
-              ))}
-            </div>
-
-            {/* Mascot image */}
-            <div className="absolute right-[-12.5rem] bottom-[-22rem] hidden md:block pointer-events-none">
-              <Image
-                src="https://d2uq10394z5icp.cloudfront.net/global/Mascot+-+M%E1%BA%B7t+tr%C6%B0%E1%BB%9Bc.svg"
-                alt="Mascot"
-                width={200}
-                height={500}
-                loading="lazy"
-                className="w-[25vw] h-auto -rotate-[35deg]"
-              />
-            </div>
-
-            {/* Back to Library Button (Mobile) */}
-            <div
-              className="md:hidden w-fit h-fit rounded-md p-[2px] mt-[2rem] mx-auto"
-              style={{
-                background: "linear-gradient(to top, #474A6E, #DBB968)",
-              }}
-            >
-              <Link href="/media/fintechtainment">
-                <ActionButton text="Back to FinTechTainment Library" />
+          <div
+            className="
+                flex flex-row md:flex-col 
+                gap-4 
+                overflow-x-auto snap-x snap-mandatory md:overflow-visible 
+                pb-4 md:pb-0
+                no-scrollbar
+            "
+          >
+            {sidebarPodcasts.map((item) => (
+              <Link
+                href={`/media/fintechtainment/${item._id}`}
+                key={item._id}
+                className="
+                    group flex flex-col bg-white rounded-xl shadow-md border border-gray-100 hover:border-[#DBB968] overflow-hidden hover:shadow-xl transition-all duration-300
+                    min-w-[80vw] sm:min-w-[45vw] md:min-w-0 md:w-full 
+                    snap-center
+                  "
+              >
+                <div className="relative w-full h-48 md:h-40 overflow-hidden bg-gray-200">
+                  <Image
+                    src={item.thumbnail_url}
+                    alt={item.title}
+                    layout="fill"
+                    objectFit="fill"
+                    className="transition-transform duration-500 group-hover:scale-105"
+                  />
+                </div>
+                <div className="p-4 flex-grow flex flex-col justify-between">
+                  <p className="font-bold text-sm text-[#0D1742] leading-snug line-clamp-2">
+                    {item.title}
+                  </p>
+                  <p className="text-xs text-gray-500 mt-2">
+                    {formatPublicationDate(item.publicationDate)}
+                  </p>
+                </div>
               </Link>
-            </div>
+            ))}
+
+            {/* Spacer for mobile scroll padding right */}
+            <div className="w-2 md:hidden flex-shrink-0"></div>
+          </div>
+
+          {/* Mascot - Desktop Only */}
+          <div className="absolute right-[-12.5rem] bottom-[-1rem] hidden md:block pointer-events-none">
+            <Image
+              src="https://d2uq10394z5icp.cloudfront.net/global/Mascot+-+M%E1%BA%B7t+tr%C6%B0%E1%BB%9Bc.svg"
+              alt="Mascot"
+              width={200}
+              height={500}
+              loading="lazy"
+              className="w-[25vw] h-auto -rotate-[35deg]"
+            />
           </div>
         </div>
       </div>

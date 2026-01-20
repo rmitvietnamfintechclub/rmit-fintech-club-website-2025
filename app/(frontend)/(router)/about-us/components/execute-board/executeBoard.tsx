@@ -91,7 +91,7 @@ function ExecutiveBoardCard({
           <Image
             alt={`${name} profile`}
             src={photo_url}
-            className="object-cover w-full h-full"
+            className="object-contain w-full h-full"
             width={300}
             height={400}
             fetchPriority={isPriority ? "high" : "auto"}
@@ -132,14 +132,14 @@ function ExecutiveBoardCard({
           </div>
         </div>
 
-        {/* === DESKTOP LAYOUT (CLASSIC STYLE - GIỮ NGUYÊN) === */}
+        {/* === DESKTOP LAYOUT === */}
         <div className="hidden md:block">
-          <CardHeader className="pb-0 pt-0 h-[17rem]">
+          <CardHeader className="pb-0 pt-0 h-[14rem]">
             <div className="z-0 w-full h-full">
               <Image
                 alt={`${name} profile`}
                 src={photo_url}
-                className="object-cover w-full h-full"
+                className="object-contain w-full h-full"
                 width={400}
                 height={400}
                 fetchPriority={isPriority ? "high" : "auto"}

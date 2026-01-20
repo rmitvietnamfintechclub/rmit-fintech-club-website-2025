@@ -102,13 +102,13 @@ function ManagementBoardCard({
         "
       >
         {/* =================================================================
-            1. MOBILE LAYOUT (Premium Style - Giống Executive Board)
+            1. MOBILE LAYOUT
            ================================================================= */}
         <div className="md:hidden relative w-full aspect-[4/5]">
           <Image
             alt={`${name} profile`}
             src={photo_url}
-            className="object-cover w-full h-full"
+            className="object-contain w-full h-full"
             width={300}
             height={400}
             fetchPriority={isPriority ? "high" : "auto"}
@@ -153,12 +153,12 @@ function ManagementBoardCard({
             2. DESKTOP LAYOUT
            ================================================================= */}
         <div className="hidden md:block">
-          <CardHeader className="pb-0 pt-0 h-[17rem]">
+          <CardHeader className="pb-0 pt-0 h-[14rem]">
             <div className="z-0 w-full h-full">
               <Image
                 alt={`${name} profile`}
                 src={photo_url}
-                className="object-cover w-full h-full"
+                className="object-contain w-full h-full"
                 width={400}
                 height={400}
                 fetchPriority={isPriority ? "high" : "auto"}
@@ -206,8 +206,6 @@ function ManagementBoardCard({
     </motion.div>
   );
 }
-
-// --- Main Component ---
 
 const ManagementBoard = () => {
   const [members, setMembers] = useState<ManagementBoardMember[]>([]);

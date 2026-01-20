@@ -65,6 +65,45 @@ const ChevronRightIcon = () => (
   </svg>
 );
 
+const ExternalLinkIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className="ml-2"
+  >
+    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+    <polyline points="15 3 21 3 21 9"></polyline>
+    <line x1="10" y1="14" x2="21" y2="3"></line>
+  </svg>
+);
+
+const FileIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="48"
+    height="48"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="#DBB968"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
+    <polyline points="14 2 14 8 20 8" />
+    <path d="M16 13H8" />
+    <path d="M16 17H8" />
+    <path d="M10 9H8" />
+  </svg>
+);
+
 const ActionButton = ({
   text,
   onClick,
@@ -125,7 +164,9 @@ export default function SpecificArticle({
     return (
       <div className="p-8 text-center flex flex-col items-center justify-center h-screen">
         <div className="w-12 h-12 border-[5px] border-[#F0EDFF] border-t-[#DCB968] rounded-full animate-spin"></div>
-        <p className="mt-4 text-lg text-[#5E5E92] animate-pulse">Loading Article...</p>
+        <p className="mt-4 text-lg text-[#5E5E92] animate-pulse">
+          Loading Article...
+        </p>
       </div>
     );
   }
@@ -215,7 +256,7 @@ export default function SpecificArticle({
           <p className="font-medium text-base text-white text-left md:text-justify py-2 whitespace-pre-wrap">
             {article.summary}
           </p>
-          
+
           {/* Buttons Section */}
           <section className="flex flex-col md:flex-row justify-center md:justify-start gap-2 md:gap-4 w-full md:w-auto">
             <div
@@ -224,7 +265,7 @@ export default function SpecificArticle({
                 background: "linear-gradient(to top, #474A6E, #DBB968)",
               }}
             >
-              <ActionButton 
+              <ActionButton
                 text="Read Article"
                 onClick={() => {
                   const element = document.getElementById("article");
@@ -266,8 +307,8 @@ export default function SpecificArticle({
       <nav aria-label="Breadcrumb" className="w-full py-8 px-6 md:px-16">
         <ol className="flex items-center flex-wrap">
           <li className="flex items-center">
-            <Link 
-              href="/media" 
+            <Link
+              href="/media"
               className="text-black hover:text-[#A28436] transition-colors hover:underline underline-offset-4"
             >
               Media
@@ -275,8 +316,8 @@ export default function SpecificArticle({
             <ChevronRightIcon />
           </li>
           <li className="flex items-center">
-            <Link 
-              href="/media/article" 
+            <Link
+              href="/media/article"
               className="text-black hover:text-[#A28436] transition-colors hover:underline underline-offset-4"
             >
               Article Library
@@ -284,9 +325,9 @@ export default function SpecificArticle({
             <ChevronRightIcon />
           </li>
           <li className="flex items-center min-w-0">
-            <span 
+            <span
               className="text-black font-semibold truncate max-w-[150px] md:max-w-none cursor-default"
-              title={article.title} 
+              title={article.title}
             >
               {article.title}
             </span>
@@ -299,17 +340,48 @@ export default function SpecificArticle({
         id="article"
         className="flex flex-col md:flex-row justify-center pb-12 px-6 md:px-16 gap-8"
       >
-        {/* PDF Viewer */}
+        {/* PDF VIEWER CONTAINER */}
         <div className="w-full md:max-w-4xl">
-          <iframe
-            src={article.content_url}
-            title="PDF Viewer"
-            className="w-full h-[80vh] md:h-[120vh] rounded-lg shadow-lg bg-gray-100"
-            aria-label="PDF article preview"
-          >
-            This browser does not support PDFs.
-          </iframe>
-          
+          {/* --- 1. DESKTOP: INLINE VIEWER (Hidden on Mobile) --- */}
+          <div className="hidden md:block w-full h-[150vh] rounded-lg shadow-lg bg-gray-100 overflow-hidden border border-gray-200">
+            <iframe
+              src={article.content_url}
+              title="PDF Viewer"
+              className="w-full h-full"
+              aria-label="PDF article preview"
+            />
+          </div>
+
+          {/* --- 2. MOBILE: PDF CARD (Visible on Mobile Only) --- */}
+          <div className="md:hidden w-full bg-white rounded-xl shadow-md border border-gray-200 p-6 flex flex-col items-center text-center">
+            <div className="bg-ft-primary-yellow-100/20 p-4 rounded-full mb-4">
+              <FileIcon />
+            </div>
+            <h3 className="text-xl font-bold text-[#2C305F] mb-2">
+              Read the Full Article
+            </h3>
+            <p className="text-gray-500 text-sm mb-6 max-w-xs">
+              This document is optimized for reading on your device's native PDF
+              viewer.
+            </p>
+
+            <a
+              href={article.content_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full"
+            >
+              <motion.button
+                whileTap={{ scale: 0.98 }}
+                className="w-full bg-[#2C305F] text-white font-semibold py-3.5 px-6 rounded-lg shadow-md flex items-center justify-center gap-2 hover:bg-[#1f2244] transition-colors"
+              >
+                Open PDF
+                <ExternalLinkIcon />
+              </motion.button>
+            </a>
+          </div>
+
+          {/* Back Button (Desktop positioning) */}
           <div
             className="hidden md:block w-fit h-fit rounded-md p-[2px] mt-[2rem] mb-12 md:mb-20 mx-auto"
             style={{
@@ -342,28 +414,42 @@ export default function SpecificArticle({
             </div>
           )}
 
-          {/* Sidebar Articles Section */}
           <div>
             <h2 className="text-3xl font-bold text-ft-primary-yellow-100 mb-4">
               {sidebarTitle}
             </h2>
-            <div className="flex flex-col gap-6">
+            <div
+              className="
+                flex flex-row md:flex-col 
+                gap-4 
+                overflow-x-auto snap-x snap-mandatory md:overflow-visible 
+                pb-4 md:pb-0 
+                scrollbar-hide /* Cần thêm plugin hoặc style ẩn scrollbar */
+            "
+              style={{ msOverflowStyle: "none", scrollbarWidth: "none" }}
+            >
               {sidebarArticles.map((item) => (
                 <Link
                   href={`/media/article/${item._id}`}
                   key={item._id}
-                  className="group block rounded-lg overflow-hidden border-2 border-gray-200 md:border-transparent hover:border-[#DBB968] hover:shadow-lg transition-all duration-300 bg-white"
+                  className="
+                    group flex flex-col bg-white rounded-lg overflow-hidden border-2 border-gray-200 md:border-transparent hover:border-[#DBB968] hover:shadow-lg transition-all duration-300
+                    /* --- CAROUSEL STYLES --- */
+                    flex-shrink-0 
+                    w-[80vw] sm:w-[45vw] md:w-full
+                    snap-center
+                  "
                 >
-                  <div className="relative w-full h-[22rem] md:h-72 overflow-hidden">
+                  <div className="relative w-full h-96 md:h-72 overflow-hidden">
                     <Image
                       src={item.illustration_url}
                       alt={item.title}
                       layout="fill"
                       objectFit="fill"
-                      className="rounded-t-lg transition-transform duration-500 group-hover:scale-105"
+                      className="transition-transform duration-500 group-hover:scale-105"
                     />
                   </div>
-                  <div className="p-4 bg-gray-50 rounded-b-lg">
+                  <div className="p-4 bg-gray-50 rounded-b-lg flex-grow">
                     <p className="font-semibold text-gray-800 text-md leading-snug line-clamp-2">
                       {item.title}
                     </p>
@@ -373,14 +459,14 @@ export default function SpecificArticle({
                   </div>
                 </Link>
               ))}
+              {/* Spacer for mobile scroll */}
+              <div className="w-2 md:hidden flex-shrink-0"></div>
             </div>
           </div>
 
           <div
-            className="block md:hidden w-fit h-fit rounded-md p-[2px] mt-0 md:mt-[2rem] mb-0 md:mb-20 mx-auto"
-            style={{
-              background: "linear-gradient(to top, #474A6E, #DBB968)",
-            }}
+            className="block md:hidden w-fit h-fit rounded-md p-[2px] mt-0 mx-auto"
+            style={{ background: "linear-gradient(to top, #474A6E, #DBB968)" }}
           >
             <Link href="/media/article">
               <ActionButton text="Back to Article Library" />
@@ -388,7 +474,7 @@ export default function SpecificArticle({
           </div>
         </div>
       </div>
-      
+
       {/* Mascot */}
       <div className="absolute bottom-[-9rem] left-0 hidden md:block pointer-events-none">
         <Image
