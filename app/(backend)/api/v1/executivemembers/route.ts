@@ -1,29 +1,22 @@
-import connectMongoDB from "@/app/(backend)/libs/mongodb";
-import { type NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { getExecutiveMembers, addExecutiveMember } from "@/app/(backend)/controllers/executiveController";
-import { requireAdmin } from "@/app/(backend)/middleware/middleware";
+import { publicRoute, adminRoute } from "@/app/(backend)/libs/api-handler";
 
-export async function GET(req: NextRequest) {
-  await connectMongoDB();
-
+// --- GET: PUBLIC ---
+export const GET = publicRoute(async (req) => {
   const { searchParams } = new URL(req.url);
   const generation = searchParams.get("generation");
 
   const result = await getExecutiveMembers(generation || undefined);
+  
   return NextResponse.json(result);
-}
+});
 
-export async function POST(req: NextRequest) {
-  // Require admin for POST
-	const isAdmin = await requireAdmin(req);
-	if (!isAdmin) {
-		return NextResponse.json(
-			{ status: 403, message: "Forbidden" },
-			{ status: 403 },
-		);
-	}
-  await connectMongoDB();
+// --- POST: ADMIN ONLY ---
+export const POST = adminRoute(async (req) => {
   const data = await req.json();
+  
   const result = await addExecutiveMember(data);
+  
   return NextResponse.json(result);
-} 
+});

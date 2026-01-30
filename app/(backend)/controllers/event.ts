@@ -1,61 +1,80 @@
-import { NextResponse } from "next/server";
-import Event from "../models/event";
+import Event from "@/app/(backend)/models/event";
 import mongoose from "mongoose";
 
-// Add new event
+// --- Service: Lấy danh sách Event (Pagination & Filter) ---
+export async function getEvents(limit: number = 10, offset: number = 0) {
+    const currDate = new Date();
+    
+    // Logic query: Lấy event từ hiện tại trở đi
+    const query = { date: { $gte: currDate } };
+
+    const [events, total] = await Promise.all([
+        Event.find(query, { 
+            name: 1, posterUrl: 1, date: 1, time: 1, mode: 1, location: 1 
+        })
+        .sort({ date: 1 })
+        .skip(offset)
+        .limit(limit)
+        .lean(),
+        Event.countDocuments(query)
+    ]);
+
+    return { events, total, limit, offset };
+}
+
+// --- Service: Lấy chi tiết Event (Sanitize Data) ---
+export async function getEventById(id: string) {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        throw new Error("Invalid event ID");
+    }
+
+    const event = await Event.findById(id).lean() as any;
+
+    if (!event) return null;
+
+    const sanitizedEvent = {
+        _id: event._id,
+        name: event.name,
+        description: event.description,
+        posterUrl: event.posterUrl || null,
+        date: event.date,
+        time: event.time,
+        mode: event.mode,
+        location: event.location,
+        agenda: Array.isArray(event.agenda) ? event.agenda.map((a: any) => ({
+            time: a.time,
+            description: a.description,
+        })) : [],
+        speakers: Array.isArray(event.speakers) ? event.speakers.map((s: any) => ({
+            name: s.name || null,
+            photoUrl: s.photoUrl || null,
+            bio: s.bio || null,
+        })) : [],
+        partners: Array.isArray(event.partners) ? event.partners : [],
+        registrationDeadline: event.registrationDeadline,
+        created_at: event.created_at || new Date(), // Fallback nếu thiếu
+        updated_at: event.updated_at || new Date(),
+    };
+
+    return sanitizedEvent;
+}
+
+// --- Service: Thêm Event ---
 export async function addEvent(data: any) {
-    try {
-        const event = new Event(data);
-        await event.save();
-        return NextResponse.json(event, { status: 201 });
-    } catch(err: any) {
-        return NextResponse.json(err, { status: err.status });
-    } 
+    const event = await Event.create(data);
+    return event;
 }
 
-// Update existing event by id
+// --- Service: Update Event ---
 export async function updateEvent(id: string, data: any) {
-    if (!data) {
-        return NextResponse.json(
-            { message: "No data provided" },
-            { status: 400 }
-        );
-    }
+    if (!data) throw new Error("No data provided");
 
-    try {
-        const updated = await Event.findByIdAndUpdate(id, data, {
-            new: true,
-        });
-        if (!updated) {
-            return NextResponse.json(
-                { message: "Event not found" },
-                { status: 404 }
-            );
-        }
-        return NextResponse.json(
-            { event: updated },
-            { status: 200 }
-        );
-    } catch(err: any) {
-        return NextResponse.json(err, { status: err.status });
-    }
+    const updated = await Event.findByIdAndUpdate(id, data, { new: true }).lean();
+    return updated;
 }
 
-// Delete existing event by id
+// --- Service: Delete Event ---
 export async function deleteEvent(id: string) {
-    try {
-        const deleted = await Event.findByIdAndDelete(id);
-        if(!deleted) {
-            return NextResponse.json(
-                { message: "Event not found" },
-                { status: 404 }
-            )
-        }
-        return NextResponse.json(
-            { event: deleted },
-            { status: 200 }
-        );
-    } catch(err: any) {
-        return NextResponse.json(err, { status: err.status });
-    }
+    const deleted = await Event.findByIdAndDelete(id).lean();
+    return deleted;
 }

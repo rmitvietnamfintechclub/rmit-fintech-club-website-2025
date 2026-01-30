@@ -1,35 +1,43 @@
-import type { NextRequest } from "next/server";
-import {
-  getArticleById,
-  updateArticle,
-  deleteArticle,
-} from "@/app/(backend)/controllers/articleController";
+import { NextResponse } from "next/server";
+import { getArticleById, updateArticle, deleteArticle } from "@/app/(backend)/controllers/articleController";
+import { publicRoute, adminRoute } from "@/app/(backend)/libs/api-handler";
 
-type RouteParams = {
-  params: { id: string };
-};
+// --- GET: PUBLIC ---
+export const GET = publicRoute(async (req, { params }) => {
+  const result = await getArticleById(params.id);
 
-/**
- * GET /api/v1/article/{id}
- * Fetches a single article by its ID.
- */
-export async function GET(_request: NextRequest, { params }: RouteParams) {
-  return getArticleById(params.id);
-}
+  if (!result) {
+    return NextResponse.json({ error: "Article not found" }, { status: 404 });
+  }
 
-/**
- * PUT /api/v1/article/{id}
- * Updates an existing article.
- */
-export async function PUT(request: NextRequest, { params }: RouteParams) {
-  const articleData = await request.json();
-  return updateArticle(params.id, articleData);
-}
+  return NextResponse.json(result, { status: 200 });
+});
 
-/**
- * DELETE /api/v1/article/{id}
- * Deletes an article.
- */
-export async function DELETE(_request: NextRequest, { params }: RouteParams) {
-  return deleteArticle(params.id);
-}
+// --- PUT: ADMIN ONLY ---
+export const PUT = adminRoute(async (req, { params }) => {
+  const data = await req.json();
+  const article = await updateArticle(params.id, data);
+
+  if (!article) {
+    return NextResponse.json({ error: "Article not found" }, { status: 404 });
+  }
+
+  return NextResponse.json(
+    { message: "Article updated successfully", article },
+    { status: 200 }
+  );
+});
+
+// --- DELETE: ADMIN ONLY ---
+export const DELETE = adminRoute(async (req, { params }) => {
+  const article = await deleteArticle(params.id);
+
+  if (!article) {
+    return NextResponse.json({ error: "Article not found" }, { status: 404 });
+  }
+
+  return NextResponse.json(
+    { message: "Article deleted successfully" },
+    { status: 200 }
+  );
+});

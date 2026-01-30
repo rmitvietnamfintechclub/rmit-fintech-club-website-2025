@@ -12,25 +12,11 @@ export async function getExecutiveMembers(generation?: string) {
       }
       filter.generation = genNum;
     }
-    // If no generation, do NOT set filter.generation
 
     const members = await ExecutiveMember.find(filter);
     return { status: 200, members };
   } catch (error) {
     return { status: 500, message: "Error fetching executive members" };
-  }
-}
-
-// Get a single executive member by ID
-export async function getExecutiveMemberById(id: string) {
-  try {
-    const member = await ExecutiveMember.findById(id);
-    if (!member) {
-      return { status: 404, message: "Executive member not found" };
-    }
-    return { status: 200, member };
-  } catch (error: any) {
-    return { status: 400, message: error.message };
   }
 }
 

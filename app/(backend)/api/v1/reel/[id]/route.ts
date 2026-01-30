@@ -1,37 +1,47 @@
-import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 import {
-  deleteReel,
-  updateReel,
   getReelById,
+  updateReel,
+  deleteReel,
 } from "@/app/(backend)/controllers/reelController";
+import { publicRoute, adminRoute } from "@/app/(backend)/libs/api-handler";
 
-/**
- * Handles GET requests for a single reel by its ID.
- */
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
-  return getReelById(params.id);
-}
+// --- GET: PUBLIC ---
+export const GET = publicRoute(async (req, { params }) => {
+  const reel = await getReelById(params.id);
 
-/**
- * Handles PUT requests to update a reel by its ID.
- */
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
-  const data = await request.json();
-  return updateReel(params.id, data);
-}
+  if (!reel) {
+    return NextResponse.json({ error: "Reel not found" }, { status: 404 });
+  }
 
-/**
- * Handles DELETE requests to remove a reel by its ID.
- */
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
-  return deleteReel(params.id);
-}
+  return NextResponse.json({ reel }, { status: 200 });
+});
+
+// --- PUT: ADMIN ONLY ---
+export const PUT = adminRoute(async (req, { params }) => {
+  const data = await req.json();
+  const reel = await updateReel(params.id, data);
+
+  if (!reel) {
+    return NextResponse.json({ error: "Reel not found" }, { status: 404 });
+  }
+
+  return NextResponse.json(
+    { message: "Reel updated successfully", reel },
+    { status: 200 }
+  );
+});
+
+// --- DELETE: ADMIN ONLY ---
+export const DELETE = adminRoute(async (req, { params }) => {
+  const reel = await deleteReel(params.id);
+
+  if (!reel) {
+    return NextResponse.json({ error: "Reel not found" }, { status: 404 });
+  }
+
+  return NextResponse.json(
+    { message: "Reel deleted successfully" },
+    { status: 200 }
+  );
+});

@@ -1,45 +1,30 @@
-import { addManagementBoard } from "@/app/(backend)/controllers/managementBoard";
-import connectMongoDb from "@/app/(backend)/libs/mongodb";
+import { NextResponse } from "next/server";
 import ManagementBoard from "@/app/(backend)/models/managementBoard";
-import { type NextRequest, NextResponse } from "next/server";
-import { requireAdmin } from "@/app/(backend)/middleware/middleware";
+import { addManagementBoard } from "@/app/(backend)/controllers/managementBoard";
+import { publicRoute, adminRoute } from "@/app/(backend)/libs/api-handler";
 
-export async function GET(req: NextRequest) {
-	await connectMongoDb();
+// --- GET: PUBLIC ---
+export const GET = publicRoute(async (req) => {
+    const { searchParams } = new URL(req.url);
+    const generation = searchParams.get("generation");
+    
+    const filter: Record<string, any> = generation 
+        ? { generation: Number(generation) } 
+        : {};
 
-	const { searchParams } = new URL(req.url);
-	const generation = searchParams.get("generation");
-	const filter: Record<string, any> = {};
+    const members = await ManagementBoard.find(filter);
+    
+    return NextResponse.json({
+        status: 200,
+        members,
+    });
+});
 
-	if (generation) {
-		filter.generation = Number(generation);
-	}
-
-	try {
-		const members = await ManagementBoard.find(filter);
-		return NextResponse.json({
-			status: 200,
-			members,
-		});
-	} catch (err) {
-		return NextResponse.json({
-			status: 200,
-			message: "Error fetching management board members",
-		});
-	}
-}
-
-export async function POST(req: NextRequest) {
-	// Require admin for POST
-	const isAdmin = await requireAdmin(req);
-	if (!isAdmin) {
-		return NextResponse.json(
-			{ status: 403, message: "Forbidden" },
-			{ status: 403 },
-		);
-	}
-	await connectMongoDb();
-	const data = await req.json();
-	const result = await addManagementBoard(data);
-	return NextResponse.json(result);
-}
+// --- POST: ADMIN ONLY ---
+export const POST = adminRoute(async (req) => {
+    const data = await req.json();
+    
+    const result = await addManagementBoard(data);
+    
+    return NextResponse.json(result);
+});

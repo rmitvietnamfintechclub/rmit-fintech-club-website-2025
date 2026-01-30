@@ -1,20 +1,19 @@
-import Project from "../models/project";
-import Article from "../models/article";
-import Podcast from "../models/podcast";
+import Project from "@/app/(backend)/models/project";
+import Article from "@/app/(backend)/models/article";
+import Podcast from "@/app/(backend)/models/podcast";
 import { Types } from "mongoose";
 
-// Helper to find a project and flatten its structure for the client
-const getProjectByIdOrSlug = async (idOrSlug: string) => {
+// --- Helper: Tìm Project theo ID hoặc Slug (Kèm logic Media auto-update) ---
+export const getProjectByIdOrSlug = async (idOrSlug: string) => {
   const query = Types.ObjectId.isValid(idOrSlug)
     ? { _id: idOrSlug }
     : { slug: idOrSlug };
 
   const project = (await Project.findOne(query).lean()) as any;
 
-  if (!project) {
-    throw new Error("Project not found");
-  }
+  if (!project) return null;
 
+  // Logic đặc biệt: Tự động lấy Article/Podcast mới nhất nếu là Media Project
   if (project.category === "media" && project.auto_update_type) {
     let Model: any;
     let fieldsToSelect: string;
@@ -24,33 +23,33 @@ const getProjectByIdOrSlug = async (idOrSlug: string) => {
         Model = Podcast;
         fieldsToSelect = "_id title thumbnail_url publicationDate";
         break;
-
       case "Article":
         Model = Article;
         fieldsToSelect = "_id title illustration_url publicationDate";
         break;
-
       default:
-        console.warn(`Unknown auto_update_type: ${project.auto_update_type}`);
+        // Nếu không khớp type nào thì trả về project gốc
         return project;
     }
 
-    const latestProducts = await Model.find({})
-      .sort({ publicationDate: -1 })
-      .limit(project.auto_update_limit || 6)
-      .select(fieldsToSelect)
-      .lean();
+    if (Model) {
+      const latestProducts = await Model.find({})
+        .sort({ publicationDate: -1 })
+        .limit(project.auto_update_limit || 6)
+        .select(fieldsToSelect)
+        .lean();
 
-    project.products = latestProducts.map((doc: any) => ({
-      onModel: project.auto_update_type,
-      product: doc,
-    }));
+      project.products = latestProducts.map((doc: any) => ({
+        onModel: project.auto_update_type,
+        product: doc,
+      }));
+    }
   }
 
   return project;
 };
 
-// GET all projects
+// --- Service: Lấy tất cả Project ---
 export async function getAllProjects() {
   const projects = await Project.find({})
     .select("title type status category image_url year slug")
@@ -58,10 +57,10 @@ export async function getAllProjects() {
     .limit(100)
     .lean();
 
-  return { status: 200, data: projects, count: projects.length };
+  return { projects, count: projects.length };
 }
 
-// GET large-scaled, ongoing projects
+// --- Service: Lấy Project Large-Scaled & Ongoing ---
 export async function getLargeScaledOngoingProjects() {
   const projects = await Project.find({
     type: "large-scaled",
@@ -71,10 +70,11 @@ export async function getLargeScaledOngoingProjects() {
     .sort({ createdAt: -1 })
     .limit(50)
     .lean();
-  return { status: 200, data: projects, count: projects.length };
+    
+  return { projects, count: projects.length };
 }
 
-// GET department projects
+// --- Service: Lấy Project theo Department ---
 export async function getDepartmentProjects(department: string) {
   const result = await Project.aggregate([
     { $match: { type: "department", status: "Ongoing", department } },
@@ -103,14 +103,14 @@ export async function getDepartmentProjects(department: string) {
     department_description: "",
     projects: [],
   };
+  
   return {
-    status: 200,
-    data: departmentData,
+    departmentData,
     count: departmentData.projects.length,
   };
 }
 
-// GET completed projects by year
+// --- Service: Lấy Completed Project theo năm ---
 export async function getCompletedProjectsByYear(year: string) {
   const yearNum = parseInt(year);
   if (isNaN(yearNum)) throw new Error("Invalid year parameter");
@@ -121,22 +121,17 @@ export async function getCompletedProjectsByYear(year: string) {
     .limit(50)
     .lean();
 
-  return { status: 200, data: projects, count: projects.length, year: yearNum };
+  return { projects, count: projects.length, year: yearNum };
 }
 
-// GET a single project's details
-export async function getProjectDetails(idOrSlug: string) {
-  return await getProjectByIdOrSlug(idOrSlug);
-}
-
-// POST a new project
+// --- Service: Tạo Project ---
 export async function createProject(data: any) {
   const project = new Project(data);
   await project.save();
   return project;
 }
 
-// PUT (update) an existing project
+// --- Service: Update Project ---
 export async function updateProject(idOrSlug: string, updateData: any) {
   const query = Types.ObjectId.isValid(idOrSlug)
     ? { _id: idOrSlug }
@@ -144,10 +139,9 @@ export async function updateProject(idOrSlug: string, updateData: any) {
 
   const project = await Project.findOne(query);
 
-  if (!project) {
-    throw new Error("Project not found");
-  }
+  if (!project) return null;
 
+  // Cập nhật từng field (trừ _id và slug nếu không muốn đổi)
   for (const key in updateData) {
     if (key !== "_id" && key !== "slug") {
       project.set(key, updateData[key]);
@@ -155,18 +149,15 @@ export async function updateProject(idOrSlug: string, updateData: any) {
   }
 
   const updatedProject = await project.save();
-
   return updatedProject;
 }
 
-// DELETE a project
+// --- Service: Xóa Project ---
 export async function deleteProject(idOrSlug: string) {
   const query = Types.ObjectId.isValid(idOrSlug)
     ? { _id: idOrSlug }
     : { slug: idOrSlug };
-  const project = await Project.findOneAndDelete(query);
-
-  if (!project) throw new Error("Project not found");
-
-  return { message: "Project deleted successfully", deletedProject: project };
+    
+  const project = await Project.findOneAndDelete(query).lean();
+  return project;
 }
