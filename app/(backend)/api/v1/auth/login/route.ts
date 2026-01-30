@@ -1,56 +1,38 @@
-import connectMongoDB from "@/app/(backend)/libs/mongodb";
-import User from "@/app/(backend)/models/user";
-import bcryptjs from "bcryptjs";
-import { SignJWT } from "jose";
-import { type NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
+import { loginUser } from "@/app/(backend)/controllers/authController";
+import { publicRoute } from "@/app/(backend)/libs/api-handler";
 
-export async function POST(request: NextRequest) {
-	try {
-		connectMongoDB();
-		// Get data from user
-		const { email, password } = await request.json();
-		const user = await User.findOne({ email: email });
-		// Check if user existed
-		if (!user) {
-			return Response.json(
-				{ error: "User doesn't exist" },
-				{ status: 403 },
-			);
-		}
-		// Compare password
-		const isMatch = await bcryptjs.compare(password, user.password);
-		if (!isMatch) {
-			return Response.json(
-				{ error: "Password not matched" },
-				{ status: 403 },
-			);
-		}
-		// Create JWT token
-		const jwtSecretKey = process.env.JWT_SECRET;
-		const secretKey = new TextEncoder().encode(jwtSecretKey);
-		const token = await new SignJWT({
-			id: user._id,
-			email: user.email,
-			role: user.role,
-		})
-			.setProtectedHeader({ alg: "HS256" })
-			.setIssuedAt()
-			.setExpirationTime("1 day")
-			.sign(secretKey);
-		// Create response
-		const response = NextResponse.json(
-			{ message: "Login successfully!" },
-			{ status: 200 },
-		);
-		// Store token in cookie
-		response.cookies.set("token", token, {
-			httpOnly: true,
-			secure: process.env.NODE_ENV === "production",
-			sameSite: "strict",
-		});
+export const POST = publicRoute(async (req) => {
+    const body = await req.json();
+    const { email, password } = body;
 
-		return response;
-	} catch (error) {
-		return Response.json({ error: error }, { status: 500 });
-	}
-}
+    if (!email || !password) {
+        return NextResponse.json({ message: "Missing email or password" }, { status: 400 });
+    }
+
+    try {
+        // Gọi controller lấy token
+        const token = await loginUser(email, password);
+
+        // Tạo response
+        const response = NextResponse.json(
+            { message: "Login successful" },
+            { status: 200 }
+        );
+
+        // Set Cookie (HTTP Only - Chống XSS)
+        response.cookies.set("token", token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production", // Chỉ dùng HTTPS ở production
+            sameSite: "strict", // Chống CSRF
+            path: "/",
+            maxAge: 60 * 60 * 24, // 1 ngày
+        });
+
+        return response;
+
+    } catch (error: any) {
+        // Trả về lỗi 401 cho login sai
+        return NextResponse.json({ message: error.message }, { status: 401 });
+    }
+});

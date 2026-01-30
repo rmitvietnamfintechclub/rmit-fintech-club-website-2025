@@ -1,237 +1,237 @@
 "use client";
+
+import React, { useState } from "react";
+import Image from "next/image"; 
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Button, Checkbox, Input } from "@heroui/react";
 import axios from "axios";
-import type React from "react";
-import { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { Mail, Lock, Eye, EyeOff } from "lucide-react";
+
+// --- 1. Validation Schema ---
+const loginSchema = z.object({
+  email: z
+    .string()
+    .min(1, "Email is required")
+    .email("Please enter a valid email address"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+  rememberMe: z.boolean(),
+});
+
+type LoginFormValues = z.infer<typeof loginSchema>;
+
+// --- 2. Static Styles (Moved outside component for performance) ---
+const inputStyles = {
+  label: "text-black/60 dark:text-white/90 font-semibold mb-2",
+  input: [
+    "bg-transparent",
+    "text-black/90 dark:text-white/90",
+    "placeholder:text-default-700/50 dark:placeholder:text-white/60",
+  ],
+  inputWrapper: [
+    "shadow-sm",
+    "bg-default-100",
+    "data-[hover=true]:bg-default-200",
+    "group-data-[focus=true]:bg-white",
+    "group-data-[focus=true]:ring-2",
+    "group-data-[focus=true]:ring-ft-primary-blue-500/20", // UX: Focus ring
+    "!cursor-text",
+    "transition-all duration-200", // UX: Smooth transition
+  ],
+};
 
 const LoginPage = () => {
-  const [visible, setVisible] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const toggleVisibility = () => setVisible(!visible);
-  const login = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const configuration = {
-      method: "post",
-      url: "/api/v1/auth/login",
-      data: {
-        email,
-        password,
-      },
-    };
-    axios(configuration)
-      .then((result) => {
-        console.log(result);
-        toast.success(result.data.message, {
-          duration: 3000,
-          position: "top-center",
-        });
-      })
-      .catch((error) => {
-        console.log(error);
-        toast.error(error.response.data.error);
+  const [isVisible, setIsVisible] = useState(false);
+  const router = useRouter();
+
+  const toggleVisibility = () => setIsVisible(!isVisible);
+
+  // --- 3. Form Setup ---
+  const {
+    register,
+    control, // Needed for HeroUI Checkbox
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<LoginFormValues>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+      rememberMe: true,
+    },
+  });
+
+  // --- 4. Submit Logic ---
+  const onSubmit = async (data: LoginFormValues) => {
+    try {
+      const response = await axios.post("/api/v1/auth/login", data);
+
+      toast.success(response.data.message || "Welcome back!", {
+        duration: 4000,
+        position: "top-center",
+        style: {
+          background: "#10B981",
+          color: "#fff",
+          fontWeight: "bold",
+        },
       });
-    const user = {
-      email,
-      password,
-    };
-    // try {
-    //     const response = await axios.post("/api/v1/auth/login", user);
-    //     // router.push("/login");
-    // } catch (error:any) {
-    //     console.log("Signup failed", error.message);
-    // }
+
+      router.push("/");
+    } catch (error: any) {
+      console.error("Login Error:", error);
+      const errorMessage =
+        error.response?.data?.message || // Check for 'message' first
+        error.response?.data?.error || // Then check for 'error'
+        "Invalid credentials. Please try again.";
+
+      toast.error(errorMessage, {
+        position: "top-center",
+      });
+    }
   };
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 bg-white min-h-full w-full h-screen">
-      <Toaster position="top-center" />
-      <div className="col-span-0 flex flex-col md:col-span-1 mx-auto">
-        <img
-          src="loginPage/Logo.svg"
-          loading="lazy"
-          className="text-center w-4/12 md:w-10/12 mx-auto my-auto"
-          alt="Club Logo"
-          aria-label="logo"
-        />
-      </div>
-      <div className="col-span-1 flex flex-col justify-center text-center align-middle">
-        <h2 className=" text-ft-primary-blue-500 mb-10 mt-7 md:mt-0">
-          Admin Login
-        </h2>
-        <form
-          onSubmit={(e) => login(e)}
-          className="flex flex-col mx-10 md:mx-20 gap-5"
-        >
-          <Input
-            value={email}
-            onValueChange={setEmail}
-            classNames={{
-              label: "text-black font-bold dark:text-black",
-              input: [
-                "bg-transparent",
-                "text-black dark:text-black",
-                "placeholder:text-black dark:placeholder:text-black",
-                "placeholder:font-bold dark:placeholder:font-bold",
-                "group-data-[has-value=true]:text-black",
-                "dark:group-data-[has-value=true]:text-black",
-              ],
-              innerWrapper: "bg-transparent",
-              inputWrapper: [
-                "font-bold",
-                "bg-gray-200",
-                "dark:bg-gray-200",
-                "hover:bg-gray-200",
-                "dark:hover:bg-gray-200",
-                "group-data-[focus=true]:bg-gray-200",
-                "group-data-[has-value=true]:text-black",
-                "dark:group-data-[focus=true]:bg-gray-200",
-                "dark:group-data-[has-value=true]:text-black",
-                "!cursor-text",
-              ],
-            }}
-            isRequired
-            type="text"
-            placeholder="Email"
-            radius="md"
-            size="lg"
-            startContent={
-              <i className=" text-ft-primary-blue-500">
-                <svg
-                  aria-label="email icon"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="28"
-                  height="28"
-                  viewBox="0 0 24 24 "
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="icon icon-tabler icons-tabler-outline icon-tabler-mail"
-                >
-                  <title>email icon</title>
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10z" />
-                  <path d="M3 7l9 6l9 -6" />
-                </svg>
-              </i>
-            }
-          />
-          <Input
-            value={password}
-            onValueChange={setPassword}
-            classNames={{
-              label: "text-black font-bold dark:text-black",
-              input: [
-                "bg-transparent",
-                "text-black dark:text-black",
-                "placeholder:text-black dark:placeholder:text-black",
-                "placeholder:font-bold dark:placeholder:font-bold",
-                "group-data-[has-value=true]:text-black",
-                "dark:group-data-[has-value=true]:text-black",
-              ],
-              innerWrapper: "bg-transparent font-bold",
-              inputWrapper: [
-                "font-bold",
-                "bg-gray-200",
-                "dark:bg-gray-200",
-                "hover:bg-gray-200",
-                "dark:hover:bg-gray-200",
-                "group-data-[focus=true]:bg-gray-200",
-                "group-data-[has-value=true]:text-black",
-                "dark:group-data-[focus=true]:bg-gray-200",
-                "dark:group-data-[has-value=true]:text-black",
-                "!cursor-text",
-              ],
-            }}
-            isRequired
-            type={visible ? "text" : "password"}
-            placeholder="Password"
-            radius="md"
-            size="lg"
-            startContent={
-              <i className=" text-ft-primary-blue-500">
-                <svg
-                  aria-label="password icon"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="28"
-                  height="28"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="icon icon-tabler icons-tabler-outline icon-tabler-key"
-                >
-                  <title>password icon</title>
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path d="M16.555 3.843l3.602 3.602a2.877 2.877 0 0 1 0 4.069l-2.643 2.643a2.877 2.877 0 0 1 -4.069 0l-.301 -.301l-6.558 6.558a2 2 0 0 1 -1.239 .578l-.175 .008h-1.172a1 1 0 0 1 -.993 -.883l-.007 -.117v-1.172a2 2 0 0 1 .467 -1.284l.119 -.13l.414 -.414h2v-2h2v-2l2.144 -2.144l-.301 -.301a2.877 2.877 0 0 1 0 -4.069l2.643 -2.643a2.877 2.877 0 0 1 4.069 0z" />
-                  <path d="M15 9h.01" />
-                </svg>
-              </i>
-            }
-            endContent={
-              <button
-                className="focus:outline-none"
-                type="button"
-                onClick={toggleVisibility}
-              >
-                {visible ? (
-                  <svg
-                    aria-label="eye-icon"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="icon icon-tabler icons-tabler-outline icon-tabler-eye"
-                  >
-                    <title>eye-icon</title>
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                    <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
-                    <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
-                  </svg>
-                ) : (
-                  <svg
-                    aria-label="eye-icon"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="icon icon-tabler icons-tabler-outline icon-tabler-eye-off"
-                  >
-                    <title>eye-icon</title>
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                    <path d="M10.585 10.587a2 2 0 0 0 2.829 2.828" />
-                    <path d="M16.681 16.673a8.717 8.717 0 0 1 -4.681 1.327c-3.6 0 -6.6 -2 -9 -6c1.272 -2.12 2.712 -3.678 4.32 -4.674m2.86 -1.146a9.055 9.055 0 0 1 1.82 -.18c3.6 0 6.6 2 9 6c-.666 1.11 -1.379 2.067 -2.138 2.87" />
-                    <path d="M3 3l18 18" />
-                  </svg>
-                )}
-              </button>
-            }
-          />
-          <Checkbox defaultSelected className=" text-start text-black">
-            <span className="text-black">Remember me</span>
-          </Checkbox>
-          <Button
-            type="submit"
-            size="lg"
-            className=" bg-ft-primary-yellow-500 py-5 w-full rounded-lg text-white"
+    <div className="flex w-full h-screen bg-white overflow-hidden">
+      <Toaster />
+
+      {/* --- Left Section: Brand / Visuals --- */}
+      <div
+        className="hidden md:flex w-1/2 relative items-center justify-center p-12 overflow-hidden"
+        style={{
+          backgroundColor: "#ffffff",
+          backgroundImage: `
+                radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.08) 0px, transparent 50%), 
+                radial-gradient(at 100% 100%, rgba(234, 179, 8, 0.1) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(243, 244, 246, 0.5) 0px, transparent 50%)
+            `,
+        }}
+      >
+        <div className="absolute top-0 -left-10 w-72 h-72 bg-ft-primary-blue-500/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 -right-10 w-96 h-96 bg-ft-primary-yellow-500/5 rounded-full blur-3xl" />
+
+        <div className="w-full max-w-md relative z-10 flex flex-col items-center">
+          <Link
+            href="/"
+            className="relative w-full aspect-[4/3] cursor-pointer hover:scale-105 transition-transform duration-300"
+            title="Back to Home"
           >
-            Login
-          </Button>
-        </form>
+            <Image
+              src="https://d2uq10394z5icp.cloudfront.net/global/FTC-DefaultLogo-NoName.svg"
+              alt="FinTech Club Logo"
+              fill
+              priority
+              className="object-contain drop-shadow-xl"
+            />
+          </Link>
+        </div>
+      </div>
+
+      {/* --- Right Section: Form --- */}
+      <div className="flex w-full md:w-2/3 flex-col justify-center items-center px-6 md:px-10 bg-white relative z-20">
+        <div className="w-full max-w-lg space-y-8">
+          <div className="text-left space-y-2">
+            <h2 className="text-4xl font-extrabold text-center text-gray-900 tracking-tight">
+              ADMIN PORTAL
+            </h2>
+          </div>
+
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="flex flex-col gap-5"
+          >
+            {/* Email */}
+            <Input
+              {...register("email")}
+              autoFocus
+              placeholder="Enter your email address"
+              variant="flat"
+              radius="lg"
+              size="lg"
+              classNames={inputStyles}
+              startContent={
+                <Mail
+                  className="text-default-400 pointer-events-none"
+                  size={20}
+                />
+              }
+              isInvalid={!!errors.email}
+              errorMessage={errors.email?.message}
+            />
+
+            {/* Password */}
+            <div className="space-y-1">
+              <Input
+                {...register("password")}
+                placeholder="Enter your password"
+                variant="flat"
+                radius="lg"
+                size="lg"
+                type={isVisible ? "text" : "password"}
+                classNames={inputStyles}
+                startContent={
+                  <Lock
+                    className="text-default-400 pointer-events-none"
+                    size={20}
+                  />
+                }
+                endContent={
+                  <button
+                    className="focus:outline-none text-default-400 hover:text-gray-700 transition-colors rounded-full p-1"
+                    type="button"
+                    onClick={toggleVisibility}
+                    aria-label="toggle password visibility"
+                  >
+                    {isVisible ? <EyeOff size={20} /> : <Eye size={20} />}
+                  </button>
+                }
+                isInvalid={!!errors.password}
+                errorMessage={errors.password?.message}
+              />
+            </div>
+
+            {/* Options Row */}
+            <div className="flex items-center justify-between">
+              <Controller
+                name="rememberMe"
+                control={control}
+                render={({ field }) => (
+                  <Checkbox
+                    isSelected={field.value}
+                    onValueChange={field.onChange}
+                    classNames={{
+                      label: "text-small text-gray-600 font-medium",
+                      wrapper: "before:border-gray-300",
+                    }}
+                    size="sm"
+                  >
+                    Remember me
+                  </Checkbox>
+                )}
+              />
+
+              <button
+                type="button"
+                className="text-small text-ft-primary-blue-500 font-semibold hover:text-ft-primary-blue-600 hover:underline transition-all focus:outline-none"
+              >
+                Forgot password?
+              </button>
+            </div>
+
+            {/* Submit Button */}
+            <Button
+              type="submit"
+              size="lg"
+              isLoading={isSubmitting}
+              className="w-full bg-ft-primary-yellow hover:bg-ft-primary-yellow text-white font-bold text-md shadow-lg shadow-ft-primary-yellow-500/20 transition-transform active:scale-[0.98]"
+            >
+              {isSubmitting ? "Authenticating..." : "Sign in"}
+            </Button>
+          </form>
+        </div>
       </div>
     </div>
   );
