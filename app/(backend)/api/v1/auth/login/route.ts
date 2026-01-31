@@ -20,11 +20,10 @@ export const POST = publicRoute(async (req) => {
             { status: 200 }
         );
 
-        // Set Cookie (HTTP Only - Chống XSS)
         response.cookies.set("token", token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production", // Chỉ dùng HTTPS ở production
-            sameSite: "strict", // Chống CSRF
+            sameSite: "strict",
             path: "/",
             maxAge: 60 * 60 * 24, // 1 ngày
         });
@@ -32,7 +31,6 @@ export const POST = publicRoute(async (req) => {
         return response;
 
     } catch (error: any) {
-        // Trả về lỗi 401 cho login sai
         return NextResponse.json({ message: error.message }, { status: 401 });
     }
 });

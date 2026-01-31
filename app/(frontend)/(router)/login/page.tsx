@@ -3,8 +3,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { Button, Checkbox, Input, Spinner } from "@heroui/react";
+import { Button, Input, Spinner } from "@heroui/react";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import { useForm, Controller } from "react-hook-form";
@@ -48,7 +47,6 @@ const inputStyles = {
 
 const LoginPage = () => {
   const [isVisible, setIsVisible] = useState(false);
-  const router = useRouter();
 
   const toggleVisibility = () => setIsVisible(!isVisible);
 
@@ -77,16 +75,14 @@ const LoginPage = () => {
         duration: 4000,
         position: "top-center",
         style: {
-          background: "#10B981", // Green-500
+          background: "#10B981",
           color: "#fff",
           fontWeight: "600",
         },
         icon: "🚀",
       });
 
-      // Secure Redirect
-      router.refresh(); // Refresh to update server components (e.g. Navbar state)
-      router.push("/");
+      window.location.href = "/";
     } catch (error: any) {
       console.error("Login Error:", error);
 

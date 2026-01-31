@@ -7,7 +7,6 @@ import React, {
   type ButtonHTMLAttributes,
 } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import Image from "next/image";
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -41,7 +40,6 @@ interface AdminNavbarProps {
 const isOpenAtom = atom(false);
 
 const AdminNavbar = ({ user }: AdminNavbarProps) => {
-  const router = useRouter();
   const [isOpen, setIsOpen] = useAtom(isOpenAtom);
   const [hidden, setHidden] = useState(false);
   const isOpenRef = useRef(isOpen);
@@ -68,10 +66,9 @@ const AdminNavbar = ({ user }: AdminNavbarProps) => {
   // --- Logout Logic ---
   const handleLogout = async () => {
     try {
-      await axios.get("/api/v1/auth/logout");
+      await axios.post("/api/v1/auth/logout");
       toast.success("Logged out successfully");
-      router.refresh();
-      router.push("/login");
+      window.location.href = "/login";
     } catch (error) {
       console.error("Logout failed", error);
       toast.error("Logout failed");
@@ -104,7 +101,7 @@ const AdminNavbar = ({ user }: AdminNavbarProps) => {
       variants={{ visible: { y: 0 }, hidden: { y: "-100%" } }}
       animate={hidden ? "hidden" : "visible"}
       transition={{ duration: 0.3, ease: "easeInOut" }}
-      className="sticky top-0 h-[8vh] py-[1vh] z-50 flex w-full transition-[colors, transform] duration-300 bg-ft-primary-blue shadow-md"
+      className="sticky top-0 h-[8vh] py-[1vh] z-[9999] flex w-full transition-[colors, transform] duration-300 bg-ft-primary-blue shadow-md overflow-visible"
     >
       <div className="flex justify-between items-center pr-[2vw] w-full">
         {/* --- Logo Section --- */}
@@ -221,7 +218,11 @@ const AdminNavbar = ({ user }: AdminNavbarProps) => {
                 src="https://scontent.fsgn17-1.fna.fbcdn.net/v/t39.30808-6/487824097_1102282055274093_49442541000041971_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeFRmJiF1FJCnD-Q5b5RskaQIFjK5pVZMsAgWMrmlVkywBFz0HIhVqGUQbshftIG22aF95yQV0BuuMLlVkqQD0xT&_nc_ohc=viwESOKrTSgQ7kNvwHbI3mY&_nc_oc=Adn3suXouLCGeFpkE9Ukjqq68k728mQ2quDR8NhV4INWAc5paFOQQTACdcdx-F8HAxZH14RDGBcUuVmInBwLn6RH&_nc_zt=23&_nc_ht=scontent.fsgn17-1.fna&_nc_gid=Cap-4_gJJ86ZsnaINFe8Cw&oh=00_AftOv8IlhFCAFthb8gE12jiWUbaDSP8PeCQ1B7MkcaZGZg&oe=69834B1F"
               />
             </DropdownTrigger>
-            <DropdownMenu aria-label="Profile Actions" variant="flat">
+            <DropdownMenu
+              aria-label="Profile Actions"
+              variant="flat"
+              className="bg-white border border-gray-200 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.2)] rounded-xl p-2 min-w-[240px] z-[9999]"
+            >
               {/* --- Profile Info --- */}
               <DropdownItem
                 key="profile"
