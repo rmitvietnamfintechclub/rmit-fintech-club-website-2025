@@ -213,9 +213,14 @@ const AdminNavbar = ({ user }: AdminNavbarProps) => {
                 isBordered
                 as="button"
                 className="transition-transform hover:scale-105"
+                classNames={{
+                  img: "opacity-100",
+                }}
                 color="warning"
                 size="sm"
-                src="https://scontent.fsgn17-1.fna.fbcdn.net/v/t39.30808-6/487824097_1102282055274093_49442541000041971_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeFRmJiF1FJCnD-Q5b5RskaQIFjK5pVZMsAgWMrmlVkywBFz0HIhVqGUQbshftIG22aF95yQV0BuuMLlVkqQD0xT&_nc_ohc=viwESOKrTSgQ7kNvwHbI3mY&_nc_oc=Adn3suXouLCGeFpkE9Ukjqq68k728mQ2quDR8NhV4INWAc5paFOQQTACdcdx-F8HAxZH14RDGBcUuVmInBwLn6RH&_nc_zt=23&_nc_ht=scontent.fsgn17-1.fna&_nc_gid=Cap-4_gJJ86ZsnaINFe8Cw&oh=00_AftOv8IlhFCAFthb8gE12jiWUbaDSP8PeCQ1B7MkcaZGZg&oe=69834B1F"
+                src="https://d2uq10394z5icp.cloudfront.net/global/FTC-LogoWithName.jpg"
+                showFallback={true}
+                name={user.email?.substring(0, 2).toUpperCase()}
               />
             </DropdownTrigger>
             <DropdownMenu
