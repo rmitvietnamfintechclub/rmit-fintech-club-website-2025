@@ -1,25 +1,40 @@
-"use client"; // Bắt buộc phải có dòng này
+"use client";
 
 import { usePathname } from "next/navigation";
-import Navbar from "@/components/navbar";
+import Navbar from "@/components/navbar"; 
+import AdminNavbar from "@/components/admin-navbar"; 
 import FooterWrapper from "../app/(frontend)/footer-wrapper"; 
+import { UserPayload } from "@/app/(backend)/libs/auth";
 
-export default function MainLayout({ children }: { children: React.ReactNode }) {
+interface MainLayoutProps {
+  children: React.ReactNode;
+  isLoggedIn: boolean;
+  user: UserPayload | null;
+}
+
+export default function MainLayout({ children, isLoggedIn, user }: MainLayoutProps) {
   const pathname = usePathname();
 
   const disableLayoutRoutes = ["/login"];
-  
-  const shouldShowLayout = !disableLayoutRoutes.includes(pathname);
+  const shouldHideLayout = disableLayoutRoutes.includes(pathname);
+
+  const renderNavbar = () => {
+    if (shouldHideLayout) return null;
+    
+    if (isLoggedIn && user) return <AdminNavbar user={user} />;
+    
+    return <Navbar />;
+  };
 
   return (
     <div className="relative flex flex-col h-screen">
-      {shouldShowLayout && <Navbar />}
+      {renderNavbar()}
       
       <main className="flex-grow overflow-x-clip">
         {children}
       </main>
       
-      {shouldShowLayout && <FooterWrapper />}
+      {!shouldHideLayout && !isLoggedIn && <FooterWrapper />}
     </div>
   );
 }

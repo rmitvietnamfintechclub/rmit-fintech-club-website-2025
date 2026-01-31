@@ -5,6 +5,8 @@ import clsx from "clsx";
 import type { Metadata, Viewport } from "next";
 import { Providers } from "../providers";
 import MainLayout from "@/components/main-layout";
+import { cookies } from "next/headers";
+import { verifyToken } from "@/app/(backend)/libs/auth";
 
 export const metadata: Metadata = {
   title: {
@@ -27,11 +29,21 @@ export const viewport: Viewport = {
   ],
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const cookieStore = cookies();
+  const token = cookieStore.get("token")?.value;
+
+  let user = null;
+  if (token) {
+    user = await verifyToken(token);
+  }
+
+  const isLoggedIn = !!user;
+
   return (
     <html className="overflow-x-hidden" lang="en" suppressHydrationWarning>
       <body
@@ -41,7 +53,9 @@ export default function RootLayout({
         )}
       >
         <Providers themeProps={{ attribute: "class", defaultTheme: "light" }}>
-          <MainLayout>{children}</MainLayout>
+          <MainLayout isLoggedIn={isLoggedIn} user={user}>
+            {children}
+          </MainLayout>
         </Providers>
       </body>
     </html>

@@ -14,17 +14,11 @@ import { atom, useAtom } from "jotai";
 
 const isOpenAtom = atom(false);
 export let headerHeight: number;
-// Removing the global let variable as it doesn't cause re-renders. 
-// We will use state/ref for sidebar status.
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useAtom(isOpenAtom);
   
-  // New state to control visibility based on scroll
   const [hidden, setHidden] = useState(false);
-
-  // We use a ref to track isOpen without adding it to the dependency array 
-  // of useMotionValueEvent (to avoid re-attaching listeners constantly)
   const isOpenRef = useRef(isOpen);
   useEffect(() => {
     isOpenRef.current = isOpen;

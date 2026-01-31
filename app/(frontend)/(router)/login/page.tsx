@@ -1,46 +1,48 @@
 "use client";
 
 import React, { useState } from "react";
-import Image from "next/image"; 
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Button, Checkbox, Input } from "@heroui/react";
+import { Button, Checkbox, Input, Spinner } from "@heroui/react";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { Mail, Lock, Eye, EyeOff } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff, ArrowRight, Loader2 } from "lucide-react";
 
-// --- 1. Validation Schema ---
+// --- 1. Zod Validation Schema ---
+// Strong validation ensures bad data is caught early (Security & UX)
 const loginSchema = z.object({
   email: z
     .string()
     .min(1, "Email is required")
     .email("Please enter a valid email address"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
+  password: z.string().min(1, "Password is required"),
   rememberMe: z.boolean(),
 });
 
 type LoginFormValues = z.infer<typeof loginSchema>;
 
-// --- 2. Static Styles (Moved outside component for performance) ---
 const inputStyles = {
-  label: "text-black/60 dark:text-white/90 font-semibold mb-2",
+  label: "!text-gray-600 dark:!text-white/90 font-semibold mb-1.5",
   input: [
     "bg-transparent",
-    "text-black/90 dark:text-white/90",
-    "placeholder:text-default-700/50 dark:placeholder:text-white/60",
+    "!text-gray-900 dark:!text-white",
+    "placeholder:!text-gray-400 dark:placeholder:!text-gray-500",
   ],
   inputWrapper: [
     "shadow-sm",
-    "bg-default-100",
-    "data-[hover=true]:bg-default-200",
+    "bg-gray-50",
+    "border-1 border-gray-200", // Subtle border for better definition
+    "data-[hover=true]:bg-gray-100",
     "group-data-[focus=true]:bg-white",
-    "group-data-[focus=true]:ring-2",
-    "group-data-[focus=true]:ring-ft-primary-blue-500/20", // UX: Focus ring
+    "group-data-[focus=true]:!border-[#3B82F6]", // Hardcoded Blue Focus Border
+    "group-data-[focus=true]:!ring-2",
+    "group-data-[focus=true]:!ring-[#3B82F6]/20", // Hardcoded Blue Ring
     "!cursor-text",
-    "transition-all duration-200", // UX: Smooth transition
+    "transition-all duration-200",
   ],
 };
 
@@ -50,10 +52,9 @@ const LoginPage = () => {
 
   const toggleVisibility = () => setIsVisible(!isVisible);
 
-  // --- 3. Form Setup ---
   const {
     register,
-    control, // Needed for HeroUI Checkbox
+    control,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<LoginFormValues>({
@@ -65,160 +66,157 @@ const LoginPage = () => {
     },
   });
 
-  // --- 4. Submit Logic ---
+  // --- 4. Secure Submit Handler ---
   const onSubmit = async (data: LoginFormValues) => {
     try {
+      // API call
       const response = await axios.post("/api/v1/auth/login", data);
 
-      toast.success(response.data.message || "Welcome back!", {
+      // Success Feedback
+      toast.success(response.data.message || "Welcome back, Admin!", {
         duration: 4000,
         position: "top-center",
         style: {
-          background: "#10B981",
+          background: "#10B981", // Green-500
           color: "#fff",
-          fontWeight: "bold",
+          fontWeight: "600",
         },
+        icon: "🚀",
       });
 
+      // Secure Redirect
+      router.refresh(); // Refresh to update server components (e.g. Navbar state)
       router.push("/");
     } catch (error: any) {
       console.error("Login Error:", error);
+
       const errorMessage =
-        error.response?.data?.message || // Check for 'message' first
-        error.response?.data?.error || // Then check for 'error'
-        "Invalid credentials. Please try again.";
+        error.response?.data?.message ||
+        error.response?.data?.error ||
+        "Invalid credentials. Please check your email and password.";
 
       toast.error(errorMessage, {
         position: "top-center",
+        style: {
+          background: "#EF4444", // Red-500
+          color: "#fff",
+          fontWeight: "600",
+        },
       });
     }
   };
 
   return (
-    <div className="flex w-full h-screen bg-white overflow-hidden">
+    <div className="flex w-full min-h-screen bg-white overflow-hidden font-sans">
       <Toaster />
 
-      {/* --- Left Section: Brand / Visuals --- */}
+      {/* --- Left Section: Visual Branding --- */}
       <div
-        className="hidden md:flex w-1/2 relative items-center justify-center p-12 overflow-hidden"
+        className="hidden lg:flex w-1/2 relative items-center justify-center p-16"
         style={{
-          backgroundColor: "#ffffff",
-          backgroundImage: `
-                radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.08) 0px, transparent 50%), 
-                radial-gradient(at 100% 100%, rgba(234, 179, 8, 0.1) 0px, transparent 50%),
-                radial-gradient(at 100% 0%, rgba(243, 244, 246, 0.5) 0px, transparent 50%)
-            `,
+          background: "linear-gradient(135deg, #F9FAFB 0%, #F3F4F6 100%)",
         }}
       >
-        <div className="absolute top-0 -left-10 w-72 h-72 bg-ft-primary-blue-500/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 -right-10 w-96 h-96 bg-ft-primary-yellow-500/5 rounded-full blur-3xl" />
+        {/* Abstract Background Shapes */}
+        <div
+          className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] rounded-full opacity-30 blur-[100px]"
+          style={{ background: "#3B82F6" }} // Brand Blue
+        />
+        <div
+          className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] rounded-full opacity-20 blur-[120px]"
+          style={{ background: "#EAB308" }}
+        />
 
-        <div className="w-full max-w-md relative z-10 flex flex-col items-center">
+        <div className="relative z-10 w-full max-w-lg flex flex-col items-center text-center">
+          {/* Logo Link */}
           <Link
             href="/"
-            className="relative w-full aspect-[4/3] cursor-pointer hover:scale-105 transition-transform duration-300"
-            title="Back to Home"
+            className="relative w-96 aspect-square mb-8 transition-transform hover:scale-105 duration-300 ease-out"
+            aria-label="Back to Homepage"
           >
             <Image
-              src="https://d2uq10394z5icp.cloudfront.net/global/FTC-DefaultLogo-NoName.svg"
+              src="https://d2uq10394z5icp.cloudfront.net/global/FTC-Logo.png"
               alt="FinTech Club Logo"
               fill
               priority
-              className="object-contain drop-shadow-xl"
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-contain drop-shadow-2xl"
             />
           </Link>
         </div>
       </div>
 
-      {/* --- Right Section: Form --- */}
-      <div className="flex w-full md:w-2/3 flex-col justify-center items-center px-6 md:px-10 bg-white relative z-20">
-        <div className="w-full max-w-lg space-y-8">
-          <div className="text-left space-y-2">
-            <h2 className="text-4xl font-extrabold text-center text-gray-900 tracking-tight">
-              ADMIN PORTAL
+      {/* --- Right Section: Login Form --- */}
+      <div className="flex w-full lg:w-1/2 flex-col justify-center items-center px-6 sm:px-12 lg:px-24 bg-white relative z-20">
+        <div className="w-full max-w-[420px] space-y-10">
+          {/* Header */}
+          <div>
+            <h2 className="text-4xl font-extrabold text-gray-900 text-center tracking-tight">
+              Admin Portal
             </h2>
           </div>
 
+          {/* Form */}
           <form
             onSubmit={handleSubmit(onSubmit)}
-            className="flex flex-col gap-5"
+            className="flex flex-col gap-6"
+            noValidate
           >
-            {/* Email */}
+            {/* Email Field */}
             <Input
               {...register("email")}
               autoFocus
+              type="email"
+              label="Email Address"
               placeholder="Enter your email address"
               variant="flat"
-              radius="lg"
+              labelPlacement="outside-top"
+              radius="md"
               size="lg"
               classNames={inputStyles}
               startContent={
                 <Mail
-                  className="text-default-400 pointer-events-none"
+                  className="text-gray-400 pointer-events-none mr-2"
                   size={20}
                 />
               }
               isInvalid={!!errors.email}
               errorMessage={errors.email?.message}
+              autoComplete="username" // Security Best Practice
             />
 
-            {/* Password */}
+            {/* Password Field */}
             <div className="space-y-1">
               <Input
                 {...register("password")}
+                label="Password"
                 placeholder="Enter your password"
                 variant="flat"
-                radius="lg"
+                labelPlacement="outside-top"
+                radius="md"
                 size="lg"
                 type={isVisible ? "text" : "password"}
                 classNames={inputStyles}
                 startContent={
                   <Lock
-                    className="text-default-400 pointer-events-none"
+                    className="text-gray-400 pointer-events-none mr-2"
                     size={20}
                   />
                 }
                 endContent={
                   <button
-                    className="focus:outline-none text-default-400 hover:text-gray-700 transition-colors rounded-full p-1"
+                    className="focus:outline-none text-gray-400 hover:text-gray-600 transition-colors p-1"
                     type="button"
                     onClick={toggleVisibility}
-                    aria-label="toggle password visibility"
+                    aria-label={isVisible ? "Hide password" : "Show password"}
                   >
                     {isVisible ? <EyeOff size={20} /> : <Eye size={20} />}
                   </button>
                 }
                 isInvalid={!!errors.password}
                 errorMessage={errors.password?.message}
+                autoComplete="current-password" // Security Best Practice
               />
-            </div>
-
-            {/* Options Row */}
-            <div className="flex items-center justify-between">
-              <Controller
-                name="rememberMe"
-                control={control}
-                render={({ field }) => (
-                  <Checkbox
-                    isSelected={field.value}
-                    onValueChange={field.onChange}
-                    classNames={{
-                      label: "text-small text-gray-600 font-medium",
-                      wrapper: "before:border-gray-300",
-                    }}
-                    size="sm"
-                  >
-                    Remember me
-                  </Checkbox>
-                )}
-              />
-
-              <button
-                type="button"
-                className="text-small text-ft-primary-blue-500 font-semibold hover:text-ft-primary-blue-600 hover:underline transition-all focus:outline-none"
-              >
-                Forgot password?
-              </button>
             </div>
 
             {/* Submit Button */}
@@ -226,9 +224,14 @@ const LoginPage = () => {
               type="submit"
               size="lg"
               isLoading={isSubmitting}
-              className="w-full bg-ft-primary-yellow hover:bg-ft-primary-yellow text-white font-bold text-md shadow-lg shadow-ft-primary-yellow-500/20 transition-transform active:scale-[0.98]"
+              spinner={<Spinner color="white" size="sm" />}
+              className="w-full bg-ft-primary-yellow text-white font-bold text-base shadow-lg shadow-orange-500/20 transition-all hover:opacity-90 active:scale-[0.98] h-12 rounded-lg"
             >
-              {isSubmitting ? "Authenticating..." : "Sign in"}
+              {isSubmitting ? (
+                "Signing In..."
+              ) : (
+                <span className="flex items-center gap-2">Sign In</span>
+              )}
             </Button>
           </form>
         </div>
