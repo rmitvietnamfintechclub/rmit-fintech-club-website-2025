@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Plus } from "lucide-react";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 
@@ -12,8 +11,9 @@ import { ConfirmationModal } from "./components/ConfirmationModal";
 import { MemberSkeleton } from "./components/MemberSkeleton";
 import { Member, BoardType } from "./types";
 import { deleteFileFromS3 } from "@/app/(backend)/libs/upload-client";
-import { Settings } from "lucide-react";
 import { PublishModal } from "./components/PublishModal";
+import Link from "next/link";
+import { Plus, Settings, Home, ChevronRight } from "lucide-react";
 
 export default function EBMBPage() {
   const [activeTab, setActiveTab] = useState<BoardType>("EB");
@@ -233,6 +233,21 @@ export default function EBMBPage() {
   return (
     <div className="min-h-screen bg-gray-50/50 p-6 md:p-10">
       <Toaster position="top-center" containerStyle={{ zIndex: 99999 }} />
+      <nav className="flex items-center gap-2 text-sm text-gray-500 mb-6 animate-in fade-in slide-in-from-left-2 duration-500">
+        <Link
+          href="/admin"
+          className="flex items-center gap-1 hover:text-ft-primary-blue transition-colors hover:underline"
+        >
+          <Home size={16} />
+          <span>Dashboard</span>
+        </Link>
+
+        <ChevronRight size={16} className="text-gray-400" />
+
+        <span className="font-semibold text-gray-800 cursor-default">
+          EBMB Management
+        </span>
+      </nav>
       {/* --- Header & Controls --- */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
