@@ -19,6 +19,16 @@ export async function getHonorees(
   return honorees;
 }
 
+export async function getAvailableYears() {
+  const semesters = await HallOfFame.distinct("semester");
+  
+  const years = Array.from(new Set(
+    semesters.map((s: string) => parseInt(s.substring(0, 4)))
+  )).sort((a, b) => b - a);
+
+  return years;
+}
+
 export async function createHonoree(data: any) {
   const { name, achievement, category, photo_url, semester } = data;
   if (!name || !achievement || !category || !photo_url || !semester) {

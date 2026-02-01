@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 
 const getDefaultSemester = (): string => {
   const today = new Date();
-  const month = today.getMonth(); // 0 = Jan, ..., 11 = Dec
+  const month = today.getMonth();
   const year = today.getFullYear();
 
   // 1. Tháng 1 - 2: Đang là cuối Sem C năm ngoái. 
@@ -21,10 +21,9 @@ const getDefaultSemester = (): string => {
   // -> Hiện HoF của Sem B năm nay.
   if (month >= 10) return `${year}B`;
 
-  return `${year}A`; // Fallback
+  return `${year}A`;
 };
 
-// --- Phần còn lại giữ nguyên logic Observer ---
 let globalSemester = getDefaultSemester();
 const subscribers = new Set<(sem: string) => void>();
 

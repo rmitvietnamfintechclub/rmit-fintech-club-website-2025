@@ -1,4 +1,3 @@
-// app/admin/ebmb/components/ImageUpload.tsx
 import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { UploadCloud, X } from "lucide-react";

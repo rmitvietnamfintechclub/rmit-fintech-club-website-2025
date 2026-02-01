@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
-import { X } from "lucide-react";
+import { X, ChevronDown } from "lucide-react";
 import { Spinner, Progress } from "@heroui/react";
 import { Member, BoardType } from "../types";
 import { ImageUpload } from "./ImageUpload";
@@ -10,6 +10,20 @@ import {
   deleteFileFromS3,
 } from "@/app/(backend)/libs/upload-client";
 import toast from "react-hot-toast";
+
+const EB_POSITIONS = [
+  "President",
+  "Internal Vice President",
+  "External Vice President",
+  "Chief of Finance Officer",
+];
+
+const MB_POSITIONS = [
+  "Head of Business",
+  "Head of Technology",
+  "Head of Marketing",
+  "Head of Human Resources",
+];
 
 interface MemberModalProps {
   isOpen: boolean;
@@ -42,7 +56,7 @@ export const MemberModal = ({
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
 
-  const currentName = watch("name");
+  const positionOptions = boardType === "EB" ? EB_POSITIONS : MB_POSITIONS;
 
   useEffect(() => {
     if (isOpen) {
@@ -53,14 +67,14 @@ export const MemberModal = ({
       } else {
         reset({
           name: "",
-          position: "",
+          position: positionOptions[0],
           photo_url: null,
           linkedin_url: "",
           generation: defaultGen,
         });
       }
     }
-  }, [isOpen, initialData, defaultGen, reset]);
+  }, [isOpen, initialData, defaultGen, reset, positionOptions]);
 
   const uploadFolder = boardType === "EB" ? STORAGE_PATHS.EB : STORAGE_PATHS.MB;
 
@@ -68,7 +82,6 @@ export const MemberModal = ({
     try {
       let finalPhotoUrl = data.photo_url;
 
-      // 1. UPLOAD ẢNH MỚI (Nếu user chọn file)
       if (data.photo_url instanceof File) {
         setIsUploading(true);
         setUploadProgress(0);
@@ -92,13 +105,11 @@ export const MemberModal = ({
       if (initialData?.photo_url && initialData.photo_url !== finalPhotoUrl) {
         try {
           await deleteFileFromS3(initialData.photo_url);
-          console.log("Deleted old image from S3");
         } catch (err) {
           console.error("Failed to clean up old image", err);
         }
       }
 
-      // 3. SAVE VÀO DB
       const payload = {
         ...data,
         generation: Number(data.generation),
@@ -115,7 +126,6 @@ export const MemberModal = ({
 
   if (!isOpen) return null;
 
-  // ... (Phần return JSX giữ nguyên như code trước)
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
       <div className="bg-white rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200 flex flex-col max-h-[90vh]">
@@ -162,13 +172,22 @@ export const MemberModal = ({
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Position <span className="text-ft-danger">*</span>
                 </label>
-                <input
-                  {...register("position", {
-                    required: "Position is required",
-                  })}
-                  placeholder="Ex: President"
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-ft-primary-yellow outline-none transition"
-                />
+                <div className="relative">
+                  <select
+                    {...register("position", { required: "Position is required" })}
+                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-ft-primary-yellow outline-none transition appearance-none bg-white cursor-pointer"
+                  >
+                    {positionOptions.map((pos) => (
+                      <option key={pos} value={pos}>
+                        {pos}
+                      </option>
+                    ))}
+                  </select>
+                  {/* Custom Arrow Icon */}
+                  <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none text-gray-500">
+                    <ChevronDown size={16} />
+                  </div>
+                </div>
                 {errors.position && (
                   <span className="text-ft-danger text-xs mt-1 block">
                     {errors.position.message as string}
@@ -217,6 +236,7 @@ export const MemberModal = ({
               )}
             </div>
 
+            {/* --- LINKEDIN --- */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 LinkedIn URL (Optional)
