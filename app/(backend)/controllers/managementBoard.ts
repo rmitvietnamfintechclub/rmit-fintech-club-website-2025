@@ -1,6 +1,4 @@
-import { NextResponse } from "next/server";
 import ManagementBoard from "../models/managementBoard";
-import connectMongoDB from "../libs/mongodb";
 
 // Add new management board members
 export async function addManagementBoard(data: any) {

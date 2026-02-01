@@ -26,5 +26,5 @@ export const POST = adminRoute(async (req) => {
     
     const result = await addManagementBoard(data);
     
-    return NextResponse.json(result);
+    return NextResponse.json(result, { status: result.status });
 });

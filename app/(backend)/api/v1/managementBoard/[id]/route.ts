@@ -3,7 +3,7 @@ import { updateManagementBoard, deleteManagementBoard } from "@/app/(backend)/co
 import { adminRoute } from "@/app/(backend)/libs/api-handler";
 
 // --- PUT: ADMIN ONLY ---
-export const PUT = adminRoute(async (req, { params }) => {
+export const PATCH = adminRoute(async (req, { params }) => {
     const id = params.id;
     const data = await req.json();
     

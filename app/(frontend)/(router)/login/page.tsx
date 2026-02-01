@@ -82,7 +82,7 @@ const LoginPage = () => {
         icon: "🚀",
       });
 
-      window.location.href = "/";
+      window.location.href = "/admin";
     } catch (error: any) {
       console.error("Login Error:", error);
 

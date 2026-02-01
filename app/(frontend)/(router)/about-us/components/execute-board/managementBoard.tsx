@@ -215,7 +215,13 @@ const ManagementBoard = () => {
   useEffect(() => {
     const fetchManagementBoard = async () => {
       try {
-        const response = await axios.get("/api/v1/managementBoard");
+        const settingsRes = await axios.get("/api/v1/settings");
+        const activeGen = settingsRes.data.value;
+
+        const response = await axios.get("/api/v1/managementBoard", {
+            params: { generation: activeGen }
+        });
+        
         if (response.data.status === 200 && response.data.members) {
           setMembers(response.data.members);
         } else {

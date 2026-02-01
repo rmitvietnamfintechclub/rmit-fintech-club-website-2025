@@ -219,8 +219,6 @@ const AdminNavbar = ({ user }: AdminNavbarProps) => {
                 color="warning"
                 size="sm"
                 src="https://d2uq10394z5icp.cloudfront.net/global/FTC-LogoWithName.jpg"
-                showFallback={true}
-                name={user.email?.substring(0, 2).toUpperCase()}
               />
             </DropdownTrigger>
             <DropdownMenu
@@ -252,7 +250,7 @@ const AdminNavbar = ({ user }: AdminNavbarProps) => {
               {/* --- Dashboard --- */}
               <DropdownItem
                 key="dashboard"
-                href="/admin/dashboard"
+                href="/admin"
                 textValue="Dashboard"
                 startContent={
                   <LayoutDashboard size={18} className="text-gray-500" />

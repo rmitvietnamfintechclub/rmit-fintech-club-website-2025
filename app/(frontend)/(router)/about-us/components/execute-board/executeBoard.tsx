@@ -199,7 +199,13 @@ const ExecutiveBoard = () => {
   useEffect(() => {
     const fetchExecutiveBoard = async () => {
       try {
-        const response = await axios.get("/api/v1/executivemembers");
+        const settingsRes = await axios.get("/api/v1/settings");
+        const activeGen = settingsRes.data.value;
+
+        const response = await axios.get("/api/v1/executivemembers", {
+            params: { generation: activeGen } 
+        });
+
         if (response.data.status === 200 && response.data.members) {
           setMembers(response.data.members);
         } else {

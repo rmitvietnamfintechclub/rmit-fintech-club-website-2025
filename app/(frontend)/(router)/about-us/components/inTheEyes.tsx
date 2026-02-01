@@ -21,7 +21,7 @@ export default function FinTechInTheEyes() {
       >
         <div className="hidden md:block md:w-auto md:mb-0">
           <Image
-            src="https://d2uq10394z5icp.cloudfront.net/about_us/executive_board/President-TriTruong.png"
+            src="https://d2uq10394z5icp.cloudfront.net/about_us/executive_board/truong-quoc-tri-f9TL0.png"
             alt="President Avatar"
             className="w-full object-cover
                        md:w-[30vw] md:aspect-auto"
