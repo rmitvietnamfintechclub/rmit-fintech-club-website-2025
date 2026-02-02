@@ -166,8 +166,7 @@ export default function SpecificArticle({
         <Spinner
           size="lg"
           classNames={{
-            wrapper: "w-16 h-16 transform-gpu will-change-transform",
-            circle1: "border-b-ft-primary-yellow border-[4px]",
+wrapper: "w-16 h-16 transform-gpu will-change-transform translate-z-0",            circle1: "border-b-ft-primary-yellow border-[4px]",
             circle2: "border-b-ft-primary-yellow border-[4px]",
           }}
         />

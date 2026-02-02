@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useTransition } from "react";
 import Link from "next/link";
 import LabelSort from "./components/labelSort";
 import ArticleCard from "./components/articleCard";
@@ -10,6 +10,7 @@ import { Spinner } from "@heroui/react";
 import Image from "next/image";
 import axios from "axios";
 
+// --- Interfaces ---
 interface ApiArticle {
   _id: string;
   title: string;
@@ -19,7 +20,6 @@ interface ApiArticle {
   publicationDate: string;
 }
 
-// Interface for the data structure your ArticleCard component needs
 interface DisplayArticle {
   _id: string;
   imageSrc: string;
@@ -30,19 +30,15 @@ interface DisplayArticle {
   date: string;
 }
 
-// --- Helper functions for date formatting ---
+// --- Helpers ---
 const addOrdinalSuffix = (day: number): string => {
   if (day > 10 && day < 14) return `${day}th`;
   const lastDigit = day % 10;
   switch (lastDigit) {
-    case 1:
-      return `${day}st`;
-    case 2:
-      return `${day}nd`;
-    case 3:
-      return `${day}rd`;
-    default:
-      return `${day}th`;
+    case 1: return `${day}st`;
+    case 2: return `${day}nd`;
+    case 3: return `${day}rd`;
+    default: return `${day}th`;
   }
 };
 
@@ -61,7 +57,7 @@ const ChevronRightIcon = () => (
     height="20"
     viewBox="0 0 24 24"
     fill="none"
-    stroke="#A28436" // Màu vàng gold của bạn
+    stroke="#A28436"
     strokeWidth="2"
     strokeLinecap="round"
     strokeLinejoin="round"
@@ -71,43 +67,38 @@ const ChevronRightIcon = () => (
 );
 
 export default function ArticleLibrary() {
-  // State for managing API data, loading, and errors
   const [articles, setArticles] = useState<DisplayArticle[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
 
-  // State for pagination and filtering
+  // Pagination & Filter
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [selectedLabel, setSelectedLabel] = useState<string | null>(null);
-
-  // State to hold all unique labels for the dropdown
   const [availableLabels, setAvailableLabels] = useState<string[]>([]);
 
   const itemsPerPage = 5;
+  const [isPending, startTransition] = useTransition();
 
+  // --- 1. Fetch Labels (Run Once) ---
   useEffect(() => {
     const fetchAllLabels = async () => {
       try {
         const response = await axios.get(`/api/v1/article/labels`);
-        
         const uniqueLabels: string[] = response.data || [];
-        const sortedLabels = uniqueLabels.sort();
-        
-        setAvailableLabels(["All", ...sortedLabels]);
+        setAvailableLabels(["All", ...uniqueLabels.sort()]);
       } catch (err) {
-        console.error("Failed to fetch unique labels:", err);
+        console.error("Failed to fetch labels:", err);
         setAvailableLabels(["All"]);
       }
     };
-
     fetchAllLabels();
   }, []);
 
-  // Effect to fetch paginated/filtered articles when page or selectedLabel changes
+  // --- 2. Fetch Articles (On Change) ---
   useEffect(() => {
     const fetchArticles = async () => {
-      setLoading(true);
+      setLoading(true); 
       setError("");
 
       try {
@@ -119,9 +110,9 @@ export default function ArticleLibrary() {
           params.append("labels", selectedLabel);
         }
 
-        const response = await axios.get(
-          `/api/v1/article?${params.toString()}`
-        );
+        // Fetch data
+        const response = await axios.get(`/api/v1/article?${params.toString()}`);
+        
         const {
           articles: fetchedArticles = [],
           totalPages: fetchedTotalPages = 1,
@@ -139,14 +130,17 @@ export default function ArticleLibrary() {
           })
         );
 
-        setArticles(formattedArticles);
-        setTotalPages(fetchedTotalPages);
+        startTransition(() => {
+          setArticles(formattedArticles);
+          setTotalPages(fetchedTotalPages);
+          setLoading(false);
+        });
+
       } catch (err: any) {
         console.error("Error fetching articles:", err);
         setError("Failed to load articles. Please try again later.");
         setArticles([]);
         setTotalPages(1);
-      } finally {
         setLoading(false);
       }
     };
@@ -159,16 +153,17 @@ export default function ArticleLibrary() {
     setPage(1);
   };
 
+  // --- Content Renderer ---
   const renderArticleContent = () => {
     if (loading) {
       return (
         <div className="flex flex-col items-center justify-center w-full h-64 p-8 relative z-10">
-          <Spinner 
+          <Spinner
             size="lg"
             classNames={{
-              wrapper: "w-16 h-16 transform-gpu will-change-transform", 
-              circle1: "border-b-ft-primary-yellow border-[4px]", 
-              circle2: "border-b-ft-primary-yellow border-[4px]",
+              wrapper: "w-16 h-16 transform-gpu will-change-transform translate-z-0",
+              circle1: "border-b-[#DCB968] border-[4px]",
+              circle2: "border-b-[#DCB968] border-[4px]",
             }}
           />
           <p className="mt-5 text-lg font-semibold text-[#5E5E92] animate-pulse tracking-wide">
@@ -206,7 +201,7 @@ export default function ArticleLibrary() {
           ))}
         </div>
         {totalPages > 1 && (
-          <div className="flex justify-center">
+          <div className="flex justify-center mt-4 mb-12">
             <PaginationRounded
               page={page}
               onPageChange={(value) => setPage(value)}
@@ -254,10 +249,7 @@ export default function ArticleLibrary() {
             Welcome to the Bi-weekly Article Series, where curiosity meets
             analysis at the intersection of finance and technology. Our
             articles, crafted by dedicated members of the FinTech Club, blend
-            academic depth with real-world relevance, providing you with
-            rigorously researched insights into emerging industry trends
-            alongside pivotal global economic events. Explore our latest work
-            and discover what’s truly shaping the industry today.
+            academic depth with real-world relevance.
           </p>
           <div
             className="w-fit h-fit rounded-md p-[2px] mt-[1.5rem] max-md:mt-0"
@@ -277,7 +269,7 @@ export default function ArticleLibrary() {
         </div>
       </div>
 
-      {/* --- Responsive Breadcrumbs (Native Tailwind) --- */}
+      {/* --- Breadcrumbs --- */}
       <nav
         aria-label="Breadcrumb"
         className="w-full py-8 max-md:py-4 px-6 md:pl-16"
@@ -295,16 +287,14 @@ export default function ArticleLibrary() {
             <ChevronRightIcon />
           </li>
           <li>
-            <span 
-              className="text-black font-semibold truncate max-w-[150px] md:max-w-none cursor-default"
-            >
+            <span className="text-black font-semibold truncate max-w-[150px] md:max-w-none cursor-default">
               Article Library
             </span>
           </li>
         </ol>
       </nav>
 
-      {/* --- Responsive LabelSort --- */}
+      {/* --- Label Sort --- */}
       <div className="relative pb-4 max-md:pb-0 px-6 md:pl-24">
         <LabelSort
           availableLabels={availableLabels}
@@ -312,6 +302,7 @@ export default function ArticleLibrary() {
         />
       </div>
 
+      {/* --- Content (Articles & Pagination) --- */}
       {renderArticleContent()}
     </section>
   );
