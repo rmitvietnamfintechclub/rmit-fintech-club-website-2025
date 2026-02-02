@@ -161,21 +161,22 @@ export default function SpecificArticle({
   }, [params.id]);
 
   if (loading) {
-    return (
-      <div className="flex flex-col items-center justify-center w-full h-screen p-8 relative z-10">
-        <Spinner
-          size="lg"
-          classNames={{
-wrapper: "w-16 h-16 transform-gpu will-change-transform translate-z-0",            circle1: "border-b-ft-primary-yellow border-[4px]",
-            circle2: "border-b-ft-primary-yellow border-[4px]",
-          }}
-        />
-        <p className="mt-5 text-lg font-semibold text-[#5E5E92] animate-pulse tracking-wide">
-          Loading Article...
-        </p>
-      </div>
-    );
-  }
+      return (
+        <div className="flex flex-col items-center justify-center w-full h-screen p-8">
+          <Spinner 
+            size="lg"
+            classNames={{
+              wrapper: "w-16 h-16",
+              circle1: "border-b-ft-primary-yellow border-[4px]", 
+              circle2: "border-b-ft-primary-yellow border-[4px]",
+            }}
+          />
+          <p className="mt-5 text-lg font-semibold text-[#5E5E92] animate-pulse tracking-wide">
+            Loading Article...
+          </p>
+        </div>
+      );
+    }
 
   // --- ERROR STATE ---
   if (error) {
