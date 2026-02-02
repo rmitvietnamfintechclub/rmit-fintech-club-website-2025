@@ -30,7 +30,7 @@ export default function HonoreeCard({
             alt={name}
             width={400}
             height={400}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-contain"
             fetchPriority="high"
             loading="eager"
             priority={true}
