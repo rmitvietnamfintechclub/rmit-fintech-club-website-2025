@@ -28,15 +28,19 @@ export default function PaginationRounded({
         disableAnimation={false}
         classNames={{
           wrapper: "gap-2 overflow-visible",
-          item: "w-9 h-9 text-bluePrimary text-sm font-semibold bg-transparent hover:bg-yellowPrimary/20 transition-all duration-200",
+          item: "w-9 h-9 text-[#2C305F] text-sm font-semibold bg-transparent hover:bg-[#DCB968]/20 transition-all duration-200",
           cursor:
-            "w-9 h-9 !bg-bluePrimary text-white font-bold shadow-lg shadow-bluePrimary/20 transform transition-transform active:scale-95",
+            "w-9 h-9 !bg-[#2C305F] text-white font-bold shadow-lg shadow-[#2C305F]/20 transform transition-transform active:scale-95",
+          
+          // Nút Prev
           prev: [
-            "text-bluePrimary hover:bg-yellowPrimary/20",
+            "text-[#2C305F] hover:bg-[#DCB968]/20",
             "data-[disabled=true]:text-gray-300 data-[disabled=true]:opacity-50 data-[disabled=true]:pointer-events-none",
           ].join(" "),
+
+          // Nút Next
           next: [
-            "text-bluePrimary hover:bg-yellowPrimary/20",
+            "text-[#2C305F] hover:bg-[#DCB968]/20",
             "data-[disabled=true]:text-gray-300 data-[disabled=true]:opacity-50 data-[disabled=true]:pointer-events-none",
           ].join(" "),
         }}
