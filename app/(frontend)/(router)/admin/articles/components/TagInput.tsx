@@ -8,7 +8,12 @@ interface TagInputProps {
   error?: string;
 }
 
-export const TagInput = ({ value = [], onChange, placeholder, error }: TagInputProps) => {
+export const TagInput = ({
+  value = [],
+  onChange,
+  placeholder,
+  error,
+}: TagInputProps) => {
   const [inputValue, setInputValue] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -28,8 +33,7 @@ export const TagInput = ({ value = [], onChange, placeholder, error }: TagInputP
   };
 
   const addTag = () => {
-    const trimmedInput = inputValue.trim().replace(/,/g, ""); // Xóa dấu phẩy nếu có
-    // Chỉ thêm nếu có nội dung và chưa tồn tại
+    const trimmedInput = inputValue.trim().replace(/,/g, "");
     if (trimmedInput && !value.includes(trimmedInput)) {
       onChange([...value, trimmedInput]);
       setInputValue("");
@@ -50,14 +54,10 @@ export const TagInput = ({ value = [], onChange, placeholder, error }: TagInputP
       <div
         onClick={handleContainerClick}
         className={`
-          flex flex-wrap items-center gap-2 px-3 py-2 border rounded-xl bg-white transition-all cursor-text min-h-[46px]
-          ${error 
-            ? "border-ft-danger focus-within:ring-2 focus-within:ring-ft-danger/20" 
-            : "border-gray-300 focus-within:ring-2 focus-within:ring-ft-primary-yellow focus-within:border-transparent"
-          }
+          flex flex-wrap items-center gap-2 px-3 py-2 border rounded-xl bg-white transition-all cursor-text min-h-[46px] border-gray-300 focus-within:ring-2 focus-within:ring-ft-primary-yellow focus-within:border-transparent
+         
         `}
       >
-        {/* Render danh sách các Tags */}
         {value.map((tag, index) => (
           <span
             key={index}
@@ -77,20 +77,21 @@ export const TagInput = ({ value = [], onChange, placeholder, error }: TagInputP
           </span>
         ))}
 
-        {/* Input nhập liệu */}
         <input
           ref={inputRef}
           type="text"
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           onKeyDown={handleKeyDown}
-          onBlur={addTag} // Tự add tag khi click ra ngoài
+          onBlur={addTag}
           className="flex-1 outline-none bg-transparent min-w-[120px] text-sm text-gray-700 placeholder:text-gray-400"
           placeholder={value.length === 0 ? placeholder : ""}
         />
       </div>
-      
-      {error && <span className="text-ft-danger text-xs mt-1 block">{error}</span>}
+
+      {error && (
+        <span className="text-ft-danger text-xs mt-1 block">{error}</span>
+      )}
     </div>
   );
 };

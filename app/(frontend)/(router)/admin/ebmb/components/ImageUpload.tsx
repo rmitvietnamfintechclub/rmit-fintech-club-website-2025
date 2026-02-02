@@ -94,7 +94,7 @@ export const ImageUpload = ({
             </div>
             <div>
               <span className="text-sm font-bold text-gray-600 group-hover:text-ft-primary-blue transition-colors">
-                Click to upload cover
+                Click to upload
               </span>
               <p className="text-[10px] text-gray-400 mt-1 uppercase tracking-wide font-medium">
                 JPG, PNG, WEBP (Max 5MB)
