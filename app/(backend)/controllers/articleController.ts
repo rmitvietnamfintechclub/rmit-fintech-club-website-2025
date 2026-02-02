@@ -13,7 +13,6 @@ export async function getArticles(
 ): Promise<GetArticlesResult> {
   const skip = (page - 1) * limit;
 
-  // Build query
   const query: any = {};
   if (labels.length > 0) {
     query.labels = {
@@ -21,11 +20,9 @@ export async function getArticles(
     };
   }
 
-  // Chạy song song 2 query cho nhanh
   const [totalArticles, articles] = await Promise.all([
     Article.countDocuments(query),
     Article.find(query)
-      .select("_id title summary illustration_url labels publicationDate")
       .sort({ publicationDate: -1 })
       .skip(skip)
       .limit(limit)
@@ -42,7 +39,6 @@ export async function getArticleById(id: string) {
 
   if (!article) return null;
 
-  // Logic tìm bài viết liên quan
   let sidebarTitle = "Related Articles";
   let sidebarArticles = await Article.find({
     labels: { $in: article.labels },
@@ -85,4 +81,9 @@ export async function updateArticle(id: string, data: Partial<ArticleType>) {
 export async function deleteArticle(id: string) {
   const article = await Article.findByIdAndDelete(id).lean();
   return article;
+}
+
+export async function getUniqueLabels() {
+  const labels = await Article.distinct("labels");
+  return labels.sort();
 }
