@@ -52,7 +52,6 @@ export const ArticleCard = ({
 
       {/* 2. Content Body */}
       <div className="p-5 flex flex-col flex-1">
-        {/* Labels - Giới hạn 1 dòng để tránh vỡ layout, nếu nhiều quá thì ẩn bớt (Optional) */}
         <div className="flex flex-wrap gap-1.5 mb-3 h-6 overflow-hidden">
           {safeLabels.slice(0, 3).map((label, index) => (
             <span

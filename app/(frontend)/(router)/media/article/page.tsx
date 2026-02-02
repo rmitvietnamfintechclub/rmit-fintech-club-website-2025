@@ -6,10 +6,10 @@ import LabelSort from "./components/labelSort";
 import ArticleCard from "./components/articleCard";
 import { motion } from "framer-motion";
 import PaginationRounded from "./components/pagination";
+import { Spinner } from "@heroui/react";
 import Image from "next/image";
 import axios from "axios";
 
-// Interface for the raw data from the API
 interface ApiArticle {
   _id: string;
   title: string;
@@ -54,7 +54,6 @@ const formatArticleDate = (isoString: string): string => {
   return `${month} ${day}, ${year}`;
 };
 
-// --- Component Icon Mũi tên (Thay thế NavigateNextIcon) ---
 const ChevronRightIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -87,17 +86,15 @@ export default function ArticleLibrary() {
 
   const itemsPerPage = 5;
 
-  // Effect to fetch all unique labels once on component mount
   useEffect(() => {
     const fetchAllLabels = async () => {
       try {
-        const response = await axios.get(`/api/v1/article`);
-        const allArticles: ApiArticle[] =
-          response.data.articles || response.data || [];
-
-        const allLabelsFlat = allArticles.flatMap((article) => article.labels);
-        const uniqueLabels = Array.from(new Set(allLabelsFlat)).sort();
-        setAvailableLabels(["All", ...uniqueLabels]);
+        const response = await axios.get(`/api/v1/article/labels`);
+        
+        const uniqueLabels: string[] = response.data || [];
+        const sortedLabels = uniqueLabels.sort();
+        
+        setAvailableLabels(["All", ...sortedLabels]);
       } catch (err) {
         console.error("Failed to fetch unique labels:", err);
         setAvailableLabels(["All"]);
@@ -165,10 +162,16 @@ export default function ArticleLibrary() {
   const renderArticleContent = () => {
     if (loading) {
       return (
-        <div className="p-8 text-center flex flex-col items-center justify-center h-64">
-          {/* ✅ Thay thế CircularProgress bằng Tailwind Spinner */}
-          <div className="w-12 h-12 border-[5px] border-[#F0EDFF] border-t-[#DCB968] rounded-full animate-spin"></div>
-          <p className="mt-4 text-lg text-[#5E5E92] animate-pulse">
+        <div className="flex flex-col items-center justify-center w-full h-64 p-8">
+          <Spinner 
+            size="lg"
+            classNames={{
+              wrapper: "w-16 h-16",
+              circle1: "border-b-ft-primary-yellow border-[4px]", 
+              circle2: "border-b-ft-primary-yellow border-[4px]",
+            }}
+          />
+          <p className="mt-5 text-lg font-semibold text-[#5E5E92] animate-pulse tracking-wide">
             Loading Articles...
           </p>
         </div>
@@ -188,7 +191,7 @@ export default function ArticleLibrary() {
 
     return (
       <>
-        <div className="py-6 px-6 md:px-12 lg:px-24">
+        <div className="pt-6 px-6 md:px-12 lg:px-24">
           {articles.map((article) => (
             <Link href={`/media/article/${article._id}`} key={article._id}>
               <ArticleCard

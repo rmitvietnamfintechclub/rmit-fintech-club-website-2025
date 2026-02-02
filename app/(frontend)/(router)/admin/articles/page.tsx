@@ -37,17 +37,19 @@ export default function ArticlePage() {
   const [editingArticle, setEditingArticle] = useState<Article | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
-  // --- FETCH DATA ---
+  const fetchLabels = async () => {
+    try {
+      const res = await axios.get("/api/v1/article/labels");
+      setAvailableLabels(res.data || []);
+    } catch (error) {
+      console.error("Failed to fetch labels", error);
+    }
+  };
+
+  // --- 2. INITIAL FETCH ---
   useEffect(() => {
-    const fetchLabels = async () => {
-      try {
-        const res = await axios.get("/api/v1/article/labels");
-        setAvailableLabels(res.data || []);
-      } catch (error) {
-        console.error("Failed to fetch labels", error);
-      }
-    };
     fetchLabels();
   }, []);
 
@@ -86,7 +88,10 @@ export default function ArticlePage() {
         toast.success("Article created successfully");
       }
       setIsModalOpen(false);
-      fetchArticles();
+      
+      fetchArticles(); 
+      fetchLabels(); 
+      
     } catch (error: any) {
       toast.error(error.response?.data?.error || "Failed to save article");
     } finally {
@@ -97,6 +102,8 @@ export default function ArticlePage() {
   const handleDelete = async () => {
     if (!deleteId) return;
     const article = articles.find((a) => a._id === deleteId);
+
+    setIsDeleting(true);
     try {
       await axios.delete(`/api/v1/article/${deleteId}`);
 
@@ -106,10 +113,15 @@ export default function ArticlePage() {
 
       toast.success("Deleted successfully");
       setDeleteId(null);
+      
       fetchArticles();
+      fetchLabels();
+
     } catch (error) {
       toast.error("Failed to delete");
-    }
+    } finally {
+    setIsDeleting(false);
+  }
   };
 
   const articleToDelete = articles.find((a) => a._id === deleteId);
@@ -296,7 +308,7 @@ export default function ArticlePage() {
         onConfirm={handleDelete}
         title="Delete Article"
         description={deleteModalContent}
-        isLoading={false}
+        isLoading={isDeleting}
       />
     </div>
   );

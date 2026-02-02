@@ -59,7 +59,6 @@ export const ArticleModal = ({
           publicationDate: initialData.publicationDate
             ? new Date(initialData.publicationDate).toISOString().split("T")[0]
             : "",
-          // If editing an article with a PDF, mark validation as valid
           pdf_validation: initialData.content_url ? "valid" : "",
         });
       } else {
@@ -71,7 +70,7 @@ export const ArticleModal = ({
           authors: [],
           labels: [],
           publicationDate: new Date().toISOString().split("T")[0],
-          pdf_validation: "", // Default empty to trigger required error
+          pdf_validation: "",
         });
       }
     }
@@ -83,20 +82,39 @@ export const ArticleModal = ({
       let finalIllustrationUrl = data.illustration_url;
       let finalContentUrl = initialData?.content_url || "";
 
-      // Check if we need to upload anything (Image or PDF)
-      if (data.illustration_url instanceof File || contentFile) {
+      const filesToUpload = [];
+      if (data.illustration_url instanceof File) filesToUpload.push("image");
+      if (contentFile) filesToUpload.push("pdf");
+
+      const totalFiles = filesToUpload.length;
+
+      // If files need uploading
+      if (totalFiles > 0) {
         setIsUploading(true);
         setUploadProgress(0);
 
         try {
-          // A. Upload Illustration (Cover Image)
+          // Counter for completed files
+          let completedFiles = 0;
+
+          // --- Helper for smooth progress ---
+          const segment = 100 / totalFiles;
+
+          // Function to update global progress
+          const updateProgress = (fileProgress: number, fileIndex: number) => {
+            // Formula: (Files Completed * segment) + (Current File Progress / totalFiles)
+            const total = fileIndex * segment + fileProgress / totalFiles;
+            setUploadProgress(total);
+          };
+
+          // A. Upload Illustration (If new file selected)
           if (data.illustration_url instanceof File) {
             const uniqueName = `cover-${Date.now()}-${data.title.replace(/\s+/g, "-").slice(0, 20)}`;
             finalIllustrationUrl = await uploadFileToS3(
               data.illustration_url,
               STORAGE_PATHS.ARTICLES_ILLUSTRATION,
               uniqueName,
-              (p) => setUploadProgress(p / 2), // First 50%
+              (p) => updateProgress(p, completedFiles), // Smart calc
             );
 
             // Cleanup old image
@@ -105,6 +123,7 @@ export const ArticleModal = ({
                 console.error,
               );
             }
+            completedFiles++; // Done 1
           }
 
           // B. Upload Content File (PDF)
@@ -114,7 +133,7 @@ export const ArticleModal = ({
               contentFile,
               STORAGE_PATHS.ARTICLES_CONTENT,
               uniqueContentName,
-              (p) => setUploadProgress(50 + p / 2), // Last 50%
+              (p) => updateProgress(p, completedFiles), // Smart calc
             );
 
             // Cleanup old PDF
@@ -123,7 +142,9 @@ export const ArticleModal = ({
                 console.error,
               );
             }
+            completedFiles++;
           }
+
           setUploadProgress(100);
         } catch (error) {
           toast.error("Upload failed");
@@ -158,7 +179,7 @@ export const ArticleModal = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 animate-in fade-in duration-200">
       <div className="bg-white rounded-2xl w-full max-w-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
         {/* Header */}
         <div className="px-6 py-4 bg-ft-background border-b border-gray-100 flex justify-between items-center shrink-0">

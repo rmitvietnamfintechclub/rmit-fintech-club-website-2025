@@ -101,7 +101,7 @@ const AdminNavbar = ({ user }: AdminNavbarProps) => {
       variants={{ visible: { y: 0 }, hidden: { y: "-100%" } }}
       animate={hidden ? "hidden" : "visible"}
       transition={{ duration: 0.3, ease: "easeInOut" }}
-      className="sticky top-0 h-[8vh] py-[1vh] z-[9999] flex w-full transition-[colors, transform] duration-300 bg-ft-primary-blue shadow-md overflow-visible"
+      className="sticky top-0 h-[8vh] py-[1vh] z-[99] flex w-full transition-[colors, transform] duration-300 bg-ft-primary-blue shadow-md overflow-visible"
     >
       <div className="flex justify-between items-center pr-[2vw] w-full">
         {/* --- Logo Section --- */}
@@ -224,7 +224,7 @@ const AdminNavbar = ({ user }: AdminNavbarProps) => {
             <DropdownMenu
               aria-label="Profile Actions"
               variant="flat"
-              className="bg-white border border-gray-200 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.2)] rounded-xl p-2 min-w-[240px] z-[9999]"
+              className="bg-white border border-gray-200 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.2)] rounded-xl p-2 min-w-[240px] z-[99]"
             >
               {/* --- Profile Info --- */}
               <DropdownItem

@@ -251,7 +251,6 @@ export default function PodcastLibrary() {
     if (podcastsLoading) {
       return (
         <div className="p-8 text-center flex flex-col items-center justify-center h-64">
-          {/* ✅ Tailwind Spinner thay thế CircularProgress */}
           <div className="w-12 h-12 border-[5px] border-[#F0EDFF] border-t-[#DCB968] rounded-full animate-spin"></div>
           <p className="mt-4 text-lg text-[#5E5E92] animate-pulse">
             Loading Podcasts...
@@ -339,7 +338,7 @@ export default function PodcastLibrary() {
     <section className="overflow-x-hidden">
       {/* Hero Section */}
       <div
-        className="w-screen h-[80vh] md:h-screen flex items-center justify-center relative"
+        className="w-screen h-[70vh] md:h-[92vh] flex items-center justify-center relative"
         style={{
           background: "linear-gradient(to bottom, #474A6E, #DBB968)",
         }}

@@ -6,10 +6,9 @@ import { Plus, Trophy, Calendar } from "lucide-react";
 import toast, { Toaster } from "react-hot-toast";
 import Link from "next/link";
 import { ChevronRight, Home } from "lucide-react";
-import { Sparkles, Hourglass } from "lucide-react";
 import { HallOfFameSkeleton } from "./components/HallOfFameSkeleton";
 
-import { Honoree, HOF_CATEGORIES } from "./types";
+import { Honoree, HOF_CATEGORIES, parseSemester } from "./types";
 import { HallOfFameCard } from "./components/HallOfFameCard";
 import { HallOfFameModal } from "./components/HallOfFameModal";
 import { ConfirmationModal } from "../ebmb/components/ConfirmationModal";
@@ -25,6 +24,7 @@ export default function HallOfFamePage() {
   const [editingHonoree, setEditingHonoree] = useState<Honoree | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     const fetchYears = async () => {
@@ -94,9 +94,21 @@ export default function HallOfFamePage() {
       } else {
         await axios.post("/api/v1/hall-of-fame", data);
         toast.success("Created successfully");
+
+        const { year, term } = parseSemester(data.semester);
+
+        if (!availableYears.includes(year)) {
+          setAvailableYears((prev) => [...prev, year].sort((a, b) => b - a));
+        }
+
+        if (filterYear !== year || filterTerm !== term) {
+          setFilterYear(year);
+          setFilterTerm(term);
+        } else {
+          fetchHonorees();
+        }
       }
       setIsModalOpen(false);
-      fetchHonorees();
     } catch (error: any) {
       toast.error(error.response?.data?.error || "Failed to save");
     } finally {
@@ -107,6 +119,7 @@ export default function HallOfFamePage() {
   const handleDelete = async () => {
     if (!deleteId) return;
     const item = honorees.find((h) => h._id === deleteId);
+    setIsDeleting(true);
     try {
       await axios.delete(`/api/v1/hall-of-fame/${deleteId}`);
       if (item?.photo_url) await deleteFileFromS3(item.photo_url);
@@ -115,6 +128,8 @@ export default function HallOfFamePage() {
       fetchHonorees();
     } catch (error) {
       toast.error("Failed to delete");
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -272,7 +287,7 @@ export default function HallOfFamePage() {
             No Honorees Yet
           </h3>
 
-          <p className="text-gray-500 text-sm mb-6 text-center max-w-sm">
+          <p className="text-gray-500 text-sm mb-6 text-center max-w-md">
             There are no records for{" "}
             <span className="font-semibold text-gray-700">
               Semester {filterYear}
@@ -291,8 +306,7 @@ export default function HallOfFamePage() {
           >
             <Plus size={18} />
             <span>
-              Add Honoree to {filterYear}
-              {filterTerm}
+              Add Honoree
             </span>
           </button>
         </div>
@@ -352,7 +366,7 @@ export default function HallOfFamePage() {
         onConfirm={handleDelete}
         title="Remove Honoree"
         description={deleteModalContent}
-        isLoading={false}
+        isLoading={isDeleting}
       />
     </div>
   );

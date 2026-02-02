@@ -3,10 +3,10 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { Spinner } from "@heroui/react";
 import Image from "next/image";
 import axios from "axios";
 
-// --- INTERFACES (Giữ nguyên) ---
 interface ApiArticle {
   _id: string;
   title: string;
@@ -161,15 +161,22 @@ export default function SpecificArticle({
   }, [params.id]);
 
   if (loading) {
-    return (
-      <div className="p-8 text-center flex flex-col items-center justify-center h-screen">
-        <div className="w-12 h-12 border-[5px] border-[#F0EDFF] border-t-[#DCB968] rounded-full animate-spin"></div>
-        <p className="mt-4 text-lg text-[#5E5E92] animate-pulse">
-          Loading Article...
-        </p>
-      </div>
-    );
-  }
+      return (
+        <div className="flex flex-col items-center justify-center w-full h-screen p-8">
+          <Spinner 
+            size="lg"
+            classNames={{
+              wrapper: "w-16 h-16",
+              circle1: "border-b-ft-primary-yellow border-[4px]", 
+              circle2: "border-b-ft-primary-yellow border-[4px]",
+            }}
+          />
+          <p className="mt-5 text-lg font-semibold text-[#5E5E92] animate-pulse tracking-wide">
+            Loading Article...
+          </p>
+        </div>
+      );
+    }
 
   // --- ERROR STATE ---
   if (error) {
@@ -239,7 +246,7 @@ export default function SpecificArticle({
         }}
       >
         {/* Text content */}
-        <div className="flex flex-col items-center md:items-start justify-center z-30 w-full md:w-[58vw] order-2 md:order-1">
+        <div className="flex flex-col items-center md:items-start justify-center z-30 w-full">
           <div className="flex flex-wrap gap-2 mb-4 justify-center md:justify-start">
             {article.labels?.map((label) => (
               <div
@@ -286,20 +293,6 @@ export default function SpecificArticle({
               </Link>
             </div>
           </section>
-        </div>
-
-        {/* Image */}
-        <div className="z-30 order-1 md:order-2 mb-8 md:mb-0">
-          <Image
-            src={article.illustration_url}
-            alt={article.title}
-            width={500}
-            height={500}
-            className="max-md:hidden md:w-[25vw] h-auto rounded-lg shadow-lg"
-            fetchPriority="high"
-            loading="eager"
-            priority={true}
-          />
         </div>
       </div>
 

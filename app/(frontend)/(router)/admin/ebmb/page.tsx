@@ -298,15 +298,17 @@ export default function EBMBPage() {
           ))}
         </div>
       ) : members.length === 0 ? (
-        <div className="text-center py-20 bg-white rounded-2xl border border-dashed border-gray-300">
+        <div className="flex flex-col justify-center items-center text-center py-20 bg-white rounded-2xl border border-dashed border-gray-300">
           <p className="text-gray-400 font-medium">
-            No members found for Gen {selectedGen}.
+            There are no members found for Gen {selectedGen}.
           </p>
+
           <button
             onClick={openAddModal}
-            className="text-ft-primary-blue font-bold mt-2 hover:underline"
+            className="flex items-center gap-2 px-5 py-2.5  mt-4  bg-ft-primary-blue text-white rounded-xl font-bold shadow-md hover:bg-ft-primary-blue-100 hover:scale-105 transition-all duration-200"
           >
-            Create first member
+            <Plus size={18} />
+            <span>Add member</span>
           </button>
         </div>
       ) : (
