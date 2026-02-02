@@ -96,3 +96,8 @@ export async function deletePodcast(id: string) {
   const podcast = await Podcast.findByIdAndDelete(id).lean();
   return podcast;
 }
+
+export async function getUniqueLabels() {
+  const labels = await Podcast.distinct("labels");
+  return labels.sort();
+}
