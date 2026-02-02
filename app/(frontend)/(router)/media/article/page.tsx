@@ -162,11 +162,11 @@ export default function ArticleLibrary() {
   const renderArticleContent = () => {
     if (loading) {
       return (
-        <div className="flex flex-col items-center justify-center w-full h-64 p-8">
+        <div className="flex flex-col items-center justify-center w-full h-64 p-8 relative z-10">
           <Spinner 
             size="lg"
             classNames={{
-              wrapper: "w-16 h-16",
+              wrapper: "w-16 h-16 transform-gpu will-change-transform", 
               circle1: "border-b-ft-primary-yellow border-[4px]", 
               circle2: "border-b-ft-primary-yellow border-[4px]",
             }}
