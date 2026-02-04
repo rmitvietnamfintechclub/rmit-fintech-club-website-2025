@@ -6,7 +6,6 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import axios from "axios";
 
-// --- INTERFACES (Giữ nguyên) ---
 interface GuestSpeaker {
   name: string;
   description: string;
@@ -134,7 +133,6 @@ export default function SpecificPodcast({
   if (loading) {
     return (
       <div className="p-8 text-center flex flex-col items-center justify-center h-screen">
-        {/* ✅ Tailwind Spinner */}
         <div className="w-12 h-12 border-[5px] border-[#F0EDFF] border-t-[#DCB968] rounded-full animate-spin"></div>
         <p className="mt-4 text-lg text-[#5E5E92] animate-pulse">Loading...</p>
       </div>

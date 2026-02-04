@@ -2,21 +2,28 @@
 
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Plus, FileText, Filter, Calendar, Users } from "lucide-react";
+import {
+  Plus,
+  Mic,
+  Filter,
+  Home,
+  Calendar,
+  Users,
+  ChevronRight as BreadcrumbArrow,
+} from "lucide-react";
 import toast, { Toaster } from "react-hot-toast";
 import Link from "next/link";
-import { Home, ChevronRight as BreadcrumbArrow } from "lucide-react";
 
-import { Article } from "./types";
-import { ArticleCard } from "./components/ArticleCard";
-import { ArticleModal } from "./components/ArticleModal";
-import { ArticleCardSkeleton } from "./components/ArticleCardSkeleton";
+import { Podcast } from "./types";
+import { PodcastCard } from "./components/PodcastCard";
+import { PodcastModal } from "./components/PodcastModal";
+import { PodcastCardSkeleton } from "./components/PodcastCardSkeleton";
 import { Pagination } from "./components/Pagination";
 import { ConfirmationModal } from "../ebmb/components/ConfirmationModal";
 import { deleteFileFromS3 } from "@/app/(backend)/libs/upload-client";
 
-export default function ArticlePage() {
-  const [articles, setArticles] = useState<Article[]>([]);
+export default function PodcastPage() {
+  const [podcasts, setPodcasts] = useState<Podcast[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [availableLabels, setAvailableLabels] = useState<string[]>([]);
 
@@ -24,30 +31,30 @@ export default function ArticlePage() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [filterLabel, setFilterLabel] = useState("");
-  const limit = 8;
+  const limit = 6;
 
   // Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingArticle, setEditingArticle] = useState<Article | null>(null);
+  const [editingPodcast, setEditingPodcast] = useState<Podcast | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
+  // --- FETCH DATA ---
   const fetchLabels = async () => {
     try {
-      const res = await axios.get("/api/v1/article/labels");
+      const res = await axios.get("/api/v1/podcast/labels");
       setAvailableLabels(res.data || []);
     } catch (error) {
       console.error("Failed to fetch labels", error);
     }
   };
 
-  // --- 2. INITIAL FETCH ---
   useEffect(() => {
     fetchLabels();
   }, []);
 
-  const fetchArticles = async () => {
+  const fetchPodcasts = async () => {
     setIsLoading(true);
     try {
       const params: any = { page, limit };
@@ -55,38 +62,37 @@ export default function ArticlePage() {
         params.labels = filterLabel;
       }
 
-      const res = await axios.get("/api/v1/article", { params });
-      setArticles(res.data.articles || []);
+      const res = await axios.get("/api/v1/podcast", { params });
+      setPodcasts(res.data.podcasts || []);
       setTotalPages(res.data.totalPages || 1);
     } catch (error) {
       console.error(error);
-      setArticles([]);
+      setPodcasts([]);
     } finally {
       setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchArticles();
+    fetchPodcasts();
   }, [page, filterLabel]);
 
   // --- HANDLERS ---
   const handleSubmit = async (data: any) => {
     setIsSubmitting(true);
     try {
-      if (editingArticle) {
-        await axios.put(`/api/v1/article/${editingArticle._id}`, data);
-        toast.success("Article updated successfully");
+      if (editingPodcast) {
+        await axios.put(`/api/v1/podcast/${editingPodcast._id}`, data);
+        toast.success("Podcast updated successfully");
       } else {
-        await axios.post("/api/v1/article", data);
-        toast.success("Article created successfully");
+        await axios.post("/api/v1/podcast", data);
+        toast.success("Podcast created successfully");
       }
       setIsModalOpen(false);
-
-      fetchArticles();
-      fetchLabels();
+      fetchPodcasts();
+      fetchLabels(); // Refresh labels in case new ones were added
     } catch (error: any) {
-      toast.error(error.response?.data?.error || "Failed to save article");
+      toast.error(error.response?.data?.error || "Failed to save podcast");
     } finally {
       setIsSubmitting(false);
     }
@@ -94,20 +100,24 @@ export default function ArticlePage() {
 
   const handleDelete = async () => {
     if (!deleteId) return;
-    const article = articles.find((a) => a._id === deleteId);
+    const podcast = podcasts.find((p) => p._id === deleteId);
 
     setIsDeleting(true);
-    try {
-      await axios.delete(`/api/v1/article/${deleteId}`);
 
-      if (article?.illustration_url)
-        await deleteFileFromS3(article.illustration_url);
-      if (article?.content_url) await deleteFileFromS3(article.content_url);
+    try {
+      await axios.delete(`/api/v1/podcast/${deleteId}`);
+
+      // Cleanup images
+      if (podcast?.thumbnail_url)
+        await deleteFileFromS3(podcast.thumbnail_url).catch(console.error);
+      if (podcast?.guest_speaker?.avatar_url)
+        await deleteFileFromS3(podcast.guest_speaker.avatar_url).catch(
+          console.error,
+        );
 
       toast.success("Deleted successfully");
       setDeleteId(null);
-
-      fetchArticles();
+      fetchPodcasts();
       fetchLabels();
     } catch (error) {
       toast.error("Failed to delete");
@@ -116,36 +126,30 @@ export default function ArticlePage() {
     }
   };
 
-  const articleToDelete = articles.find((a) => a._id === deleteId);
+  const podcastToDelete = podcasts.find((p) => p._id === deleteId);
 
-  const deleteModalContent = articleToDelete ? (
+  const deleteModalContent = podcastToDelete ? (
     <div className="space-y-3 mt-2 text-sm text-gray-600">
       <p>
-        Are you sure you want to delete this article? This action cannot be
+        Are you sure you want to delete this podcast? This action cannot be
         undone.
       </p>
-
-      {/* Context Box */}
       <div className="bg-red-50 p-3 rounded-xl border border-red-100 flex gap-3 items-start">
-        {/* Thông tin bài viết */}
         <div className="space-y-1">
           <h4 className="font-bold text-gray-900 line-clamp-2 leading-tight text-left">
-            {articleToDelete.title}
+            {podcastToDelete.title}
           </h4>
-
           <div className="flex justify-between gap-3 text-xs text-gray-500 pt-1">
             <div className="flex items-center gap-1">
               <Users size={12} />
-              <span className="truncate max-w-[250px]">
-                {articleToDelete.authors?.join(", ")}
-              </span>
+              {podcastToDelete.guest_speaker.name}
             </div>
             <div className="flex items-center gap-1">
               <Calendar size={12} />
               <span>
-                {articleToDelete.publicationDate
+                {podcastToDelete.publicationDate
                   ? new Date(
-                      articleToDelete.publicationDate,
+                      podcastToDelete.publicationDate,
                     ).toLocaleDateString("en-GB")
                   : "N/A"}
               </span>
@@ -156,7 +160,6 @@ export default function ArticlePage() {
     </div>
   ) : null;
 
-  // --- RENDER ---
   return (
     <div className="min-h-screen bg-ft-background p-6 md:p-10">
       <Toaster position="top-center" />
@@ -170,25 +173,27 @@ export default function ArticlePage() {
           <Home size={16} /> Dashboard
         </Link>
         <BreadcrumbArrow size={16} />
-        <span className="font-semibold text-gray-800">Articles</span>
+        <span className="font-semibold text-gray-800">Podcasts</span>
       </nav>
 
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
           <h1 className="text-3xl font-extrabold text-ft-primary-blue flex items-center gap-2">
-            Articles
+            Podcasts
           </h1>
-          <p className="text-gray-500 mt-1">Manage news and publications.</p>
+          <p className="text-gray-500 mt-1">
+            Manage podcast episodes and guests.
+          </p>
         </div>
         <button
           onClick={() => {
-            setEditingArticle(null);
+            setEditingPodcast(null);
             setIsModalOpen(true);
           }}
           className="bg-ft-primary-blue text-white px-5 py-2.5 rounded-xl font-bold hover:brightness-110 shadow-lg flex items-center gap-2"
         >
-          <Plus size={20} /> Create Article
+          <Plus size={20} /> Create Podcast
         </button>
       </div>
 
@@ -197,7 +202,6 @@ export default function ArticlePage() {
         <div className="pl-3 pr-2 text-gray-400">
           <Filter size={18} />
         </div>
-
         <div className="relative group">
           <select
             value={filterLabel}
@@ -214,8 +218,7 @@ export default function ArticlePage() {
               </option>
             ))}
           </select>
-
-          {/* Custom Chevron Icon */}
+          {/* Custom Chevron */}
           <div className="absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 group-hover:text-ft-primary-blue transition-colors">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -236,45 +239,45 @@ export default function ArticlePage() {
 
       {/* Content */}
       {isLoading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
-          {[...Array(4)].map((_, i) => (
-            <ArticleCardSkeleton key={i} />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+          {/* 🔥 Render 6 Skeletons */}
+          {[...Array(6)].map((_, i) => (
+            <PodcastCardSkeleton key={i} />
           ))}
         </div>
-      ) : articles.length === 0 ? (
+      ) : podcasts.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20 bg-white rounded-2xl border-2 border-dashed border-gray-300">
-          <FileText className="text-gray-400 mb-4" size={48} />
-          <h3 className="text-lg font-bold text-gray-900">No Articles Found</h3>
+          <Mic className="text-gray-400 mb-4" size={48} />
+          <h3 className="text-lg font-bold text-gray-900">No Podcasts Found</h3>
           <p className="text-gray-500 text-sm mb-6">
-            There are no articles matching your filter.
+            There are no podcasts matching your filter.
           </p>
           <button
             onClick={() => {
-              setEditingArticle(null);
+              setEditingPodcast(null);
               setIsModalOpen(true);
             }}
             className="text-ft-primary-blue font-bold hover:underline"
           >
-            Create first article
+            Create first podcast
           </button>
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
-            {articles.map((article) => (
-              <ArticleCard
-                key={article._id}
-                article={article}
-                onEdit={(a) => {
-                  setEditingArticle(a);
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            {podcasts.map((podcast) => (
+              <PodcastCard
+                key={podcast._id}
+                podcast={podcast}
+                onEdit={(p) => {
+                  setEditingPodcast(p);
                   setIsModalOpen(true);
                 }}
-                onDelete={() => setDeleteId(article._id)}
+                onDelete={() => setDeleteId(podcast._id)}
               />
             ))}
           </div>
 
-          {/* Pagination */}
           <div className="pb-8">
             <Pagination
               currentPage={page}
@@ -286,11 +289,11 @@ export default function ArticlePage() {
       )}
 
       {/* Modals */}
-      <ArticleModal
+      <PodcastModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onSubmit={handleSubmit}
-        initialData={editingArticle}
+        initialData={editingPodcast}
         isLoading={isSubmitting}
       />
 
@@ -298,7 +301,7 @@ export default function ArticlePage() {
         isOpen={!!deleteId}
         onClose={() => setDeleteId(null)}
         onConfirm={handleDelete}
-        title="Delete Article"
+        title="Delete Podcast"
         description={deleteModalContent}
         isLoading={isDeleting}
       />

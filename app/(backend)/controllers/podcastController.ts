@@ -17,15 +17,13 @@ export async function getPodcasts(
     };
   }
 
-  // Chạy song song count và find để tối ưu tốc độ
   const [totalPodcasts, podcasts] = await Promise.all([
     Podcast.countDocuments(query),
     Podcast.find(query)
-      .select("_id title summary thumbnail_url labels publicationDate")
       .sort({ publicationDate: -1 })
       .skip(skip)
       .limit(limit)
-      .lean(), // .lean() giúp trả về object nhẹ hơn
+      .lean(),
   ]);
 
   const totalPages = Math.ceil(totalPodcasts / limit);

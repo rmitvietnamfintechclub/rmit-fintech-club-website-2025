@@ -62,7 +62,7 @@ export const ArticleCard = ({
             </span>
           ))}
           {safeLabels.length > 3 && (
-            <span className="text-[10px] text-gray-400 flex items-center">
+            <span className="text-[10px] font-bold px-2 py-1 rounded-md bg-gray-50 text-gray-500">
               +{safeLabels.length - 3}
             </span>
           )}

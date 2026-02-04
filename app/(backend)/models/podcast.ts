@@ -58,9 +58,11 @@ const podcastSchema = new Schema(
       },
       linkedIn_url: {
         type: String,
-        required: true,
+        required: false,
         validate: {
           validator: function (value: string) {
+            if (!value) return true;
+
             try {
               new URL(value);
               return true;
@@ -77,7 +79,7 @@ const podcastSchema = new Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 const Podcast =

@@ -209,7 +209,7 @@ export const ArticleModal = ({
               <input
                 {...register("title", { required: "Title is required" })}
                 className="w-full px-3 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-ft-primary-yellow outline-none transition"
-                placeholder="Enter article title"
+                placeholder="Please enter article title"
               />
               {errors.title && (
                 <span className="text-ft-danger text-xs mt-1 block">
@@ -227,7 +227,7 @@ export const ArticleModal = ({
                 {...register("summary", { required: "Summary is required" })}
                 rows={10}
                 className="w-full px-3 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-ft-primary-yellow outline-none resize-none transition"
-                placeholder="Enter a brief summary"
+                placeholder="Please enter a brief summary of the article"
               />
               {errors.summary && (
                 <span className="text-ft-danger text-xs mt-1 block">
