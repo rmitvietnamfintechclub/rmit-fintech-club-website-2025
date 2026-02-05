@@ -55,7 +55,7 @@ export const ReelCard = ({ reel, onEdit, onDelete }: ReelCardProps) => {
       {/* Content Area */}
       <div className="p-4 flex flex-col flex-1">
         {/* Labels */}
-        <div className="flex flex-wrap gap-1.5 mb-2">
+        <div className="flex flex-wrap gap-1.5 mb-2 h-6 overflow-hidden">
           {reel.labels.slice(0, 3).map((label, idx) => (
             <span
               key={idx}
