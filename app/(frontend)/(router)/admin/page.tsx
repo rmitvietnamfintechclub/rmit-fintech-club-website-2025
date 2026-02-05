@@ -37,7 +37,7 @@ const dashboardItems = [
     href: "/admin/podcasts",
   },
   {
-    title: "FinTech101",
+    title: "FinTech 101",
     icon: Video,
     href: "/admin/fintech101",
   },

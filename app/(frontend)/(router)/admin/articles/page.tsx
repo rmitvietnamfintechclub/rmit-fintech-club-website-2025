@@ -179,7 +179,7 @@ export default function ArticlePage() {
           <h1 className="text-3xl font-extrabold text-ft-primary-blue flex items-center gap-2">
             Articles
           </h1>
-          <p className="text-gray-500 mt-1">Manage news and publications.</p>
+          <p className="text-gray-500 mt-1">Manage Bi-weekly Article publications.</p>
         </div>
         <button
           onClick={() => {

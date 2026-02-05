@@ -6,4 +6,5 @@ export const STORAGE_PATHS = {
   ARTICLES_CONTENT: "media/article/products",
   PODCASTS_THUMBNAIL: "media/podcast/graphics",
   PODCASTS_GUEST: "media/podcast/GS",
+  REELS_THUMBNAIL: "media/fintech101",
 };

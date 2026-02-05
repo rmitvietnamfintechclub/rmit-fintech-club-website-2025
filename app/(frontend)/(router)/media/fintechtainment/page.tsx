@@ -146,11 +146,9 @@ export default function PodcastLibrary() {
 
     const fetchAllReelLabels = async () => {
       try {
-        const response = await axios.get(`/api/v1/reel?limit=200`);
-        const allReels: ApiReel[] = response.data.reels || [];
-        const allLabelsFlat = allReels.flatMap((r) => r.labels);
-        const uniqueLabels = Array.from(new Set(allLabelsFlat)).sort();
-        setAvailableReelLabels(["All", ...uniqueLabels]);
+        const response = await axios.get(`/api/v1/reel/labels`);
+        const uniqueLabels: string[] = response.data || [];
+        setAvailableReelLabels(["All", ...uniqueLabels.sort()]);
       } catch (err) {
         console.error("Failed to fetch unique reel labels:", err);
         setAvailableReelLabels(["All"]);

@@ -62,3 +62,8 @@ export async function deleteReel(id: string) {
   const reel = await Reel.findByIdAndDelete(id).lean();
   return reel;
 }
+
+export async function getUniqueLabels() {
+  const labels = await Reel.distinct("labels");
+  return labels.sort();
+}

@@ -4,38 +4,36 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
   Plus,
-  Mic,
+  Film,
   Filter,
   Home,
-  Calendar,
-  Users,
   ChevronRight as BreadcrumbArrow,
 } from "lucide-react";
 import toast, { Toaster } from "react-hot-toast";
 import Link from "next/link";
 
-import { Podcast } from "./types";
-import { PodcastCard } from "./components/PodcastCard";
-import { PodcastModal } from "./components/PodcastModal";
-import { PodcastCardSkeleton } from "./components/PodcastCardSkeleton";
+import { Reel } from "./types";
+import { ReelCard } from "./components/ReelCard";
+import { ReelModal } from "./components/ReelModal";
 import { Pagination } from "./components/Pagination";
 import { ConfirmationModal } from "../ebmb/components/ConfirmationModal";
 import { deleteFileFromS3 } from "@/app/(backend)/libs/upload-client";
+import { ReelCardSkeleton } from "./components/ReelCardSkeleton";
 
-export default function PodcastPage() {
-  const [podcasts, setPodcasts] = useState<Podcast[]>([]);
+export default function ReelPage() {
+  const [reels, setReels] = useState<Reel[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [availableLabels, setAvailableLabels] = useState<string[]>([]);
 
-  // Pagination & Filter State
+  // Pagination & Filter
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [filterLabel, setFilterLabel] = useState("");
-  const limit = 6;
+  const limit = 8;
 
   // Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingPodcast, setEditingPodcast] = useState<Podcast | null>(null);
+  const [editingReel, setEditingReel] = useState<Reel | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -43,56 +41,53 @@ export default function PodcastPage() {
   // --- FETCH DATA ---
   const fetchLabels = async () => {
     try {
-      const res = await axios.get("/api/v1/podcast/labels");
+      const res = await axios.get("/api/v1/reel/labels");
       setAvailableLabels(res.data || []);
     } catch (error) {
       console.error("Failed to fetch labels", error);
     }
   };
 
-  useEffect(() => {
-    fetchLabels();
-  }, []);
-
-  const fetchPodcasts = async () => {
+  const fetchReels = async () => {
     setIsLoading(true);
     try {
       const params: any = { page, limit };
-      if (filterLabel) {
-        params.labels = filterLabel;
-      }
+      if (filterLabel) params.labels = filterLabel;
 
-      const res = await axios.get("/api/v1/podcast", { params });
-      setPodcasts(res.data.podcasts || []);
+      const res = await axios.get("/api/v1/reel", { params });
+      setReels(res.data.reels || []);
       setTotalPages(res.data.totalPages || 1);
     } catch (error) {
       console.error(error);
-      setPodcasts([]);
+      setReels([]);
     } finally {
       setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchPodcasts();
+    fetchLabels();
+  }, []);
+  useEffect(() => {
+    fetchReels();
   }, [page, filterLabel]);
 
   // --- HANDLERS ---
   const handleSubmit = async (data: any) => {
     setIsSubmitting(true);
     try {
-      if (editingPodcast) {
-        await axios.put(`/api/v1/podcast/${editingPodcast._id}`, data);
-        toast.success("Podcast updated successfully");
+      if (editingReel) {
+        await axios.put(`/api/v1/reel/${editingReel._id}`, data);
+        toast.success("Reel updated successfully");
       } else {
-        await axios.post("/api/v1/podcast", data);
-        toast.success("Podcast created successfully");
+        await axios.post("/api/v1/reel", data);
+        toast.success("Reel created successfully");
       }
       setIsModalOpen(false);
-      fetchPodcasts();
-      fetchLabels(); // Refresh labels in case new ones were added
+      fetchReels();
+      fetchLabels();
     } catch (error: any) {
-      toast.error(error.response?.data?.error || "Failed to save podcast");
+      toast.error(error.response?.data?.error || "Failed to save reel");
     } finally {
       setIsSubmitting(false);
     }
@@ -100,24 +95,18 @@ export default function PodcastPage() {
 
   const handleDelete = async () => {
     if (!deleteId) return;
-    const podcast = podcasts.find((p) => p._id === deleteId);
+    const reel = reels.find((r) => r._id === deleteId);
 
     setIsDeleting(true);
 
     try {
-      await axios.delete(`/api/v1/podcast/${deleteId}`);
-
-      // Cleanup images
-      if (podcast?.thumbnail_url)
-        await deleteFileFromS3(podcast.thumbnail_url).catch(console.error);
-      if (podcast?.guest_speaker?.avatar_url)
-        await deleteFileFromS3(podcast.guest_speaker.avatar_url).catch(
-          console.error,
-        );
+      await axios.delete(`/api/v1/reel/${deleteId}`);
+      if (reel?.thumbnailUrl)
+        await deleteFileFromS3(reel.thumbnailUrl).catch(console.error);
 
       toast.success("Deleted successfully");
       setDeleteId(null);
-      fetchPodcasts();
+      fetchReels();
       fetchLabels();
     } catch (error) {
       toast.error("Failed to delete");
@@ -126,39 +115,7 @@ export default function PodcastPage() {
     }
   };
 
-  const podcastToDelete = podcasts.find((p) => p._id === deleteId);
-
-  const deleteModalContent = podcastToDelete ? (
-    <div className="space-y-3 mt-2 text-sm text-gray-600">
-      <p>
-        Are you sure you want to delete this podcast? This action cannot be
-        undone.
-      </p>
-      <div className="bg-red-50 p-3 rounded-xl border border-red-100 flex gap-3 items-start">
-        <div className="space-y-1">
-          <h4 className="font-bold text-gray-900 line-clamp-2 leading-tight text-left">
-            {podcastToDelete.title}
-          </h4>
-          <div className="flex justify-between gap-3 text-xs text-gray-500 pt-1">
-            <div className="flex items-center gap-1">
-              <Users size={12} />
-              {podcastToDelete.guest_speaker.name}
-            </div>
-            <div className="flex items-center gap-1">
-              <Calendar size={12} />
-              <span>
-                {podcastToDelete.publicationDate
-                  ? new Date(
-                      podcastToDelete.publicationDate,
-                    ).toLocaleDateString("en-GB")
-                  : "N/A"}
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  ) : null;
+  const reelToDelete = reels.find((r) => r._id === deleteId);
 
   return (
     <div className="min-h-screen bg-ft-background p-6 md:p-10">
@@ -173,27 +130,25 @@ export default function PodcastPage() {
           <Home size={16} /> Dashboard
         </Link>
         <BreadcrumbArrow size={16} />
-        <span className="font-semibold text-gray-800">Podcasts</span>
+        <span className="font-semibold text-gray-800">FinTech 101</span>
       </nav>
 
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
           <h1 className="text-3xl font-extrabold text-ft-primary-blue flex items-center gap-2">
-            Podcasts
+            FinTech 101
           </h1>
-          <p className="text-gray-500 mt-1">
-            Manage FinTechTainment podcast episodes.
-          </p>
+          <p className="text-gray-500 mt-1">Manage FinTech 101 videos.</p>
         </div>
         <button
           onClick={() => {
-            setEditingPodcast(null);
+            setEditingReel(null);
             setIsModalOpen(true);
           }}
           className="bg-ft-primary-blue text-white px-5 py-2.5 rounded-xl font-bold hover:brightness-110 shadow-lg flex items-center gap-2"
         >
-          <Plus size={20} /> Create Podcast
+          <Plus size={20} /> Create Reel
         </button>
       </div>
 
@@ -218,7 +173,6 @@ export default function PodcastPage() {
               </option>
             ))}
           </select>
-          {/* Custom Chevron */}
           <div className="absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 group-hover:text-ft-primary-blue transition-colors">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -239,44 +193,40 @@ export default function PodcastPage() {
 
       {/* Content */}
       {isLoading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          {[...Array(3)].map((_, i) => (
-            <PodcastCardSkeleton key={i} />
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-8">
+          {[...Array(4)].map((_, i) => (
+            <ReelCardSkeleton key={i} />
           ))}
         </div>
-      ) : podcasts.length === 0 ? (
+      ) : reels.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20 bg-white rounded-2xl border-2 border-dashed border-gray-300">
-          <Mic className="text-gray-400 mb-4" size={48} />
-          <h3 className="text-lg font-bold text-gray-900">No Podcasts Found</h3>
-          <p className="text-gray-500 text-sm mb-6">
-            There are no podcasts matching your filter.
-          </p>
+          <Film className="text-gray-400 mb-4" size={48} />
+          <h3 className="text-lg font-bold text-gray-900">No Reels Found</h3>
           <button
             onClick={() => {
-              setEditingPodcast(null);
+              setEditingReel(null);
               setIsModalOpen(true);
             }}
-            className="text-ft-primary-blue font-bold hover:underline"
+            className="text-ft-primary-blue font-bold hover:underline mt-2"
           >
-            Create first podcast
+            Create first reel
           </button>
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-            {podcasts.map((podcast) => (
-              <PodcastCard
-                key={podcast._id}
-                podcast={podcast}
-                onEdit={(p) => {
-                  setEditingPodcast(p);
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-8">
+            {reels.map((reel) => (
+              <ReelCard
+                key={reel._id}
+                reel={reel}
+                onEdit={(r) => {
+                  setEditingReel(r);
                   setIsModalOpen(true);
                 }}
-                onDelete={() => setDeleteId(podcast._id)}
+                onDelete={() => setDeleteId(reel._id)}
               />
             ))}
           </div>
-
           <div className="pb-8">
             <Pagination
               currentPage={page}
@@ -288,11 +238,11 @@ export default function PodcastPage() {
       )}
 
       {/* Modals */}
-      <PodcastModal
+      <ReelModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onSubmit={handleSubmit}
-        initialData={editingPodcast}
+        initialData={editingReel}
         isLoading={isSubmitting}
       />
 
@@ -300,8 +250,16 @@ export default function PodcastPage() {
         isOpen={!!deleteId}
         onClose={() => setDeleteId(null)}
         onConfirm={handleDelete}
-        title="Delete Podcast"
-        description={deleteModalContent}
+        title="Delete Reel"
+        description={
+          reelToDelete ? (
+            <div className="mt-2 text-sm text-gray-600">
+              Are you sure you want to delete{" "}
+              <strong className="text-black">{reelToDelete.title}</strong>? This
+              action cannot be undone.
+            </div>
+          ) : null
+        }
         isLoading={isDeleting}
       />
     </div>

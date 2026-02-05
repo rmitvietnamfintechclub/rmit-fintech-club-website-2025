@@ -350,7 +350,6 @@ export const PodcastModal = ({
                               onChange(date ? date.toISOString() : "")
                             }
                             dateFormat="dd/MM/yyyy"
-                            placeholderText="DD/MM/YYYY"
                             className="w-full px-3 py-2.5 pl-10 border border-gray-300 rounded-xl focus:ring-2 focus:ring-ft-primary-yellow outline-none transition text-gray-700 block"
                             wrapperClassName="w-full"
                             autoComplete="off"
