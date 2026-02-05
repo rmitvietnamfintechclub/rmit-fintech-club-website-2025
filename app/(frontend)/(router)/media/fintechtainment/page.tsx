@@ -212,7 +212,7 @@ export default function PodcastLibrary() {
         try {
           const params = new URLSearchParams({
             page: reelPage.toString(),
-            limit: "12",
+            limit: "8",
           });
           if (selectedReelLabel && selectedReelLabel !== "All") {
             params.append("labels", selectedReelLabel);
