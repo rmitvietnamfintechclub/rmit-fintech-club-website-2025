@@ -7,6 +7,7 @@ import PodcastCard from "./components/podcastCard";
 import ReelPlayer from "./components/reelPlayer";
 import ReelLibraryGrid from "./components/ReelLibraryGrid";
 import { motion } from "framer-motion";
+import { Spinner } from "@heroui/react";
 import PaginationRounded from "./components/pagination";
 import Image from "next/image";
 import axios from "axios";
@@ -122,28 +123,27 @@ export default function PodcastLibrary() {
   const [reelPage, setReelPage] = useState(1);
   const [totalReelPages, setTotalReelPages] = useState(1);
   const [selectedReelLabel, setSelectedReelLabel] = useState<string | null>(
-    null
+    null,
   );
   const [availableReelLabels, setAvailableReelLabels] = useState<string[]>([]);
 
   const [selectedReelIndex, setSelectedReelIndex] = useState<number | null>(
-    null
+    null,
   );
 
   // --- EFFECTS ---
   useEffect(() => {
     const fetchAllPodcastLabels = async () => {
       try {
-        const response = await axios.get(`/api/v1/podcast?limit=200`);
-        const allPodcasts: ApiPodcast[] = response.data.podcasts || [];
-        const allLabelsFlat = allPodcasts.flatMap((p) => p.labels);
-        const uniqueLabels = Array.from(new Set(allLabelsFlat)).sort();
-        setAvailablePodcastLabels(["All", ...uniqueLabels]);
+        const response = await axios.get(`/api/v1/podcast/labels`);
+        const uniqueLabels: string[] = response.data || [];
+        setAvailablePodcastLabels(["All", ...uniqueLabels.sort()]);
       } catch (err) {
         console.error("Failed to fetch unique podcast labels:", err);
         setAvailablePodcastLabels(["All"]);
       }
     };
+
     const fetchAllReelLabels = async () => {
       try {
         const response = await axios.get(`/api/v1/reel?limit=200`);
@@ -156,6 +156,7 @@ export default function PodcastLibrary() {
         setAvailableReelLabels(["All"]);
       }
     };
+
     fetchAllPodcastLabels();
     fetchAllReelLabels();
   }, []);
@@ -175,7 +176,7 @@ export default function PodcastLibrary() {
             params.append("labels", selectedPodcastLabel);
           }
           const response = await axios.get(
-            `/api/v1/podcast?${params.toString()}`
+            `/api/v1/podcast?${params.toString()}`,
           );
           const {
             podcasts: fetchedPodcasts = [],
@@ -190,7 +191,7 @@ export default function PodcastLibrary() {
               imageAlt: p.title,
               labels: p.labels,
               date: formatPodcastDate(p.publicationDate),
-            })
+            }),
           );
           setPodcasts(formattedPodcasts);
           setTotalPodcastPages(fetchedTotalPages);
@@ -250,14 +251,22 @@ export default function PodcastLibrary() {
   const renderPodcastContent = () => {
     if (podcastsLoading) {
       return (
-        <div className="p-8 text-center flex flex-col items-center justify-center h-64">
-          <div className="w-12 h-12 border-[5px] border-[#F0EDFF] border-t-[#DCB968] rounded-full animate-spin"></div>
-          <p className="mt-4 text-lg text-[#5E5E92] animate-pulse">
+        <div className="flex flex-col items-center justify-center w-full h-64 p-8">
+          <Spinner
+            size="lg"
+            classNames={{
+              wrapper: "w-16 h-16",
+              circle1: "border-b-ft-primary-yellow border-[4px]",
+              circle2: "border-b-ft-primary-yellow border-[4px]",
+            }}
+          />
+          <p className="mt-5 text-lg font-semibold text-[#5E5E92] animate-pulse tracking-wide">
             Loading Podcasts...
           </p>
         </div>
       );
     }
+
     if (podcastsError)
       return (
         <div className="relative w-[90vw] max-w-4xl h-48 mx-auto my-10 md:h-64 p-[4px] rounded-lg bg-gradient-to-b from-[#DCB968] to-[#F7D27F]">
@@ -296,10 +305,16 @@ export default function PodcastLibrary() {
   const renderReelContent = () => {
     if (reelsLoading) {
       return (
-        <div className="p-8 text-center flex flex-col items-center justify-center h-64">
-          {/* ✅ Tailwind Spinner thay thế CircularProgress */}
-          <div className="w-12 h-12 border-[5px] border-[#F0EDFF] border-t-[#DCB968] rounded-full animate-spin"></div>
-          <p className="mt-4 text-lg text-[#5E5E92] animate-pulse">
+        <div className="flex flex-col items-center justify-center w-full h-64 p-8">
+          <Spinner
+            size="lg"
+            classNames={{
+              wrapper: "w-16 h-16",
+              circle1: "border-b-ft-primary-yellow border-[4px]",
+              circle2: "border-b-ft-primary-yellow border-[4px]",
+            }}
+          />
+          <p className="mt-5 text-lg font-semibold text-[#5E5E92] animate-pulse tracking-wide">
             Loading FinTech101...
           </p>
         </div>
@@ -383,9 +398,7 @@ export default function PodcastLibrary() {
             }}
           >
             <Link href="/media">
-              <motion.button
-                className="bg-ft-primary-blue-300 text-bluePrimary font-semibold px-4 py-2 rounded-md hover:bg-yellowCream transition-colors duration-200"
-              >
+              <motion.button className="bg-ft-primary-blue-300 text-bluePrimary font-semibold px-4 py-2 rounded-md hover:bg-yellowCream transition-colors duration-200">
                 Back to Media
               </motion.button>
             </Link>
@@ -411,11 +424,9 @@ export default function PodcastLibrary() {
               <ChevronRightIcon />
             </li>
             <li>
-             <span 
-              className="text-black font-semibold truncate max-w-[150px] md:max-w-none cursor-default"
-            >
-              FinTechTainment Library
-            </span>
+              <span className="text-black font-semibold truncate max-w-[150px] md:max-w-none cursor-default">
+                FinTechTainment Library
+              </span>
             </li>
           </ol>
         </nav>

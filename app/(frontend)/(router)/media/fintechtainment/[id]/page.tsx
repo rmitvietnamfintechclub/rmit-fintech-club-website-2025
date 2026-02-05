@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { Spinner } from "@heroui/react";
 import Image from "next/image";
 import axios from "axios";
 
@@ -132,9 +133,18 @@ export default function SpecificPodcast({
   // --- LOADING STATE ---
   if (loading) {
     return (
-      <div className="p-8 text-center flex flex-col items-center justify-center h-screen">
-        <div className="w-12 h-12 border-[5px] border-[#F0EDFF] border-t-[#DCB968] rounded-full animate-spin"></div>
-        <p className="mt-4 text-lg text-[#5E5E92] animate-pulse">Loading...</p>
+      <div className="flex flex-col items-center justify-center w-full h-screen p-8">
+        <Spinner
+          size="lg"
+          classNames={{
+            wrapper: "w-16 h-16",
+            circle1: "border-b-ft-primary-yellow border-[4px]",
+            circle2: "border-b-ft-primary-yellow border-[4px]",
+          }}
+        />
+        <p className="mt-5 text-lg font-semibold text-[#5E5E92] animate-pulse tracking-wide">
+          Loading...
+        </p>
       </div>
     );
   }
@@ -393,6 +403,7 @@ export default function SpecificPodcast({
           <div
             className="
                 flex flex-row md:flex-col 
+                relative
                 gap-4 
                 overflow-x-auto snap-x snap-mandatory md:overflow-visible 
                 pb-4 md:pb-0
@@ -431,18 +442,17 @@ export default function SpecificPodcast({
 
             {/* Spacer for mobile scroll padding right */}
             <div className="w-2 md:hidden flex-shrink-0"></div>
-          </div>
-
-          {/* Mascot - Desktop Only */}
-          <div className="absolute right-[-12.5rem] bottom-[-1rem] hidden md:block pointer-events-none">
-            <Image
-              src="https://d2uq10394z5icp.cloudfront.net/global/Mascot+-+M%E1%BA%B7t+tr%C6%B0%E1%BB%9Bc.svg"
-              alt="Mascot"
-              width={200}
-              height={500}
-              loading="lazy"
-              className="w-[25vw] h-auto -rotate-[35deg]"
-            />
+            {/* Mascot - Desktop Only */}
+            <div className="absolute right-[-12.5rem] bottom-[-22rem] hidden md:block pointer-events-none">
+              <Image
+                src="https://d2uq10394z5icp.cloudfront.net/global/Mascot+-+M%E1%BA%B7t+tr%C6%B0%E1%BB%9Bc.svg"
+                alt="Mascot"
+                width={200}
+                height={500}
+                loading="lazy"
+                className="w-[25vw] h-auto -rotate-[35deg]"
+              />
+            </div>
           </div>
         </div>
       </div>
