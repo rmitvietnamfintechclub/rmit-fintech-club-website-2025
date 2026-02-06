@@ -198,11 +198,11 @@ const FooterNoRounded: React.FC = () => {
                 Projects
               </Link>
             </li>
-            <li>
+            {/* <li>
               <Link href="/events" className="hover:text-[#DBB968]">
                 Events
               </Link>
-            </li>
+            </li> */}
             <li>
               <Link href="/join-us" className="hover:text-[#DBB968]">
                 Join Us
@@ -214,7 +214,7 @@ const FooterNoRounded: React.FC = () => {
 
       {/* Copyright Section */}
       <div className="container mx-auto text-center mt-[10vh] border-t border-gray-500 pt-4">
-        <p className="text-sm">Copyright ©2025 All Rights Reserved.</p>
+        <p className="text-sm">Copyright ©2026 All Rights Reserved.</p>
       </div>
 
       <Image

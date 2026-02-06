@@ -17,10 +17,10 @@ export const siteConfig = {
       label: "Media",
       href: "/media",
     },
-    // {
-    //   label: "Projects",
-    //   href: "/projects",
-    // }
+    {
+      label: "Projects",
+      href: "/projects",
+    }
     // {
     //   label: "Events",
     //   href: "/events",

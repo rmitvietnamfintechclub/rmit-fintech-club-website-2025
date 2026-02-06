@@ -1,16 +1,15 @@
 "use client";
 
-import * as React from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
-import type { DeptProjectsMap, ApiResponse, Project } from "../components/types";
+import { Project, DepartmentApiResponse } from "../../types"; 
 
 export function useDepartmentData(departments: readonly string[]) {
-  const [departmentProjects, setDepartmentProjects] = React.useState<DeptProjectsMap>({});
-  const [departmentDescriptions, setDepartmentDescriptions] = React.useState<Record<string, string>>({});
-  const [loading, setLoading] = React.useState(true);
-  const [error, setError] = React.useState<string | null>(null);
+  const [departmentProjects, setDepartmentProjects] = useState<Record<string, Project[]>>({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const controller = new AbortController();
 
     const fetchData = async () => {
@@ -18,51 +17,50 @@ export function useDepartmentData(departments: readonly string[]) {
       setError(null);
 
       try {
-        const projectResults: DeptProjectsMap = {};
-        const descriptionResults: Record<string, string> = {};
+        const projectResults: Record<string, Project[]> = {};
 
         await Promise.all(
           departments.map(async (dept) => {
-            const res = await axios.get<ApiResponse>(`/api/v1/projects`, {
-              params: { type: "department", status: "Ongoing", department: dept },
+            const res = await axios.get<DepartmentApiResponse>("/api/v1/projects", {
+              params: {
+                type: "department",
+                status: "ongoing",
+                department: dept,
+              },
               signal: controller.signal,
             });
 
-            const projectList = res.data?.data?.projects ?? [];
-            projectResults[dept] = projectList.map((p): Project => ({
-              id: p.slug,
-              title: p.title,
-              imageUrl: p.image_url,
-              slug: p.slug,
-              description: p.description,
-            }));
+            const responseData = res.data?.data;
+            const rawProjects = responseData?.departmentData?.projects || [];
 
-            descriptionResults[dept] = res.data?.data?.department_description ?? "";
+            projectResults[dept] = rawProjects.map((p) => ({
+              id: p._id,
+              title: p.title,
+              description: p.description,
+              imageUrl: p.image_url,
+              link: p.exploreLink || "#",
+              labels: p.labels || [],
+            }));
           })
         );
 
         setDepartmentProjects(projectResults);
-        setDepartmentDescriptions(descriptionResults);
       } catch (e: any) {
-        console.error("Error fetching department projects:", e);
         if (axios.isCancel(e)) return;
-        
-        // Simplified error handling
-        const message = e.response?.status === 404
-          ? "Department projects API not found."
-          : e.code === "ERR_NETWORK"
-          ? "Network error. Please check your connection."
-          : "Failed to fetch department projects.";
-        setError(message);
+
+        console.error("Error fetching projects:", e);
+        const msg = e.response?.status === 404 
+          ? "Data source not found." 
+          : "Could not load department projects.";
+        setError(msg);
       } finally {
-        setLoading(false);
+        if (!controller.signal.aborted) setLoading(false);
       }
     };
 
     fetchData();
-
     return () => controller.abort();
   }, [departments]);
 
-  return { departmentProjects, departmentDescriptions, loading, error };
+  return { departmentProjects, loading, error };
 }

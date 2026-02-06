@@ -1,50 +1,38 @@
+// src/app/.../DeptProjectsPage.tsx
 "use client";
 
-import * as React from "react";
+import React from "react";
+import { Spinner } from "@heroui/react"; // Hoặc spinner của bạn
 import DepartmentAccordion from "./components/DepartmentAccordion";
 import DeptSection from "./components/DeptContentSection";
 import { useDepartmentData } from "./hooks/useDepartmentData";
-import type { DeptItemBase } from "./components/types";
+import { DeptTabConfig } from "../types";
 
-const DEPT_TABS = [
-  {
-    value: "technology",
-    label: "TECHNOLOGY",
-    color: "bg-[#DBB968]",
-    apiDept: "Technology",
-  },
-  {
-    value: "business",
-    label: "BUSINESS",
-    color: "bg-[#2C305F]",
-    apiDept: "Business",
-  },
-  {
-    value: "marketing",
-    label: "MARKETING",
-    color: "bg-[#DBB968]",
-    apiDept: "Marketing",
-  },
-  {
-    value: "human-resources",
-    label: "HUMAN RESOURCES",
-    color: "bg-[#2C305F]",
-    apiDept: "Human Resources",
-  },
-] as const;
+const DEPT_TABS: DeptTabConfig[] = [
+  { value: "technology", label: "TECHNOLOGY", color: "bg-[#DBB968]", apiDept: "Technology" },
+  { value: "business", label: "BUSINESS", color: "bg-[#2C305F]", apiDept: "Business" },
+  { value: "marketing", label: "MARKETING", color: "bg-[#DBB968]", apiDept: "Marketing" },
+  { value: "human-resources", label: "HUMAN RESOURCES", color: "bg-[#2C305F]", apiDept: "Human Resources" },
+];
 
-const departmentApiNames = Array.from(new Set(DEPT_TABS.map((d) => d.apiDept)));
+const apiDepts = Array.from(new Set(DEPT_TABS.map((d) => d.apiDept)));
 
 export default function DeptProjectsPage() {
-  const { departmentProjects, departmentDescriptions, loading, error } =
-    useDepartmentData(departmentApiNames);
+  const { departmentProjects, loading, error } = useDepartmentData(apiDepts);
 
   if (loading) {
     return (
-      <div className="p-8 text-center flex flex-col items-center justify-center h-64">
-        <div className="w-12 h-12 border-[5px] border-[#F0EDFF] border-t-[#DCB968] rounded-full animate-spin"></div>
-        <p className="mt-4 text-lg text-[#5E5E92]">
-          Loading Department Projects
+      <div className="flex flex-col items-center justify-center w-full h-screen p-8">
+        <Spinner
+          size="lg"
+          classNames={{
+            wrapper: "w-16 h-16",
+            circle1: "border-b-ft-primary-yellow border-[4px]",
+            circle2: "border-b-ft-primary-yellow border-[4px]",
+          }}
+        />
+        <p className="mt-5 text-lg font-semibold text-[#5E5E92] animate-pulse tracking-wide">
+          Loading Department Projects...
         </p>
       </div>
     );
@@ -52,10 +40,10 @@ export default function DeptProjectsPage() {
 
   if (error) {
     return (
-      <div className="relative w-[87vw] h-48 mx-auto my-10 md:h-64 p-[4px] rounded-lg bg-gradient-to-b from-[#DCB968] to-[#F7D27F]">
-        <div className="flex flex-col items-center justify-center w-full h-full bg-[#F9FAFB] rounded-[7px] text-center px-4">
-          <p className="text-5xl font-bold mb-4">⚠️</p>
-          <p className="text-[#2C305F] text-xl">{error}</p>
+      <div className="flex items-center justify-center h-[95vh] w-full px-4">
+        <div className="bg-red-50 text-red-600 px-6 py-4 rounded-xl border border-red-100 shadow-sm text-center">
+          <p className="text-2xl mb-2">⚠️</p>
+          <p className="font-semibold">{error}</p>
         </div>
       </div>
     );
@@ -65,10 +53,9 @@ export default function DeptProjectsPage() {
     value,
     label,
     color,
-    renderContent: (_: DeptItemBase) => (
+    renderContent: () => (
       <DeptSection
         label={label}
-        description={departmentDescriptions[apiDept] || ""}
         items={departmentProjects[apiDept] || []}
       />
     ),

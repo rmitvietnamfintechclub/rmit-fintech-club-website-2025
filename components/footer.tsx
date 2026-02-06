@@ -193,11 +193,11 @@ const Footer: React.FC = () => {
                 Media
               </Link>
             </li>
-            {/* <li>
+            <li>
               <Link href="/projects" className="hover:text-[#DBB968]">
                 Projects
               </Link>
-            </li> */}
+            </li>
             {/* <li>
               <Link href="/events" className="hover:text-[#DBB968]">
                 Events

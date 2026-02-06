@@ -6,7 +6,7 @@ import FooterNoRounded from "@/components/footerNoRounded";
 
 export default function FooterWrapper() {
   const pathname = usePathname();
-  const isMediaPage = pathname === "/media";
+  const isFooterNoRoundedPage = pathname === "/media" || pathname === "/projects";
 
-  return isMediaPage ? <FooterNoRounded /> : <Footer />;
+  return isFooterNoRoundedPage ? <FooterNoRounded /> : <Footer />;
 }
