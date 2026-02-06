@@ -3,29 +3,14 @@
 import { Button, Spinner } from "@heroui/react";
 import { useState, useEffect, useRef, useCallback } from "react";
 import axios from "axios";
-
-// Interface mới bạn cung cấp
-export interface Project {
-  _id: string;
-  title: string;
-  description: string;
-  type: "large-scaled" | "department";
-  status: "ongoing" | "completed";
-  labels: string[];
-  image_url: string;
-  department?: "Business" | "Technology" | "Marketing" | "Human Resources";
-  year?: number;
-  exploreLink?: string;
-  createdAt?: Date;
-  updatedAt?: Date;
-}
+import { ApiProject } from "../types";
 
 type ProjectData = {
   labels: string[];
   title: string;
   description: string;
   link: string;
-  image: string; 
+  image: string;
 };
 
 const ClubwideProjects = () => {
@@ -53,17 +38,17 @@ const ClubwideProjects = () => {
 
         const response = await axios.get(
           "/api/v1/projects?type=large-scaled&status=ongoing",
-          { signal: controller.signal }
+          { signal: controller.signal },
         );
 
-        const apiProjects: Project[] = response.data.data?.projects || [];
+        const apiProjects: ApiProject[] = response.data.data?.projects || [];
 
         const formattedProjects: ProjectData[] = apiProjects.map((p) => ({
           title: p.title,
           description: p.description,
           labels: p.labels || [],
           image: p.image_url,
-          link: p.exploreLink || "", 
+          link: p.exploreLink || "",
         }));
 
         setProjects(formattedProjects);

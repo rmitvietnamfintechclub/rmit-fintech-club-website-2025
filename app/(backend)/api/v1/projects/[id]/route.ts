@@ -3,7 +3,7 @@ import {
     updateProject, 
     deleteProject 
 } from "@/app/(backend)/controllers/projectController";
-import { publicRoute, adminRoute } from "@/app/(backend)/libs/api-handler";
+import { adminRoute } from "@/app/(backend)/libs/api-handler";
 
 
 // --- PUT: ADMIN ONLY ---

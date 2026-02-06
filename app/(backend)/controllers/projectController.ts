@@ -8,9 +8,9 @@ export async function getAllProjects() {
     .limit(100)
     .lean();
 
-  return { 
-    projects: projects as unknown as Project[], 
-    count: projects.length 
+  return {
+    projects: projects as unknown as Project[],
+    count: projects.length,
   };
 }
 
@@ -24,21 +24,21 @@ export async function getLargeScaledOngoingProjects() {
     .limit(50)
     .lean();
 
-  return { 
-    projects: projects as unknown as Project[], 
-    count: projects.length 
+  return {
+    projects: projects as unknown as Project[],
+    count: projects.length,
   };
 }
 
 // --- Service: Lấy Project theo Department ---
 export async function getDepartmentProjects(department: string) {
   const result = await ProjectModel.aggregate([
-    { 
-      $match: { 
-        type: "department", 
+    {
+      $match: {
+        type: "department",
         status: "ongoing",
-        department: department 
-      } 
+        department: department,
+      },
     },
     { $sort: { createdAt: -1 } },
     { $limit: 50 },
@@ -47,7 +47,7 @@ export async function getDepartmentProjects(department: string) {
         _id: "$department",
         department: { $first: "$department" },
         projects: {
-          $push: "$$ROOT", 
+          $push: "$$ROOT",
         },
       },
     },
@@ -65,28 +65,32 @@ export async function getDepartmentProjects(department: string) {
   };
 }
 
-// --- Service: Lấy Completed Project theo năm ---
-export async function getCompletedProjectsByYear(year: string) {
-  const yearNum = parseInt(year);
-  if (isNaN(yearNum)) throw new Error("Invalid year parameter");
+export async function getCompletedProjects(year?: string) {
+  const query: any = { status: "completed" };
 
-  const projects = await ProjectModel.find({ 
-    status: "completed",
-    year: yearNum 
-  })
-    .sort({ createdAt: -1 })
-    .limit(50)
+  if (year) {
+    const yearNum = parseInt(year);
+    if (!isNaN(yearNum)) {
+      query.year = yearNum;
+    }
+  }
+
+  const projects = await ProjectModel.find(query)
+    .sort({ year: -1, createdAt: -1 })
+    .limit(100)
     .lean();
 
-  return { 
-    projects: projects as unknown as Project[], 
-    count: projects.length, 
-    year: yearNum 
+  return {
+    projects: projects as unknown as Project[],
+    count: projects.length,
+    year: year ? parseInt(year) : undefined
   };
 }
 
 // --- Service: Tạo Project ---
-export async function createProject(data: Omit<Project, "_id" | "createdAt" | "updatedAt" | "slug">) {
+export async function createProject(
+  data: Omit<Project, "_id" | "createdAt" | "updatedAt">,
+) {
   const project = new ProjectModel(data);
   await project.save();
   return project;
@@ -111,4 +115,9 @@ export async function updateProject(id: string, updateData: Partial<Project>) {
 export async function deleteProject(id: string) {
   const project = await ProjectModel.findByIdAndDelete(id).lean();
   return project;
+}
+
+export async function getProjectYears() {
+  const years = await ProjectModel.distinct("year", { status: "completed" });
+  return years.sort((a, b) => b - a);
 }

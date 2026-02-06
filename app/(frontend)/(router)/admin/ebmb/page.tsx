@@ -245,14 +245,14 @@ export default function EBMBPage() {
         <ChevronRight size={16} className="text-gray-400" />
 
         <span className="font-semibold text-gray-800 cursor-default">
-          EBMB Management
+          EBMB
         </span>
       </nav>
       {/* --- Header & Controls --- */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
           <h1 className="text-3xl font-extrabold text-gray-800 tracking-tight">
-            EBMB Management
+            EBMB
           </h1>
           <div className="flex items-center gap-2 mt-1">
             <p className="text-gray-500">Manage our club's leadership.</p>

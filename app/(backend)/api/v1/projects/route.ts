@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import {
   getLargeScaledOngoingProjects,
   getDepartmentProjects,
-  getCompletedProjectsByYear,
+  getCompletedProjects,
   getAllProjects,
   createProject
 } from "@/app/(backend)/controllers/projectController";
@@ -17,10 +17,10 @@ export const GET = publicRoute(async (req) => {
   const year = searchParams.get("year");
 
   // Case 1: Completed by Year
-  if (status === "completed" && year) {
-    const result = await getCompletedProjectsByYear(year);
-    return NextResponse.json({ data: result });
-  }
+  if (status === "completed") {
+  const result = await getCompletedProjects(year || undefined);
+  return NextResponse.json({ data: result });
+}
 
   // Case 2: Large Scaled & Ongoing
   if (type === "large-scaled" && status === "ongoing") {
