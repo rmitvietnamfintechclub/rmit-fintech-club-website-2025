@@ -20,10 +20,10 @@ export const siteConfig = {
     {
       label: "Projects",
       href: "/projects",
+    },
+    {
+      label: "Events",
+      href: "/events",
     }
-    // {
-    //   label: "Events",
-    //   href: "/events",
-    // }
   ]
 };

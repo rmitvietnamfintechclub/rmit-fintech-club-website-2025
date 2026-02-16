@@ -7,5 +7,8 @@ export const STORAGE_PATHS = {
   PODCASTS_THUMBNAIL: "media/podcast/graphics",
   PODCASTS_GUEST: "media/podcast/GS",
   REELS_THUMBNAIL: "media/fintech101",
-  PROJECTS_IMAGE: "projects/project_graphics"
+  PROJECTS_IMAGE: "projects/project_graphics",
+  EVENTS_POSTER: "events/posters",
+  EVENTS_GUESTS: "events/guests",
+  EVENTS_PARTNERS: "events/partners",
 };

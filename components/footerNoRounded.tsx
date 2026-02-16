@@ -198,11 +198,11 @@ const FooterNoRounded: React.FC = () => {
                 Projects
               </Link>
             </li>
-            {/* <li>
+            <li>
               <Link href="/events" className="hover:text-[#DBB968]">
                 Events
               </Link>
-            </li> */}
+            </li>
             <li>
               <Link href="/join-us" className="hover:text-[#DBB968]">
                 Join Us

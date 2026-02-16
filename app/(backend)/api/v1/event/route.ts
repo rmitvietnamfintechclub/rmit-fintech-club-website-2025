@@ -1,31 +1,42 @@
 import { NextResponse } from "next/server";
-import { getEvents, addEvent } from "@/app/(backend)/controllers/event";
+import { 
+  getAllEvents, 
+  getUpcomingEvents, 
+  createEvent 
+} from "@/app/(backend)/controllers/eventController";
 import { publicRoute, adminRoute } from "@/app/(backend)/libs/api-handler";
 
 // --- GET: PUBLIC ---
 export const GET = publicRoute(async (req) => {
-    const { searchParams } = new URL(req.url);
-    
-    // Parse params
-    const limitParam = searchParams.get('limit');
-    const offsetParam = searchParams.get('offset');
-    
-    const limit = Math.min(Math.max(parseInt(limitParam || '10', 10), 1), 100);
-    const offset = Math.max(parseInt(offsetParam || '0', 10), 0);
+  const { searchParams } = new URL(req.url);
+  
+  const type = searchParams.get("type");
+  const page = parseInt(searchParams.get("page") || "1");
+  const limit = parseInt(searchParams.get("limit") || "10");
+  
+  const status = searchParams.get("status") || undefined;
+  const mode = searchParams.get("mode") || undefined;
 
-    // Gọi Service
-    const result = await getEvents(limit, offset);
+  // Case 1: Public Homepage
+  if (type === "upcoming") {
+    const result = await getUpcomingEvents(limit || 6); 
+    return NextResponse.json({ data: result });
+  }
 
-    return NextResponse.json({
-        status: 200,
-        ...result
-    });
+  // Case 2: Admin Dashboard / List
+  // 2. Truyền status và mode vào hàm getAllEvents
+  const result = await getAllEvents(page, limit, status, mode);
+  
+  return NextResponse.json({ data: result });
 });
 
 // --- POST: ADMIN ONLY ---
 export const POST = adminRoute(async (req) => {
-    const data = await req.json();
-    const result = await addEvent(data);
-    
-    return NextResponse.json(result, { status: 201 });
+  const data = await req.json();
+  const event = await createEvent(data);
+  
+  return NextResponse.json(
+    { message: "Event created successfully", data: event }, 
+    { status: 201 }
+  );
 });

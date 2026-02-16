@@ -1,18 +1,20 @@
 import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import { UploadCloud, X, Image as ImageIcon } from "lucide-react";
+import { UploadCloud, X } from "lucide-react";
 import toast from "react-hot-toast";
 
 interface ImageUploadProps {
   value: string | File | null;
-  onChange: (file: File | string | null) => void;
+  onChange: (file: File | null) => void; // Fix type: chỉ nhận File hoặc null
   className?: string;
+  overlayText?: string; // Add prop này
 }
 
 export const ImageUpload = ({ 
   value, 
   onChange, 
-  className = "h-56 w-full" 
+  className = "h-56 w-full",
+  overlayText
 }: ImageUploadProps) => {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -28,7 +30,6 @@ export const ImageUpload = ({
     } else if (value instanceof File) {
       const objectUrl = URL.createObjectURL(value);
       setPreviewUrl(objectUrl);
-      
       return () => URL.revokeObjectURL(objectUrl);
     }
   }, [value]);
@@ -42,15 +43,14 @@ export const ImageUpload = ({
       return;
     }
 
-    onChange(file);
-    
+    onChange(file); // Pass File
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
   const handleRemove = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    onChange(null);
+    onChange(null); // Pass null
   };
 
   return (
@@ -72,12 +72,8 @@ export const ImageUpload = ({
               fill
               className="object-contain" 
             />
-            
             {/* Remove Overlay */}
             <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2 backdrop-blur-[2px]">
-              <span className="text-white text-xs font-bold bg-black/50 px-3 py-1 rounded-full">
-                Click to Change
-              </span>
               <button
                 onClick={handleRemove}
                 className="bg-white text-ft-danger p-2 rounded-full hover:bg-red-50 transition shadow-lg transform hover:scale-110"
@@ -88,18 +84,24 @@ export const ImageUpload = ({
             </div>
           </div>
         ) : (
-          <div className="flex flex-col items-center gap-3 text-gray-400 p-4 text-center">
-            <div className="p-3 bg-white rounded-full shadow-sm ring-1 ring-gray-100 group-hover:scale-110 transition-transform duration-300">
-              <UploadCloud size={24} className="text-ft-primary-blue" />
-            </div>
-            <div>
-              <span className="text-sm font-bold text-gray-600 group-hover:text-ft-primary-blue transition-colors">
-                Click to upload
-              </span>
-              <p className="text-[10px] text-gray-400 mt-1 uppercase tracking-wide font-medium">
-                JPG, PNG, WEBP (Max 5MB)
-              </p>
-            </div>
+          <div className="flex flex-col items-center gap-2 text-gray-400 p-4 text-center">
+            {overlayText ? (
+                 <span className="text-2xl font-light text-gray-300">{overlayText}</span>
+            ) : (
+                <>
+                    <div className="p-3 bg-white rounded-full shadow-sm ring-1 ring-gray-100 group-hover:scale-110 transition-transform duration-300">
+                    <UploadCloud size={24} className="text-ft-primary-blue" />
+                    </div>
+                    <div>
+                    <span className="text-sm font-bold text-gray-600 group-hover:text-ft-primary-blue transition-colors">
+                        Click to upload
+                    </span>
+                    <p className="text-[10px] text-gray-400 mt-1 uppercase tracking-wide font-medium">
+                        JPG, PNG (Max 5MB)
+                    </p>
+                    </div>
+                </>
+            )}
           </div>
         )}
 

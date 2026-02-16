@@ -3,23 +3,24 @@
 import { useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleRight, faAngleLeft } from "@fortawesome/free-solid-svg-icons";
+import { SearchX } from "lucide-react";
+import { Spinner } from "@heroui/react";
 import styles from "@/styles/upcoming.module.css";
 import clsx from "clsx";
 import axios from "axios";
 import Link from "next/link";
 
+// Define the interface for this specific UI Component
 interface EventItem {
   _id: string;
   name: string;
   posterUrl: string;
+  description: string;
   date: string;
-  time: string;
-  mode: "Hybrid" | "Offline" | "Online";
-  location: string;
 }
 
 // ==================================
-// Helper Functions (Giữ nguyên)
+// Helper Functions
 // ==================================
 const addOrdinalSuffix = (day: number): string => {
   if (day > 10 && day < 14) return `${day}th`;
@@ -39,112 +40,99 @@ const addOrdinalSuffix = (day: number): string => {
 const formatEventDate = (isoString: string): { day: string; month: string } => {
   const dateObj = new Date(isoString);
   const day = addOrdinalSuffix(dateObj.getDate());
-  const month = dateObj.toLocaleString("en-US", { month: "short" });
+  const month = dateObj.toLocaleString("en-US", { month: "long" });
   return { day, month };
 };
 
-// ==================================
-// Component con (Responsive)
-// ==================================
-
-// Component khi không có sự kiện
 const NoEventsDisplay = () => (
-  <div className="relative w-[90vw] md:w-[85vw] h-fit p-[4px] my-4 rounded-lg bg-gradient-to-b from-[#DCB968] to-[#F7D27F]">
-    <div className="flex flex-col items-center justify-center w-full h-full bg-[#F9FAFB] rounded-[7px] text-center px-4 py-12">
-      {/* Icon placeholder */}
-      <h3 className="text-xl md:text-2xl font-bold text-[#2C305F] mb-2">
-        No Upcoming Events
-      </h3>
-      <p className="text-[#5E5E92] text-sm md:text-base">
-        We're busy planning more exciting events for you. Please check back
-        later!
-      </p>
+  <div className="w-full px-20 flex justify-center">
+    <div className="w-full mt-8 p-10 md:p-16 flex flex-col items-center justify-center text-center bg-white/60 backdrop-blur-md rounded-[2.5rem] border-2 border-dashed border-gray-300/80 shadow-sm transition-all">
+      <div className="bg-gray-100 p-6 rounded-full mb-6 shadow-inner">
+        <SearchX size={48} className="text-gray-400" />
+      </div>
+      <div className="space-y-3 max-w-md mx-auto">
+        <h3 className="text-2xl md:text-3xl font-bold text-[#2C305F]">
+          No Upcoming Events
+        </h3>
+        <p className="text-base md:text-lg text-gray-500 leading-relaxed">
+          We're busy planning more exciting events for you. Please check back
+          later!
+        </p>
+      </div>
     </div>
   </div>
 );
 
-// Component Card cho Mobile
+// ==================================
+// UPDATED MOBILE CARD (Matches Desktop Style)
+// ==================================
 const MobileEventCard = ({ event }: { event: EventItem }) => {
   const { day, month } = formatEventDate(event.date);
+
   return (
-    // ✨ Wrapper để hỗ trợ snap: w-[85vw] để lộ 1 chút card sau (UX better)
-    <div className="min-w-[90vw] sm:min-w-[60vw] snap-center px-2 py-4 flex justify-center">
-      <div className="w-full rounded-lg p-[4px] bg-gradient-to-b from-[#DCB968] to-[#F7D27F]">
-        <div className="w-full h-full p-4 bg-[#2C305F] rounded-[7px] flex flex-col gap-4">
+    <div className="min-w-[85vw] sm:min-w-[60vw] snap-center px-2 py-4 flex justify-center">
+      {/* Container: Matches Desktop #5E5E92 bg and border */}
+      <div className="w-full rounded-[2rem] p-[4px] border-[#2C305F] border-2 bg-[#5E5E92]">
+        <div className="w-full h-full p-4 flex flex-col gap-4">
+          {/* Title */}
           <p className="text-xl leading-7 text-[#F7D27F] uppercase text-center font-bold truncate">
             {event.name}
           </p>
 
-          {/* Poster */}
+          {/* Poster Wrapper */}
           <div
-            className="relative w-full h-48 rounded-lg p-2"
+            className="relative w-full h-48 rounded-2xl p-1.5"
             style={{
               background: "linear-gradient(to bottom, #C9D6EA, #DBB968)",
             }}
           >
             <div
-              className="w-full h-full rounded-md bg-center bg-cover bg-no-repeat"
+              className="w-full h-full rounded-xl bg-center bg-cover bg-no-repeat"
               style={{ backgroundImage: `url(${event.posterUrl})` }}
             />
           </div>
 
-          {/* Info */}
-          <div className="w-full flex flex-col sm:flex-row gap-2">
+          {/* Info Section: Date + Description (Matches Desktop Layout) */}
+          <div className="w-full h-24 flex justify-between gap-3">
+            {/* Date Block */}
             <div
-              className="h-24 sm:h-full sm:aspect-square rounded-lg p-2"
+              className="h-full aspect-square rounded-2xl p-1.5 shrink-0"
               style={{
                 background: "linear-gradient(to bottom, #C9D6EA, #DBB968)",
               }}
             >
-              <div className="bg-[#FFFDF0] w-full h-full rounded-lg flex flex-col justify-center items-center text-[#2C305F]">
-                <p className="text-sm font-medium text-center">{event.time}</p>
-                <p className="text-sm font-medium text-center">
-                  {day} {month}
+              <div className="bg-[#FFFDF0] w-full h-full rounded-xl flex flex-col justify-center items-center text-[#2C305F]">
+                <p className="text-sm font-bold text-center leading-tight">
+                  {day} <br /> {month}
                 </p>
               </div>
             </div>
-            <div className="flex-grow flex flex-row sm:flex-col gap-2">
-              <div
-                className="h-full w-1/2 sm:w-full rounded-lg p-2 flex justify-center items-center"
-                style={{
-                  background: "linear-gradient(to bottom, #C9D6EA, #DBB968)",
-                }}
-              >
-                <div className="bg-white w-full h-full rounded-md flex flex-col sm:flex-row justify-around items-center px-2 py-1">
-                  <p className="text-xs font-bold text-[#2C305F] uppercase">
-                    Loc
-                  </p>
-                  <p className="text-xs font-medium text-center text-[#2C305F] truncate max-w-[80px]">
-                    {event.location}
-                  </p>
-                </div>
-              </div>
-              <div
-                className="h-full w-1/2 sm:w-full aspect-square sm:aspect-auto rounded-lg p-2"
-                style={{
-                  background: "linear-gradient(to bottom, #C9D6EA, #DBB968)",
-                }}
-              >
-                <div className="bg-[#FFFDF0] w-full h-full rounded-lg flex flex-col justify-center items-center px-2 py-1 text-[#2C305F]">
-                  <p className="text-xs font-bold uppercase">Format</p>
-                  <p className="text-xs font-medium text-center">
-                    {event.mode}
-                  </p>
-                </div>
+
+            {/* Description Block */}
+            <div
+              className="h-full w-full rounded-2xl p-1.5"
+              style={{
+                background: "linear-gradient(to bottom, #C9D6EA, #DBB968)",
+              }}
+            >
+              <div className="bg-white w-full h-full rounded-xl flex items-center p-3">
+                <p className="text-xs font-medium text-[#2C305F] line-clamp-4 leading-relaxed">
+                  {event.description}
+                </p>
               </div>
             </div>
           </div>
 
-          {/* Button */}
+          {/* Button: Matches Desktop Color (#A28436) */}
           <Link
             href={`/events/${event._id}`}
-            className="h-fit w-full rounded-full py-1 px-1 cursor-pointer"
+            className="h-fit w-full rounded-full p-1 cursor-pointer mt-auto"
             style={{
               background: "linear-gradient(to bottom, #C9D6EA, #DBB968)",
             }}
           >
-            <div className="bg-[#FFFDF0] w-full h-full rounded-full py-2 px-4 flex justify-center items-center transition-transform hover:scale-105">
-              <p className="text-base font-semibold text-center text-[#2C305F]">
+            <div className="bg-[#A28436] w-full h-full rounded-full py-2 px-4 flex justify-center items-center transition-transform active:scale-95">
+              <p className="text-base font-semibold text-center text-[#F2FAFB]">
                 Explore More
               </p>
             </div>
@@ -156,7 +144,7 @@ const MobileEventCard = ({ event }: { event: EventItem }) => {
 };
 
 // ==================================
-// COMPONENT CHÍNH
+// MAIN COMPONENT
 // ==================================
 export default function UpcomingEvent() {
   const [items, setItems] = useState<EventItem[]>([]);
@@ -166,27 +154,47 @@ export default function UpcomingEvent() {
   const [animating, setAnimating] = useState(false);
   const cardRef = useRef<(HTMLDivElement | null)[]>([]);
 
-  // State cho Mobile Dots
+  // State for Mobile Dots
   const [mobileActiveIndex, setMobileActiveIndex] = useState(0);
   const mobileScrollRef = useRef<HTMLDivElement>(null);
 
-  // --- Logic Fetch (Giữ nguyên) ---
+  // --- UPDATED FETCH LOGIC ---
   useEffect(() => {
     const fetchEvents = async () => {
       setLoading(true);
       setError("");
       try {
-        const response = await axios.get("/api/v1/event");
-        const fetchedEvents = response.data.events || [];
+        const response = await axios.get("/api/v1/event", {
+          params: {
+            type: "upcoming",
+            limit: 10,
+          },
+        });
 
-        if (response.data.status === 200 && fetchedEvents.length > 0) {
-          setItems(fetchedEvents);
-          setOriginalItems(fetchedEvents);
+        const fetchedEvents = response.data.data?.events || [];
+
+        const mappedEvents: EventItem[] = fetchedEvents.map((ev: any) => ({
+          _id: ev._id,
+          name: ev.name,
+          posterUrl: ev.posterUrl,
+          date: ev.date,
+          description: ev.description,
+        }));
+
+        if (mappedEvents.length > 0) {
+          setItems(mappedEvents);
+          setOriginalItems(mappedEvents);
         } else {
           setItems([]);
           setOriginalItems([]);
         }
       } catch (err: any) {
+        if (axios.isAxiosError(err) && err.response?.status === 404) {
+          setItems([]);
+          setOriginalItems([]);
+          return;
+        }
+
         console.error("Error fetching upcoming events: ", err);
         setError("Failed to load upcoming events.");
         setItems([]);
@@ -219,15 +227,15 @@ export default function UpcomingEvent() {
       cardRef.current.forEach((el, i) => {
         el?.classList.remove(styles[`card_${i + 1}_${dir}`]);
       });
-    }, 3000);
+    }, 1400);
   };
 
-  // --- Logic Scroll cho Mobile Dots (MỚI) ---
+  // --- Logic Scroll for Mobile Dots ---
   const handleMobileScroll = () => {
     if (mobileScrollRef.current) {
       const scrollLeft = mobileScrollRef.current.scrollLeft;
       const width = mobileScrollRef.current.offsetWidth;
-      // Tính toán index dựa trên vị trí cuộn
+      // Calculate index based on scroll position
       const index = Math.round(scrollLeft / width);
       setMobileActiveIndex(index);
     }
@@ -236,9 +244,18 @@ export default function UpcomingEvent() {
   const renderContent = () => {
     if (loading) {
       return (
-        <div className="p-8 text-center flex flex-col items-center justify-center h-64">
-          <div className="w-12 h-12 border-[5px] border-[#F0EDFF] border-t-[#DCB968] rounded-full animate-spin"></div>{" "}
-          <p className="mt-4 text-lg text-[#5E5E92]">Loading Upcoming Events</p>
+        <div className="flex flex-col items-center justify-center w-full py-20">
+          <Spinner
+            size="lg"
+            classNames={{
+              wrapper: "w-16 h-16",
+              circle1: "border-b-ft-primary-yellow border-[4px]",
+              circle2: "border-b-ft-primary-yellow border-[4px]",
+            }}
+          />
+          <p className="mt-6 text-lg font-semibold text-ft-primary-blue animate-pulse tracking-wide">
+            Loading Upcoming Events...
+          </p>
         </div>
       );
     }
@@ -262,17 +279,17 @@ export default function UpcomingEvent() {
     // Desktop Vars
     const visible = Array.from(
       { length: 5 },
-      (_, i) => items[i % items.length]
+      (_, i) => items[i % items.length],
     );
     const activeItem = items[2];
     const activeIndex = originalItems.findIndex(
-      (item) => item._id === activeItem?._id
+      (item) => item._id === activeItem?._id,
     );
 
     return (
       <>
         {/* =======================
-            MOBILE CAROUSEL (MỚI: CSS SCROLL SNAP)
+            MOBILE CAROUSEL (CSS SCROLL SNAP)
             ======================= */}
         <div className="w-full md:hidden flex flex-col items-center">
           {/* Container Scroll Snap */}
@@ -287,13 +304,13 @@ export default function UpcomingEvent() {
             ))}
           </div>
 
-          {/* Dots Indicator cho Mobile */}
+          {/* Dots Indicator for Mobile */}
           <div className="flex gap-2 mt-2">
             {originalItems.map((_, i) => (
               <div
                 key={i}
                 className={`h-2 w-2 rounded-full transition-all duration-300 ${
-                  i === mobileActiveIndex ? "bg-[#DCB968] w-4" : "bg-gray-300"
+                  i === mobileActiveIndex ? "bg-[#DCB968] w-4" : "bg-[#D9D9D9]"
                 }`}
               />
             ))}
@@ -301,10 +318,10 @@ export default function UpcomingEvent() {
         </div>
 
         {/* =======================
-            DESKTOP CAROUSEL (Giữ nguyên)
+            DESKTOP CAROUSEL
             ======================= */}
         <div className="hidden md:block w-full">
-          <div className="h-[85vh] w-full relative mt-4">
+          <div className="h-[90vh] w-full relative mt-8 mb-4">
             {visible.map((ev, index) => {
               if (!ev)
                 return (
@@ -324,14 +341,14 @@ export default function UpcomingEvent() {
                   className={clsx(
                     styles.card,
                     styles[`card_${index + 1}`],
-                    "grid place-items-center h-[77vh] w-[27vw] border-[#2C305F] border-[0.5vh] rounded-[2vw] p-[2vh] bg-[#2C305F]"
+                    "grid place-items-center h-[83vh] w-[30vw] border-[#2C305F] border-[0.5vh] rounded-[2vw] p-[2vh] bg-[#5E5E92]",
                   )}
                   onClick={() => {
                     if (index === 1) handleClick("prev");
                     else if (index === 3) handleClick("next");
                   }}
                 >
-                  <p className="text-[1.5rem] leading-7 text-[#F7D27F] uppercase text-center font-bold truncate w-full">
+                  <p className="text-[1.25rem] leading-7 text-[#F7D27F] uppercase text-center font-bold truncate w-full">
                     {ev.name}
                   </p>
 
@@ -348,7 +365,7 @@ export default function UpcomingEvent() {
                     />
                   </div>
 
-                  <div className="w-full h-[15vh] flex justify-between">
+                  <div className="w-full h-[20vh] flex justify-between">
                     <div
                       className="h-full aspect-square rounded-[3vh] p-[1.5vh]"
                       style={{
@@ -357,11 +374,8 @@ export default function UpcomingEvent() {
                       }}
                     >
                       <div className="bg-[#FFFDF0] w-full h-full rounded-[3vh] flex flex-col justify-center items-center text-[#2C305F]">
-                        <p className="text-[0.85rem] leading-[4vh] font-medium text-center">
-                          {ev.time}
-                        </p>
-                        <p className="text-[0.85rem] leading-[4vh] font-medium text-center">
-                          {day} {month}
+                        <p className="text-[1rem] font-bold text-center leading-tight">
+                          {day} <br /> {month}
                         </p>
                       </div>
                     </div>
@@ -372,28 +386,9 @@ export default function UpcomingEvent() {
                           "linear-gradient(to bottom, #C9D6EA, #DBB968)",
                       }}
                     >
-                      <div className="bg-white w-full h-full rounded-[2.5vh] flex flex-wrap justify-around items-center">
-                        <p className="text-[0.9rem] leading-[4vh] font-bold text-[#2C305F] uppercase">
-                          Loc
-                        </p>
-                        <p className="text-[0.85rem] leading-[4vh] font-medium text-center text-[#2C305F] truncate max-w-[80px]">
-                          {ev.location}
-                        </p>
-                      </div>
-                    </div>
-                    <div
-                      className="h-full aspect-square rounded-[3vh] p-[1.5vh] ml-[1vw]"
-                      style={{
-                        background:
-                          "linear-gradient(to bottom, #C9D6EA, #DBB968)",
-                      }}
-                    >
-                      <div className="bg-[#FFFDF0] w-full h-full rounded-[3vh] flex flex-col justify-center items-center text-[#2C305F]">
-                        <p className="text-[0.9rem] leading-[4vh] font-bold uppercase">
-                          Fmt
-                        </p>
-                        <p className="text-[0.85rem] leading-[4vh] font-medium text-center">
-                          {ev.mode}
+                      <div className="bg-white w-full h-full rounded-[2.5vh] flex items-center p-2">
+                        <p className="text-[0.85rem] leading-[4vh] font-medium line-clamp-4">
+                          {ev.description}
                         </p>
                       </div>
                     </div>
@@ -407,8 +402,8 @@ export default function UpcomingEvent() {
                         "linear-gradient(to bottom, #C9D6EA, #DBB968)",
                     }}
                   >
-                    <div className="bg-[#FFFDF0] w-full h-full rounded-[3vh] py-[1vh] px-[1vw] flex justify-center items-center transition-transform hover:scale-105">
-                      <p className="text-[1rem] leading-[3.3vh] font-semibold text-center text-[#2C305F]">
+                    <div className="bg-[#A28436] w-full h-full rounded-[3vh] py-[1vh] px-[1vw] flex justify-center items-center transition-transform hover:scale-105">
+                      <p className="text-[1rem] leading-[3.3vh] font-semibold text-center text-[#F2FAFB]">
                         Explore More
                       </p>
                     </div>
@@ -418,7 +413,7 @@ export default function UpcomingEvent() {
             })}
           </div>
 
-          {/* Nút điều khiển Desktop */}
+          {/* Desktop Controls */}
           <div className="w-full flex justify-center items-center gap-[1.5vw] mt-[-4vh] z-[10]">
             <button
               className="h-[5vh] w-[5vh] text-[3vh] leading-[4vh] rounded-full border border-[#ddd] grid place-items-center hover:bg-[#f7f7f7] disabled:opacity-50"
@@ -452,7 +447,7 @@ export default function UpcomingEvent() {
 
   return (
     <div className="h-fit w-[100vw] pt-6 md:pt-12 pb-8 relative flex flex-col items-center overflow-x-hidden">
-      {/* Header (Giữ nguyên) */}
+      {/* Header (Preserved) */}
       <div className="h-fit w-fit relative mx-auto mt-[2vh] mb-[2vh] md:mb-[4vh]">
         <p className="text-3xl md:text-[4vw] text-[#2C305F] drop-shadow-[0_4px_4px_rgba(255,204,102,0.6)] font-bold text-center">
           Upcoming Events

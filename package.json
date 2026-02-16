@@ -11,7 +11,7 @@
     "check": "biome check ./",
     "jest": "jest --coverage --passWithNoTests ./__test__",
     "bunTest": "bun test --coverage --bail",
-    "seed:projects": "npx tsx \"app/(backend)/scripts/seedProject.ts\""
+    "seed:events": "npx tsx \"scripts/seed-events.ts\""
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.856.0",

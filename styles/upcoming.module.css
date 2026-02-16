@@ -1,19 +1,19 @@
 @keyframes card_1_prev {
     from {
         opacity: 0;
-        left: 15vw;
+        left: 9vw;
         transform: perspective(100vw) translateZ(0) rotateY(90deg) translateX(5vw);
     }
     to {
         opacity: 1;
-        left: 15vw;
+        left: 9vw;
         transform: perspective(100vw) translateZ(0) rotateY(30deg) translateX(5vw);
     }
 }
 
 @keyframes card_2_prev {
     from {
-        left: 15vw;
+        left: 9vw;
         transform: perspective(100vw) translateZ(0) rotateY(30deg) translateX(5vw);
         filter: brightness(0.7);
         z-index: 1;
@@ -57,12 +57,12 @@
 @keyframes card_2_next {
     from {
         opacity: 1;
-        left: 15vw;
+        left: 9vw;
         transform: perspective(100vw) translateZ(0) rotateY(30deg) translateX(5vw);
     }
     to {
         opacity: 0;
-        left: 15vw;
+        left: 9vw;
         transform: perspective(100vw) translateZ(0) rotateY(90deg) translateX(5vw);
     }
 }
@@ -75,7 +75,7 @@
         z-index: 20;
     }
     to {
-        left: 15vw;
+        left: 9vw;
         transform: perspective(100vw) translateZ(0) rotateY(30deg) translateX(5vw);
         filter: brightness(0.7);
         z-index: 1;
@@ -115,7 +115,7 @@
   position: absolute;
   top: 0;
   opacity: 1;
-  animation-duration: 3s;
+  animation-duration: 1.5s;
   animation-timing-function: ease;
   animation-fill-mode: both;
 }
@@ -133,12 +133,12 @@
 
 .card_1 {
     opacity: 0;
-    left: 15vw;
+    left: 9vw;
     transform: perspective(100vw) translateZ(0) rotateY(90deg) translateX(5vw);
 }
 
 .card_2 {
-    left: 15vw;
+    left: 9vw;
     transform: perspective(100vw) translateZ(0) rotateY(30deg) translateX(5vw);
 }
 
