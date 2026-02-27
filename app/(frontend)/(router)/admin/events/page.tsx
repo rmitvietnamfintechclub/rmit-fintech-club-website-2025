@@ -10,6 +10,7 @@ import {
   Calendar,
   Clock,
   Archive,
+  X,
   Ban,
 } from "lucide-react";
 import toast, { Toaster } from "react-hot-toast";
@@ -125,43 +126,68 @@ export default function AdminEventsPage() {
 
   const eventToDelete = events.find((e) => e._id === deleteId);
 
-  // Render Empty State dựa trên Tab đang chọn
-  const renderEmptyState = () => (
-    <div className="flex flex-col items-center justify-center py-24 bg-white rounded-2xl border-2 border-dashed border-gray-200">
-      <div className="bg-gray-50 p-4 rounded-full mb-4">
-        {activeTab === "open" ? (
-          <Clock size={40} className="text-gray-400" />
-        ) : activeTab === "closed" ? (
-          <Archive size={40} className="text-gray-400" />
-        ) : activeTab === "no_reg" ? (
-          <Ban size={40} className="text-gray-400" />
-        ) : (
-          <Calendar size={40} className="text-gray-400" />
+  const renderEmptyState = () => {
+    const modeText = filterMode ? `${filterMode} ` : "";
+
+    let title = "No Events Found";
+    let description = "Create your first event to get started.";
+    let Icon = Calendar;
+
+    if (activeTab === "open") {
+      title = `No Open ${modeText}Events`;
+      description = `There are no ${modeText.toLowerCase()}events with open registration currently.`;
+      Icon = Clock;
+    } else if (activeTab === "closed") {
+      title = `No Closed ${modeText}Events`;
+      description = `No past registration ${modeText.toLowerCase()}events found.`;
+      Icon = Archive;
+    } else if (activeTab === "no_reg") {
+      title = `No Registration-Free ${modeText}Events`;
+      description = `All ${modeText.toLowerCase()}events have registration links configured.`;
+      Icon = Ban;
+    } else if (filterMode) {
+      title = `No ${filterMode} Events`;
+      description = `There are no ${filterMode.toLowerCase()} events created yet.`;
+    }
+
+    return (
+      <div className="flex flex-col items-center justify-center py-24 bg-white rounded-2xl border-2 border-dashed border-gray-200 animate-in fade-in zoom-in duration-300">
+        <div className="bg-gray-50 p-4 rounded-full mb-4">
+          <Icon size={40} className="text-gray-400" />
+        </div>
+        <h3 className="text-lg font-bold text-gray-900">{title}</h3>
+        <p className="text-gray-500 text-sm mb-6 text-center leading-relaxed">
+          {description}
+        </p>
+
+        {activeTab === "all" && !filterMode && (
+          <button
+            onClick={() => {
+              setEditingEvent(null);
+              setIsModalOpen(true);
+            }}
+            className="text-ft-primary-blue font-bold hover:underline text-sm flex items-center gap-1"
+          >
+            <Plus size={14} /> Create new event
+          </button>
+        )}
+
+        {(filterMode || activeTab !== "all") && (
+          <button
+            onClick={() => {
+              setFilterMode("");
+              setActiveTab("all");
+              setPage(1);
+            }}
+            className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-[#6B7280] bg-[#F3F4F6] hover:bg-[#E5E7EB] hover:text-[#374151] rounded-lg transition-all"
+          >
+            <X size={14} />
+            Clear All Filters
+          </button>
         )}
       </div>
-      <h3 className="text-lg font-bold text-gray-900">No Events Found</h3>
-      <p className="text-gray-500 text-sm mb-6 max-w-xs text-center">
-        {activeTab === "open"
-          ? "There are no events with open registration currently."
-          : activeTab === "closed"
-            ? "No past registration events found."
-            : activeTab === "no_reg"
-              ? "All events have registration links configured."
-              : "Create your first event to get started."}
-      </p>
-      {activeTab === "all" && (
-        <button
-          onClick={() => {
-            setEditingEvent(null);
-            setIsModalOpen(true);
-          }}
-          className="text-ft-primary-blue font-bold hover:underline text-sm"
-        >
-          + Create new event
-        </button>
-      )}
-    </div>
-  );
+    );
+  };
 
   return (
     <div className="min-h-screen bg-ft-background p-6 md:p-10">
@@ -185,9 +211,7 @@ export default function AdminEventsPage() {
           <h1 className="text-3xl font-extrabold text-ft-primary-blue flex items-center gap-2">
             Events
           </h1>
-          <p className="text-gray-500 mt-1">
-            Manage our club events.
-          </p>
+          <p className="text-gray-500 mt-1">Manage our club events.</p>
         </div>
         <button
           onClick={() => {

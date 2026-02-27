@@ -360,7 +360,7 @@ export default function UpcomingEvent() {
                     }}
                   >
                     <div
-                      className="w-full h-full rounded-[2.5vh] bg-center bg-cover bg-no-repeat"
+                      className="w-full h-full rounded-[2.5vh] bg-center bg-no-repeat bg-[length:100%_100%]"
                       style={{ backgroundImage: `url(${ev.posterUrl})` }}
                     />
                   </div>

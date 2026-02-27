@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import {
   X,
+  Linkedin,
   Calendar,
   MapPin,
   Link as LinkIcon,
@@ -77,6 +78,7 @@ export const EventModal = ({
 
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
+  const [filesToDelete, setFilesToDelete] = useState<string[]>([]);
 
   // Speaker Temp State
   const [tempSpeaker, setTempSpeaker] = useState<{
@@ -102,6 +104,7 @@ export const EventModal = ({
     if (isOpen) {
       setUploadProgress(0);
       setIsUploading(false);
+      setFilesToDelete([]);
       setTempSpeaker({
         name: "",
         bio: "",
@@ -192,7 +195,15 @@ export const EventModal = ({
 
   const handleRemoveSpeaker = (idx: number) => {
     const newArr = [...speakers];
-    newArr.splice(idx, 1);
+    const removedSpeaker = newArr.splice(idx, 1)[0];
+
+    if (
+      removedSpeaker.avatar_url &&
+      !removedSpeaker.avatar_url.startsWith("blob:")
+    ) {
+      setFilesToDelete((prev) => [...prev, removedSpeaker.avatar_url]);
+    }
+
     setValue("guest_speaker", newArr);
   };
 
@@ -202,8 +213,27 @@ export const EventModal = ({
 
   const handleRemovePartner = (idx: number) => {
     const newArr = [...partners];
-    newArr.splice(idx, 1);
+    const removedPartner = newArr.splice(idx, 1)[0];
+
+    if (
+      typeof removedPartner === "string" &&
+      !removedPartner.startsWith("blob:")
+    ) {
+      setFilesToDelete((prev) => [...prev, removedPartner]);
+    }
+
     setValue("partners", newArr);
+  };
+
+  const slugify = (text: string) => {
+    return text
+      .toString()
+      .toLowerCase()
+      .trim()
+      .replace(/\s+/g, "-") // Thay khoảng trắng bằng -
+      .replace(/[^\w\-]+/g, "") // Xóa ký tự đặc biệt
+      .replace(/\-\-+/g, "-") // Xóa dấu - trùng lặp
+      .substring(0, 50); // Giới hạn độ dài để tránh tên file quá dài
   };
 
   // --- SUBMIT LOGIC ---
@@ -212,6 +242,11 @@ export const EventModal = ({
       setIsUploading(true);
       setUploadProgress(0);
 
+      const eventSlug = slugify(data.name || "new-event");
+      const timestamp = Date.now();
+
+      const replacedFiles: string[] = [];
+
       const uploads: {
         file: File;
         path: string;
@@ -219,43 +254,67 @@ export const EventModal = ({
         index?: number;
       }[] = [];
 
-      if (data.posterUrl instanceof File)
+      // 1. POSTER
+      if (data.posterUrl instanceof File) {
         uploads.push({
           file: data.posterUrl,
           path: STORAGE_PATHS.EVENTS_POSTER,
           type: "poster",
         });
+        if (initialData?.posterUrl) replacedFiles.push(initialData.posterUrl);
+      }
 
+      // 2. SPEAKERS
       data.guest_speaker.forEach((sp: any, idx: number) => {
-        if (sp.avatarFile instanceof File)
+        if (sp.avatarFile instanceof File) {
           uploads.push({
             file: sp.avatarFile,
             path: STORAGE_PATHS.EVENTS_GUESTS,
             type: "speaker",
             index: idx,
           });
+          if (sp.avatar_url && !sp.avatar_url.startsWith("blob:")) {
+            replacedFiles.push(sp.avatar_url);
+          }
+        }
       });
 
+      // 3. PARTNERS
       data.partners.forEach((p: any, idx: number) => {
-        if (p instanceof File)
+        if (p instanceof File) {
           uploads.push({
             file: p,
             path: STORAGE_PATHS.EVENTS_PARTNERS,
             type: "partner",
             index: idx,
           });
+        }
       });
 
-      let finalPosterUrl = data.posterUrl;
+      let finalPosterUrl = data.posterUrl instanceof File ? "" : data.posterUrl;
       const finalSpeakers = [...data.guest_speaker];
       const finalPartners = [...data.partners];
 
+      // --- TIẾN HÀNH UPLOAD ---
       if (uploads.length > 0) {
         const totalSize = uploads.length;
         let completed = 0;
         await Promise.all(
           uploads.map(async (task) => {
-            const uniqueName = `${task.type}-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`;
+            const extension = task.file.name.split(".").pop();
+            let prefix = "";
+            if (task.type === "poster") {
+              prefix = `poster-${eventSlug}`;
+            } else if (task.type === "speaker" && task.index !== undefined) {
+              const speakerName = slugify(
+                data.guest_speaker[task.index].name || "speaker",
+              );
+              prefix = `speaker-${speakerName}`;
+            } else if (task.type === "partner") {
+              prefix = `partner-${eventSlug}`;
+            }
+
+            const uniqueName = `${prefix}-${timestamp}.${extension}`;
             const url = await uploadFileToS3(
               task.file,
               task.path,
@@ -269,17 +328,30 @@ export const EventModal = ({
               delete finalSpeakers[task.index].avatarFile;
               delete finalSpeakers[task.index].tempId;
             }
-            if (task.type === "partner" && task.index !== undefined)
+            if (task.type === "partner" && task.index !== undefined) {
               finalPartners[task.index] = url;
+            }
 
             completed++;
             setUploadProgress((completed / totalSize) * 100);
           }),
         );
-        if (initialData?.posterUrl && data.posterUrl instanceof File)
-          deleteFileFromS3(initialData.posterUrl).catch(console.error);
       }
 
+      // Gộp các file bị xóa thủ công (bấm Trash) và các file bị ghi đè (tải file mới lên)
+      const allFilesToDelete = Array.from(
+        new Set([...filesToDelete, ...replacedFiles]),
+      );
+
+      if (allFilesToDelete.length > 0) {
+        Promise.all(
+          allFilesToDelete.map((url) =>
+            deleteFileFromS3(url).catch(console.error),
+          ),
+        ).then(() => console.log("Cleaned up old files"));
+      }
+
+      // --- TẠO PAYLOAD VÀ SUBMIT ---
       const payload = {
         ...data,
         posterUrl: finalPosterUrl,
@@ -301,7 +373,6 @@ export const EventModal = ({
       setIsUploading(false);
     }
   };
-
   const isBusy = isUploading || isSaving;
   if (!isOpen) return null;
 
@@ -533,10 +604,11 @@ export const EventModal = ({
                     {speakers.map((sp: any, idx: number) => (
                       <div
                         key={idx}
-                        className="flex items-center gap-3 bg-white p-3 rounded-xl border border-[#E5E7EB] shadow-sm hover:shadow-md transition-shadow"
+                        className="flex items-start gap-3 bg-white p-3 rounded-xl border border-[#E5E7EB] shadow-sm hover:shadow-md transition-shadow group"
                       >
-                        <div className="w-10 h-10 rounded-full bg-[#E5E7EB] overflow-hidden shrink-0 border border-[#F3F4F6]">
-                          {(sp.avatar_url || sp.avatarFile) && (
+                        {/* Avatar Container */}
+                        <div className="w-10 h-10 rounded-full bg-[#E5E7EB] overflow-hidden shrink-0 border border-[#F3F4F6] mt-0.5 flex items-center justify-center">
+                          {sp.avatar_url || sp.avatarFile ? (
                             <img
                               src={
                                 sp.avatar_url ||
@@ -544,23 +616,48 @@ export const EventModal = ({
                                   ? URL.createObjectURL(sp.avatarFile)
                                   : "")
                               }
-                              alt=""
+                              alt={sp.name}
                               className="w-full h-full object-cover"
                             />
+                          ) : (
+                            <User size={18} className="text-[#9CA3AF]" />
                           )}
                         </div>
+
+                        {/* Info */}
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm font-bold truncate text-[#1F2937]">
-                            {sp.name}
-                          </p>
-                          <p className="text-xs text-[#6B7280] truncate">
+                          <div className="flex items-center gap-1.5 flex-wrap">
+                            <p className="text-sm font-bold truncate text-[#1F2937] max-w-[150px]">
+                              {sp.name}
+                            </p>
+
+                            {/* LinkedIn Indicator */}
+                            {sp.linkedIn_url && (
+                              <a
+                                href={sp.linkedIn_url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-[#0077B5] hover:bg-[#E1F2F9] p-1 rounded-md transition-colors flex items-center justify-center"
+                                title="Open LinkedIn Profile"
+                                onClick={(e) => e.stopPropagation()} // Ngăn chặn các sự kiện click không mong muốn từ container cha (nếu có)
+                              >
+                                {/* Dùng Linkedin icon thay vì LinkIcon chung chung */}
+                                <Linkedin size={14} strokeWidth={2} />
+                              </a>
+                            )}
+                          </div>
+
+                          <p className="text-xs text-[#6B7280] line-clamp-2 mt-0.5 leading-snug">
                             {sp.bio}
                           </p>
                         </div>
+
+                        {/* Delete Button */}
                         <button
                           type="button"
                           onClick={() => handleRemoveSpeaker(idx)}
-                          className="text-[#9CA3AF] hover:text-[#EF4444] p-2 hover:bg-[#FEF2F2] rounded-lg transition-colors"
+                          className="text-[#9CA3AF] hover:text-[#EF4444] p-1.5 hover:bg-[#FEF2F2] rounded-lg transition-colors"
+                          title="Remove Speaker"
                         >
                           <Trash2 size={16} />
                         </button>

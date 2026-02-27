@@ -69,7 +69,7 @@ export const EventTicket = ({ event }: EventTicketProps) => {
             borderBottomLeftRadius: "0px",
             borderBottomRightRadius: "0px",
             borderTopRightRadius: "0px",
-            ...sawtoothMaskLeft, // Áp dụng mask đã sửa
+            ...sawtoothMaskLeft,
           }}
         >
           {/* Poster Image */}
@@ -78,7 +78,7 @@ export const EventTicket = ({ event }: EventTicketProps) => {
               src={event.posterUrl}
               alt={event.name}
               fill
-              className="object-cover transition-transform duration-700 group-hover:scale-105"
+              className="object-fill transition-transform duration-700 group-hover:scale-105"
             />
             <div className="absolute inset-0 bg-gradient-to-r from-black/5 to-transparent pointer-events-none" />
           </div>

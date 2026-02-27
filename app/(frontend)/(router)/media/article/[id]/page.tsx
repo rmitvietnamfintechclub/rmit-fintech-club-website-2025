@@ -319,7 +319,7 @@ export default function SpecificArticle({
           </li>
           <li className="flex items-center min-w-0">
             <span
-              className="text-black font-semibold truncate max-w-[150px] md:max-w-none cursor-default"
+              className="text-black font-semibold line-clamp-1 cursor-default"
               title={article.title}
             >
               {article.title}

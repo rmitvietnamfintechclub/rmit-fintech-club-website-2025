@@ -292,9 +292,8 @@ export default function SpecificPodcast({
             <ChevronRightIcon />
           </li>
           <li className="flex items-center min-w-0">
-            {/* UX: Truncate title on small screens */}
             <span
-              className="text-black font-semibold truncate max-w-[200px] md:max-w-md cursor-default"
+              className="text-black font-semibold line-clamp-1 cursor-default"
               title={podcast.title}
             >
               {podcast.title}

@@ -51,7 +51,7 @@ const OtherEventCard = ({ event }: { event: Event }) => {
             src={event.posterUrl}
             alt={event.name}
             fill
-            className="object-cover transition-transform duration-500 group-hover:scale-110"
+            className="object-fill transition-transform duration-500 group-hover:scale-110"
           />
           {/* Date Badge */}
           <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm rounded-xl px-3 py-2 text-center shadow-lg">
@@ -217,12 +217,12 @@ export default function EventDetailPage() {
             {/* Right: Poster */}
             <div className="w-full lg:w-[40%] relative group">
               <div className="absolute inset-0 bg-[#DCB968] rounded-3xl rotate-6 opacity-30 group-hover:rotate-3 transition-transform duration-500" />
-              <div className="relative aspect-[4/3] w-full rounded-3xl overflow-hidden shadow-2xl border-4 border-white/10">
+              <div className="relative aspect-[16/10] w-full rounded-3xl overflow-hidden shadow-2xl border-4 border-white/10">
                 <Image
                   src={event.posterUrl}
                   alt={event.name}
                   fill
-                  className="object-cover"
+                  className="object-fill"
                 />
               </div>
             </div>
@@ -333,7 +333,7 @@ export default function EventDetailPage() {
                             }
                             alt={speaker.name}
                             fill
-                            className="object-cover"
+                            className="object-contain"
                           />
                         </div>
 
@@ -343,7 +343,7 @@ export default function EventDetailPage() {
                             href={speaker.linkedIn_url}
                             target="_blank"
                             rel="noreferrer"
-                            className="absolute bottom-0 right-0 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md text-[#2C305F] opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300 z-20 hover:bg-[#2C305F] hover:text-white"
+                            className="absolute bottom-0 right-0 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md text-[#2C305F] z-20 hover:bg-[#2C305F] hover:text-white"
                             title="Connect on LinkedIn"
                           >
                             <Linkedin size={20} />
