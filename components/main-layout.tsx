@@ -5,6 +5,7 @@ import Navbar from "@/components/navbar";
 import AdminNavbar from "@/components/admin-navbar"; 
 import FooterWrapper from "../app/(frontend)/footer-wrapper"; 
 import { UserPayload } from "@/app/(backend)/libs/auth";
+import { useRef } from "react";
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -14,6 +15,7 @@ interface MainLayoutProps {
 
 export default function MainLayout({ children, isLoggedIn, user }: MainLayoutProps) {
   const pathname = usePathname();
+  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
 
   const disableLayoutRoutes = ["/login"];
   const shouldHideLayout = disableLayoutRoutes.includes(pathname);
@@ -21,16 +23,19 @@ export default function MainLayout({ children, isLoggedIn, user }: MainLayoutPro
   const renderNavbar = () => {
     if (shouldHideLayout) return null;
     
-    if (isLoggedIn && user) return <AdminNavbar user={user} />;
+    if (isLoggedIn && user) return <AdminNavbar user={user} scrollContainerRef={scrollContainerRef} />;
     
-    return <Navbar />;
+    return <Navbar scrollContainerRef={scrollContainerRef} />;
   };
 
   return (
-    <div className="relative flex flex-col h-screen">
+    <div
+      ref={scrollContainerRef}
+      className="relative flex flex-col h-screen overflow-y-auto"
+    >
       {renderNavbar()}
       
-      <main className="flex-grow overflow-x-clip">
+      <main className="flex-grow overflow-x-clip pt-[8vh]">
         {children}
       </main>
       

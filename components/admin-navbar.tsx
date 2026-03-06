@@ -4,6 +4,7 @@ import React, {
   useState,
   useEffect,
   useRef,
+  type RefObject,
   type ButtonHTMLAttributes,
 } from "react";
 import Link from "next/link";
@@ -35,28 +36,33 @@ import {
 
 interface AdminNavbarProps {
   user: UserPayload;
+  scrollContainerRef?: RefObject<HTMLElement | null>;
 }
 
 const isOpenAtom = atom(false);
 
-const AdminNavbar = ({ user }: AdminNavbarProps) => {
+const AdminNavbar = ({ user, scrollContainerRef }: AdminNavbarProps) => {
   const [isOpen, setIsOpen] = useAtom(isOpenAtom);
   const [hidden, setHidden] = useState(false);
   const isOpenRef = useRef(isOpen);
+  const navRef = useRef<HTMLElement | null>(null);
 
   // Sync ref for scroll logic
   useEffect(() => {
     isOpenRef.current = isOpen;
   }, [isOpen]);
 
-  const { scrollY } = useScroll();
+  const { scrollY } = useScroll(
+    scrollContainerRef ? { container: scrollContainerRef } : undefined
+  );
   useMotionValueEvent(scrollY, "change", (latest) => {
     const previous = scrollY.getPrevious() ?? 0;
+    const hideThreshold = navRef.current?.offsetHeight ?? 0;
     if (isOpenRef.current) {
       setHidden(false);
       return;
     }
-    if (latest > previous && latest > 150) {
+    if (latest > previous && latest > hideThreshold) {
       setHidden(true);
     } else {
       setHidden(false);
@@ -98,6 +104,7 @@ const AdminNavbar = ({ user }: AdminNavbarProps) => {
 
   return (
     <motion.nav
+      ref={navRef}
       variants={{ visible: { y: 0 }, hidden: { y: "-100%" } }}
       animate={hidden ? "hidden" : "visible"}
       transition={{ duration: 0.3, ease: "easeInOut" }}

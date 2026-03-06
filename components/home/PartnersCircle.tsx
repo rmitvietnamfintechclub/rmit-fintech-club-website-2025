@@ -25,6 +25,8 @@ export default function PartnersCircle({
   animating,
   isMobile,
 }: PartnersCircleProps) {
+  const desktopItems = items.length > 0 ? [...items, items[0]] : items;
+
   // --- MOBILE RENDER ---
   if (isMobile) {
     return (
@@ -65,9 +67,9 @@ export default function PartnersCircle({
   // --- DESKTOP RENDER ---
   return (
     <div className="absolute h-[80vh] w-[40vw] border-[0.2vw] border-[#000] rounded-[50%] top-[50%] translate-y-[-52%] left-[-20vw] max-md:hidden">
-      {items.map((item, index) => (
+      {desktopItems.map((item, index) => (
         <div
-          key={item.id}
+          key={`${item.id}-${index}`}
           ref={(el: HTMLDivElement | null) => {
             if (circleRef.current) {
               circleRef.current[index] = el;

@@ -63,7 +63,7 @@ export default function EventsPage() {
       <Toaster position="top-center" />
 
       {/* --- MAIN CONTENT --- */}
-      <div className="container px-20 py-16 relative z-10">
+      <div className="container px-20 py-16 relative z-10 mx-auto">
         {/* Header Section */}
         <div className="text-center mb-4 space-y-6">
           <div className="flex items-center justify-center gap-4 md:gap-6">

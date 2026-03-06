@@ -9,6 +9,17 @@
     }
 }
 
+@keyframes circle_item_1_next {
+    from {
+        left: 8vw;
+        top: 4vh;
+    }
+    to {
+        left: 8vw;
+        top: 75vh;
+    }
+}
+
 @keyframes circle_item_3_next {
     from {
         left: 31vw;
@@ -135,6 +146,17 @@
     to {
         left: 8vw;
         top: 75vh;
+    }
+}
+
+@keyframes circle_item_7_prev {
+    from {
+        left: 8vw;
+        top: 75vh;
+    }
+    to {
+        left: 8vw;
+        top: 4vh;
     }
 }
 

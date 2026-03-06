@@ -2,7 +2,13 @@
 
 import { siteConfig } from "@/config/site";
 import Link from "next/link";
-import React, { useState, useEffect, type ButtonHTMLAttributes, useRef } from "react";
+import React, {
+  useState,
+  useEffect,
+  type ButtonHTMLAttributes,
+  type RefObject,
+  useRef,
+} from "react";
 import {
   type Variant,
   motion,
@@ -15,20 +21,28 @@ import { atom, useAtom } from "jotai";
 const isOpenAtom = atom(false);
 export let headerHeight: number;
 
-const Navbar = () => {
+interface NavbarProps {
+  scrollContainerRef?: RefObject<HTMLElement | null>;
+}
+
+const Navbar = ({ scrollContainerRef }: NavbarProps) => {
   const [isOpen, setIsOpen] = useAtom(isOpenAtom);
   
   const [hidden, setHidden] = useState(false);
   const isOpenRef = useRef(isOpen);
+  const navRef = useRef<HTMLElement | null>(null);
   useEffect(() => {
     isOpenRef.current = isOpen;
   }, [isOpen]);
 
-  const { scrollY } = useScroll();
+  const { scrollY } = useScroll(
+    scrollContainerRef ? { container: scrollContainerRef } : undefined
+  );
 
   // Optimized Scroll Handler using Framer Motion
   useMotionValueEvent(scrollY, "change", (latest) => {
     const previous = scrollY.getPrevious() ?? 0;
+    const hideThreshold = navRef.current?.offsetHeight ?? 0;
     
     // 1. If Mobile Menu is Open, NEVER hide navbar
     if (isOpenRef.current) {
@@ -37,8 +51,8 @@ const Navbar = () => {
     }
 
     // 2. Logic: Show/Hide based on direction
-    if (latest > previous && latest > 150) {
-      // Scrolling DOWN and past 150px -> HIDE
+    if (latest > previous && latest > hideThreshold) {
+      // Scrolling DOWN and past navbar height -> HIDE
       setHidden(true);
     } else {
       // Scrolling UP or at TOP -> SHOW
@@ -76,14 +90,15 @@ const Navbar = () => {
 
   return (
     <motion.nav
+      ref={navRef}
       // animate based on hidden state
       variants={{
         visible: { y: 0 },
         hidden: { y: "-100%" },
       }}
       animate={hidden ? "hidden" : "visible"}
-      transition={{ duration: 0.3, ease: "easeInOut" }}
-      className="sticky top-0 h-[8vh] py-[1vh] z-50 flex w-full transition-[colors, transform] duration-300 bg-ft-primary-blue shadow-md"
+      transition={{ duration: 0.1, ease: "easeInOut" }}
+      className="fixed top-0 h-[8vh] py-[1vh] z-[99999] flex w-full transition-[colors, transform] duration-300 bg-ft-primary-blue shadow-md"
     >
       <div className="flex justify-between items-center pr-[2vw] w-full">
         <Link
