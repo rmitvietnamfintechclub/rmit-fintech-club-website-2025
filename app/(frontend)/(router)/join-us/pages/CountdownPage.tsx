@@ -44,7 +44,7 @@ export default function CountdownPage() {
         }}
       >
         <div className={`${isShortHeight ? "mb-8" : ""}`}>
-          <Countdown date={new Date("2025-11-10T23:59:00")} />
+          <Countdown date={new Date("2026-03-13T23:59:00")} />
         </div>
 
         <Image
