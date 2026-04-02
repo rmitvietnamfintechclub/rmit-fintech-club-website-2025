@@ -43,11 +43,11 @@ export default function DeptAccordionItem({ value, label, color, isOpen, renderC
 
       <AccordionContent
         forceMount
+        style={{ height: `${isOpen ? '100%' : '0'}` }}
         className={`
-          w-full h-full bg-white
+          w-full bg-white
           transition-opacity ease-[cubic-bezier(0.4,0,0.2,1)] duration-[var(--acc-dur)]
-          border-4 ${borderClass}
-          ${isOpen ? "opacity-100 visible" : "opacity-0 invisible lg:hidden"}
+          ${isOpen ? `opacity-100 visible h-full border-4 ${borderClass}` : "border-0 opacity-0 invisible lg:hidden"}
         `}
       >
         <div className="h-full w-full overflow-y-auto overflow-x-hidden p-6 md:p-8 md:pb-4">

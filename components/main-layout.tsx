@@ -31,7 +31,7 @@ export default function MainLayout({ children, isLoggedIn, user }: MainLayoutPro
   return (
     <div
       ref={scrollContainerRef}
-      className="relative flex flex-col h-screen overflow-y-auto"
+      className="relative flex flex-col h-screen overflow-y-auto max-w-[100vw] overflow-x-clip"
     >
       {renderNavbar()}
       

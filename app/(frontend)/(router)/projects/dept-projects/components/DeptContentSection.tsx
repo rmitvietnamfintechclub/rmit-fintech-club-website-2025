@@ -13,7 +13,7 @@ type Props = {
 export default function DeptSection({ label, items }: Props) {
   if (!items || items.length === 0) {
     return (
-      <section className="w-full h-[90vh] min-w-[74.5vw] flex flex-col items-center justify-center text-center px-4 space-y-6">
+      <section className="w-full lg:w-[calc(100vw-240px)] h-[90vh] flex flex-col items-center justify-center text-center px-4 space-y-6">
         <div className="relative">
           <div className="absolute inset-0 bg-[#DBB968] blur-xl opacity-20 rounded-full animate-pulse" />
           <Rocket size={64} className="text-[#2C305F] relative z-10" />
