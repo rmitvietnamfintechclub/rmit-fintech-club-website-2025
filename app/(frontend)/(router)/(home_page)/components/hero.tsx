@@ -51,7 +51,7 @@ const HeroSection = () => {
         <div className="w-full md:w-[40vw] rounded-xl relative flex flex-col items-center justify-center">
           <Image
             className="w-full object-cover rounded-3xl"
-            src="https://d2uq10394z5icp.cloudfront.net/home/assets/IntroPhoto-ODay2026A+(2).jpg"
+            src="https://d2uq10394z5icp.cloudfront.net/home/assets/IntroPhoto-ODay2026A.jpg"
             alt="Intro Photo - Orientation Day"
             fetchPriority="high"
             loading="eager"
