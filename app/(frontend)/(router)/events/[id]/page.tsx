@@ -356,8 +356,7 @@ export default function EventDetailPage() {
                         {speaker.name}
                       </h3>
 
-                      {/* Dùng Bio làm chức danh ngắn gọn, cắt bớt nếu dài */}
-                      <p className="text-sm text-gray-500 mt-2 line-clamp-2">
+                      <p className="text-sm text-gray-500 mt-2">
                         {speaker.bio}
                       </p>
                     </div>
@@ -397,7 +396,7 @@ export default function EventDetailPage() {
               <div className="sticky top-24 space-y-8">
                 <div className="bg-white rounded-[2rem] p-6 shadow-lg border-t-4 border-[#DCB968]">
                   <h3 className="text-xl font-bold text-[#2C305F] mb-6">
-                    Agenda
+                    What to Expect
                   </h3>
                   <div className="space-y-0">
                     {event.agenda.map((item, idx) => (
