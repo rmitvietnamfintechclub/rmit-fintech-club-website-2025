@@ -112,7 +112,7 @@ const Department = () => {
   return (
     <div className="relative w-full h-fit flex flex-col md:h-[50rem] md:flex-row">
       {/* --- DECORATIONS (Intact) --- */}
-      <div className="absolute w-[14rem] h-auto right-3 -top-[13rem] z-30 hidden md:block">
+      <div className="absolute w-[14rem] h-auto right-2 -top-[13rem] z-30 hidden md:block">
         <Image
           src="/Department_Decoration.svg"
           alt="Department Decoration"

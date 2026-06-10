@@ -20,7 +20,7 @@ const IntroSection = () => {
       >
         <div className="flex flex-col justify-end text-center gap-3">
           <h4 className="text-ft-primary-yellow">
-            <CountUp start={0} end={inView ? 80 : 0} duration={5}>
+            <CountUp start={0} end={inView ? 60 : 0} duration={5}>
               {({ countUpRef }) => (
                 <span ref={countUpRef} className="text-6xl font-semibold" />
               )}
@@ -30,8 +30,8 @@ const IntroSection = () => {
 
           <h5 className="text-ft-primary-blue">Active Club Members</h5>
           <p>
-            From diverse backgrounds, be it Finance, Business, Technology,
-            Marketing, Design Studies, and more.
+            From diverse backgrounds: Finance, Business, Technology,
+            Digital Marketing, Design Studies, Human Resources, and more.
           </p>
         </div>
         <div className="flex flex-col justify-start text-center gap-3">
@@ -87,7 +87,7 @@ const IntroSection = () => {
           <h5 className="text-ft-primary-blue">Academic & Industry Partners</h5>
           <p>
             In broad industries such as Traditional FinTech, Web3 FinTech,
-            Finance, Technology, Healthcare, Venture Capital, etc.
+            Finance, Technology, Hospitality, Venture Capital, etc.
           </p>
         </div>
       </div>

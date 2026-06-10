@@ -45,12 +45,12 @@ const formatEventDate = (isoString: string): { day: string; month: string } => {
 };
 
 const NoEventsDisplay = () => (
-  <div className="w-full px-20 flex justify-center">
-    <div className="w-full mt-8 p-10 md:p-16 flex flex-col items-center justify-center text-center bg-white/60 backdrop-blur-md rounded-[2.5rem] border-2 border-dashed border-gray-300/80 shadow-sm transition-all">
+  <div className="w-full px-4 md:px-20 flex justify-center">
+    <div className="w-full md:mt-8 p-10 md:p-16 flex flex-col items-center justify-center text-center bg-white/60 backdrop-blur-md rounded-[2.5rem] border-2 border-dashed border-gray-300/80 shadow-sm transition-all">
       <div className="bg-gray-100 p-6 rounded-full mb-6 shadow-inner">
         <SearchX size={48} className="text-gray-400" />
       </div>
-      <div className="space-y-3 max-w-md mx-auto">
+      <div className="space-y-3 mx-auto">
         <h3 className="text-2xl md:text-3xl font-bold text-[#2C305F]">
           No Upcoming Events
         </h3>
@@ -453,28 +453,28 @@ export default function UpcomingEvent() {
           Upcoming Events
         </p>
         <div
-          className="absolute -top-5 md:-top-8 left-2 h-[3vh] md:h-[5vh] aspect-square bg-center bg-no-repeat bg-contain"
+          className="absolute max-md:hidden md:-top-10 left-1 md:h-[5vh] aspect-square bg-center bg-no-repeat bg-contain"
           style={{
             backgroundImage:
               "url(https://d2uq10394z5icp.cloudfront.net/home/assets/YellowStar.svg)",
           }}
         />
         <div
-          className="absolute -top-4 md:-top-8 left-[-7.5vh] md:left-[-13vh] h-[7vh] md:h-[12vh] aspect-square bg-center bg-no-repeat bg-contain"
+          className="absolute max-md:hidden md:-top-8 md:left-[-13vh] md:h-[12vh] aspect-square bg-center bg-no-repeat bg-contain"
           style={{
             backgroundImage:
               "url(https://d2uq10394z5icp.cloudfront.net/home/assets/YellowStar.svg)",
           }}
         />
         <div
-          className="absolute -top-2 md:-top-4 -right-10 md:right-[-11.5vh] h-[5vh] md:h-[10vh] aspect-square bg-center bg-no-repeat bg-contain"
+          className="absolute max-md:hidden md:-top-4 md:right-[-11.5vh] md:h-[10vh] aspect-square bg-center bg-no-repeat bg-contain"
           style={{
             backgroundImage:
               "url(https://d2uq10394z5icp.cloudfront.net/home/assets/YellowStar.svg)",
           }}
         />
         <div
-          className="absolute top-8 md:top-10 right-[-3vw] md:right-[-1vw] h-[3vh] md:h-[5vh] aspect-square bg-center bg-no-repeat bg-contain"
+          className="absolute max-md:hidden md:top-10 md:right-[-1vw] md:h-[5vh] aspect-square bg-center bg-no-repeat bg-contain"
           style={{
             backgroundImage:
               "url(https://d2uq10394z5icp.cloudfront.net/home/assets/YellowStar.svg)",

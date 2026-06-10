@@ -35,13 +35,13 @@ const HeroSection = () => {
 
           <div className="justify-between md:justify-start items-center gap-8 md:gap-6 flex mt-6 md:mt-8">
             <Button
-              className="bg-[#DBB968] text-[#2C305F] w-full md:w-[7rem] font-semibold rounded-lg"
+              className="bg-[#DBB968] text-[#2C305F] w-full md:w-[8rem] font-semibold rounded-lg"
               variant="solid"
             >
-              <Link href="/about-us">Read More</Link>
+              <Link href="/about-us">Explore More</Link>
             </Button>
             <Button
-              className="bg-ft-primary-blue text-ft-text-bright w-full md:w-[7rem] font-semibold rounded-lg"
+              className="bg-ft-primary-blue text-ft-text-bright w-full md:w-[8rem] font-semibold rounded-lg"
               variant="solid"
             >
               <Link href="/join-us">Join Us</Link>
@@ -51,7 +51,7 @@ const HeroSection = () => {
         <div className="w-full md:w-[40vw] rounded-xl relative flex flex-col items-center justify-center">
           <Image
             className="w-full object-cover rounded-3xl"
-            src="https://d2uq10394z5icp.cloudfront.net/home/assets/IntroPhoto-ODay.png"
+            src="https://d2uq10394z5icp.cloudfront.net/home/assets/IntroPhoto-ODay2026A.jpg"
             alt="Intro Photo - Orientation Day"
             fetchPriority="high"
             loading="eager"
@@ -59,7 +59,7 @@ const HeroSection = () => {
             height={1000}
             priority={true}
           />
-          <div className="md:hidden flex-row justify-between items-center flex w-full h-fit mt-4">
+          <div className="md:hidden flex-row justify-between items-center flex w-full h-[15vh] mt-4">
             <Image
               src="https://d2uq10394z5icp.cloudfront.net/global/Mascot+-+M%E1%BA%B7t+tr%C6%B0%E1%BB%9Bc.svg"
               alt="Bear Mascot"
@@ -68,27 +68,27 @@ const HeroSection = () => {
               fetchPriority="high"
               loading="eager"
               priority={true}
-              className="relative rounded-xl object-cover w-[20vw]"
+              className="relative rounded-xl object-cover w-[25vw] h-full"
             />
             <Image
-              src="https://d2uq10394z5icp.cloudfront.net/home/assets/IntroPhoto-EOSTrip.png"
-              alt="Intro Photo - EOS Trip"
+              src="https://d2uq10394z5icp.cloudfront.net/home/assets/IntroPhoto-Picnic2026A.jpg"
+              alt="Intro Photo - Picnic"
               width={1000}
               height={200}
               fetchPriority="high"
               loading="eager"
               priority={true}
-              className="relative rounded-xl object-cover w-[27vw]"
+              className="relative rounded-xl object-cover w-[30vw] h-full"
             />
             <Image
-              src="https://d2uq10394z5icp.cloudfront.net/home/assets/IntroPhoto-ClubDay.png"
+              src="https://d2uq10394z5icp.cloudfront.net/home/assets/IntroPhoto-ClubDay2026A.jpg"
               alt="Intro Photo - Club Day"
               width={1000}
               height={200}
               fetchPriority="high"
               loading="eager"
               priority={true}
-              className="relative rounded-xl object-cover w-[35vw]"
+              className="relative rounded-xl object-cover w-[32vw] h-full"
             />
           </div>
           <div className="mt-4 flex flex-col justify-center w-full">
@@ -107,7 +107,7 @@ const HeroSection = () => {
               </div>
             </div>
 
-            <div className="flex flex-row mt-2 justify-center gap-4 items-center max-md:mx-8">
+            <div className="flex flex-row mt-2 justify-center gap-12 max-md:gap-4 items-center max-md:mx-8">
               <div className="bg-[#F8DA92] p-3 text-center w-full md:w-[11vw] border-0">
                 Competitions
               </div>
@@ -131,7 +131,7 @@ const HeroSection = () => {
         </div>
       </div>
 
-      <div className="hidden flex-row justify-between items-center md:flex w-full h-fit">
+      <div className="hidden flex-row justify-between items-center md:flex w-full h-[50vh]">
         <Image
           src="https://d2uq10394z5icp.cloudfront.net/global/Mascot+-+M%E1%BA%B7t+tr%C6%B0%E1%BB%9Bc.svg"
           alt="Bear Mascot"
@@ -140,27 +140,27 @@ const HeroSection = () => {
           fetchPriority="high"
           loading="eager"
           priority={true}
-          className="relative rounded-xl object-cover w-[20vw]"
+          className="relative rounded-xl object-cover w-[20vw] h-full"
         />
         <Image
-          src="https://d2uq10394z5icp.cloudfront.net/home/assets/IntroPhoto-EOSTrip.png"
-          alt="Intro Photo - EOS Trip"
+          src="https://d2uq10394z5icp.cloudfront.net/home/assets/IntroPhoto-Picnic2026A.jpg"
+          alt="Intro Photo - Picnic"
           width={1000}
           height={200}
           fetchPriority="high"
           loading="eager"
           priority={true}
-          className="relative rounded-xl object-cover w-[27vw]"
+          className="relative rounded-xl object-cover w-[30vw] h-full"
         />
         <Image
-          src="https://d2uq10394z5icp.cloudfront.net/home/assets/IntroPhoto-ClubDay.png"
+          src="https://d2uq10394z5icp.cloudfront.net/home/assets/IntroPhoto-ClubDay2026A.jpg"
           alt="Intro Photo - Club Day"
           width={1000}
           height={200}
           fetchPriority="high"
           loading="eager"
           priority={true}
-          className="relative rounded-xl object-cover w-[35vw]"
+          className="relative rounded-xl object-cover w-[32vw] h-full"
         />
       </div>
     </div>
