@@ -13,6 +13,7 @@ type ManagementBoardMember = {
   name: string;
   position: string;
   linkedin_url: string;
+  generation: number;
 };
 
 
@@ -88,7 +89,6 @@ function ManagementBoardCard({
         "
       >
         {/* === MOBILE LAYOUT === */}
-        {/* Sử dụng aspect-[3/4] giống với bản Executive để đồng bộ */}
         <div className="md:hidden relative w-full aspect-[3/4]">
           <Image
             alt={`${name} profile`}
@@ -185,7 +185,10 @@ function ManagementBoardCard({
 }
 
 const ManagementBoard = () => {
-  const [members, setMembers] = useState<ManagementBoardMember[]>([]);
+  const [groupedMembers, setGroupedMembers] = useState<Record<number, ManagementBoardMember[]>>({});
+  const [generations, setGenerations] = useState<number[]>([]);
+  const [selectedGen, setSelectedGen] = useState<number>(0); 
+
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
 
@@ -193,14 +196,33 @@ const ManagementBoard = () => {
     const fetchManagementBoard = async () => {
       try {
         const settingsRes = await axios.get("/api/v1/settings");
-        const activeGen = settingsRes.data.value;
+        const currentGenNum = Number(settingsRes.data.value);
 
-        const response = await axios.get("/api/v1/managementBoard", {
-            params: { generation: activeGen }
-        });
+        // Fetch TOÀN BỘ data
+        const response = await axios.get("/api/v1/managementBoard");
         
         if (response.data.status === 200 && response.data.members) {
-          setMembers(response.data.members);
+          const allMembers: ManagementBoardMember[] = response.data.members;
+
+          // Group by Generation
+          const grouped = allMembers.reduce((acc, member) => {
+            const gen = member.generation;
+            if (!acc[gen]) acc[gen] = [];
+            acc[gen].push(member);
+            return acc;
+          }, {} as Record<number, ManagementBoardMember[]>);
+
+          // Sắp xếp Generation (a - b: cũ sang mới)
+          const sortedGens = Object.keys(grouped)
+            .map(Number)
+            .sort((a, b) => a - b);
+
+          setGroupedMembers(grouped);
+          setGenerations(sortedGens);
+
+          // Set default là thế hệ active
+          const defaultGen = grouped[currentGenNum] ? currentGenNum : sortedGens[0];
+          setSelectedGen(defaultGen);
         } else {
           setError(
             response.data.message ||
@@ -238,29 +260,62 @@ const ManagementBoard = () => {
     <section className="relative max-md:pb-0 md:py-24 px-6 md:px-20">
       <DecorativeElements />
       <main>
-        <div className="mb-4 md:mb-0">
+        <div className="md:mb-2">
            <PageHeader />
         </div>
 
-        {error && (
+        {error ? (
           <div className="relative w-full max-w-4xl h-48 mx-auto my-10 md:h-64 p-[4px] rounded-lg bg-gradient-to-b from-[#DCB968] to-[#F7D27F]">
             <div className="flex flex-col items-center justify-center w-full h-full bg-[#F9FAFB] rounded-[7px] text-center px-4">
               <p className="text-5xl font-bold mb-4">⚠️</p>
               <p className="text-[#2C305F] text-lg md:text-xl">{error}</p>
             </div>
           </div>
-        )}
+        ) : (
+          <>
+            {/* === MODERN SEGMENTED CONTROL === */}
+            {generations.length > 1 && (
+              <div className="flex justify-center mb-4 md:mb-8 overflow-x-auto hide-scrollbar py-2">
+                <div className="relative flex p-1.5 bg-white/60 backdrop-blur-md shadow-[0_4px_20px_rgba(44,48,95,0.06)] border border-gray-100 rounded-full">
+                  {generations.map((gen) => {
+                    const isActive = selectedGen === gen;
+                    return (
+                      <button
+                        key={gen}
+                        onClick={() => setSelectedGen(gen)}
+                        className={`relative px-6 md:px-8 py-2.5 rounded-full text-sm font-bold transition-colors duration-300 z-10 whitespace-nowrap ${
+                          isActive ? "text-white" : "text-[#5E5E92] hover:text-[#2C305F]"
+                        }`}
+                      >
+                        {isActive && (
+                          <motion.div
+                            layoutId="activeGenTabManagement" // Đổi tên layoutId để ko bị đụng chạm với ExecutiveBoard
+                            className="absolute inset-0 bg-[#2C305F] rounded-full -z-10 shadow-md"
+                            transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                          />
+                        )}
+                        Generation {gen}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
 
-        <div className="
-            md:pt-12 md:pb-8 
-            w-full 
-            grid grid-cols-2 gap-3 
-            md:grid-cols-2 lg:grid-cols-4 md:gap-8
-        ">
-          {members.map((item, index) => (
-            <ManagementBoardCard key={index} {...item} index={index} />
-          ))}
-        </div>
+            {/* === GRID WITH ANIMATION === */}
+            <motion.div
+              key={selectedGen}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
+              className="md:pt-4 md:pb-8 w-full grid grid-cols-2 gap-3 md:grid-cols-2 lg:grid-cols-4 md:gap-8 pb-10"
+            >
+              {(groupedMembers[selectedGen] || []).map((item, index) => (
+                <ManagementBoardCard key={`${selectedGen}-${index}`} {...item} index={index} />
+              ))}
+            </motion.div>
+          </>
+        )}
       </main>
     </section>
   );

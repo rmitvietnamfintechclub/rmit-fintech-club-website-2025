@@ -85,7 +85,7 @@ const AnimatedTopHalf = memo(
         animateProps={{ animate: controls, initial: { rotateX: 0 } }}
       />
     );
-  }
+  },
 );
 AnimatedTopHalf.displayName = "AnimatedTopHalf";
 
@@ -142,35 +142,41 @@ const FlipDigit = ({ number, title }: { number: number; title: UnitType }) => {
 };
 
 // --- Main Renderer ---
-const renderer: CountdownRendererFn = ({ days, hours, minutes, seconds, completed }) => {
+const renderer: CountdownRendererFn = ({
+  days,
+  hours,
+  minutes,
+  seconds,
+  completed,
+}) => {
   if (completed) {
-  return (
-    <div className="flex flex-col items-center justify-center animate-in zoom-in-95 duration-700 px-4">
-      {/* Glass Card Container */}
-      <div className="max-w-4xl text-center">
-        
-        <div className="relative w-40 h-40 md:w-56 md:h-56 mb-6 mx-auto drop-shadow-2xl">
-         <Image 
-           src="https://d2uq10394z5icp.cloudfront.net/global/Mascot+-+M%E1%BA%B7t+tr%C6%B0%E1%BB%9Bc.svg" 
-           alt="Mascot"
-           fill
-           className="object-contain"
-         />
-      </div>
+    return (
+      <div className="flex flex-col items-center justify-center animate-in zoom-in-95 duration-700 px-4">
+        {/* Glass Card Container */}
+        <div className="max-w-4xl text-center">
+          <div className="relative w-40 h-40 md:w-56 md:h-56 mb-6 mx-auto drop-shadow-2xl">
+            <Image
+              src="https://d2uq10394z5icp.cloudfront.net/global/Mascot+-+M%E1%BA%B7t+tr%C6%B0%E1%BB%9Bc.svg"
+              alt="Mascot"
+              fill
+              className="object-contain"
+            />
+          </div>
 
-        <h1 className="text-3xl md:text-5xl font-extrabold text-white tracking-wide drop-shadow-md mb-4 uppercase">
-          Applications Closed
-        </h1>
-        
-        <p className="text-lg md:text-xl text-white/90 font-medium leading-relaxed mb-8">
-          The recruitment form is officially closed. Thank you for your enthusiasm! 
-          <br className="hidden md:block"/>
-          Missed the chance? Don't worry, we'll be back soon.
-        </p>
+          <h1 className="text-3xl md:text-5xl font-extrabold text-white tracking-wide drop-shadow-md mb-4 uppercase">
+            Applications Closed
+          </h1>
+
+          <p className="text-lg md:text-xl text-white/90 font-medium leading-relaxed mb-8">
+            The recruitment form is officially closed. Thank you for your
+            enthusiasm!
+            <br />
+            Missed the chance? Don't worry, we'll be back soon.
+          </p>
+        </div>
       </div>
-    </div>
-  );
-}
+    );
+  }
 
   return (
     <div className="flex flex-col items-center gap-8 w-full">
