@@ -2,63 +2,15 @@
 
 import { siteConfig } from "@/config/site";
 import Link from "next/link";
-import React, {
-  useState,
-  useEffect,
-  type ButtonHTMLAttributes,
-  type RefObject,
-  useRef,
-} from "react";
-import {
-  type Variant,
-  motion,
-  useAnimate,
-  useScroll,
-  useMotionValueEvent,
-} from "framer-motion";
+import React, { useEffect, type ButtonHTMLAttributes } from "react";
+import { type Variant, motion, useAnimate } from "framer-motion";
 import { atom, useAtom } from "jotai";
 
 const isOpenAtom = atom(false);
 export let headerHeight: number;
 
-interface NavbarProps {
-  scrollContainerRef?: RefObject<HTMLElement | null>;
-}
-
-const Navbar = ({ scrollContainerRef }: NavbarProps) => {
+const Navbar = () => {
   const [isOpen, setIsOpen] = useAtom(isOpenAtom);
-  
-  const [hidden, setHidden] = useState(false);
-  const isOpenRef = useRef(isOpen);
-  const navRef = useRef<HTMLElement | null>(null);
-  useEffect(() => {
-    isOpenRef.current = isOpen;
-  }, [isOpen]);
-
-  const { scrollY } = useScroll(
-    scrollContainerRef ? { container: scrollContainerRef } : undefined
-  );
-
-  // Optimized Scroll Handler using Framer Motion
-  useMotionValueEvent(scrollY, "change", (latest) => {
-    const previous = scrollY.getPrevious() ?? 0;
-    const hideThreshold = navRef.current?.offsetHeight ?? 0;
-    
-    // 1. If Mobile Menu is Open, NEVER hide navbar
-    if (isOpenRef.current) {
-      setHidden(false);
-      return;
-    }
-
-    // 2. Logic: Show/Hide based on direction
-    if (latest > previous && latest > hideThreshold) {
-      // Scrolling DOWN and past navbar height -> HIDE
-      setHidden(true);
-    } else {
-      // Scrolling UP or at TOP -> SHOW
-      setHidden(false);
-    }
-  });
 
   const ulVariants = {
     open: {
@@ -89,17 +41,7 @@ const Navbar = ({ scrollContainerRef }: NavbarProps) => {
   };
 
   return (
-    <motion.nav
-      ref={navRef}
-      // animate based on hidden state
-      variants={{
-        visible: { y: 0 },
-        hidden: { y: "-100%" },
-      }}
-      animate={hidden ? "hidden" : "visible"}
-      transition={{ duration: 0.1, ease: "easeInOut" }}
-      className="fixed top-0 h-[8vh] py-[1vh] z-[99999] flex w-full transition-[colors, transform] duration-300 bg-ft-primary-blue shadow-md"
-    >
+    <nav className="fixed top-0 left-0 h-[8vh] py-[1vh] z-[99] flex w-full bg-ft-primary-blue shadow-md">
       <div className="flex justify-between items-center pr-[2vw] w-full">
         <Link
           href="/"
@@ -112,18 +54,16 @@ const Navbar = ({ scrollContainerRef }: NavbarProps) => {
             }}
           ></div>
         </Link>
+
         <div className="md:hidden h-fit flex justify-center items-center">
           <AnimatedHamburger />
         </div>
+
         <motion.ul
           variants={ulVariants}
-          // Use 'animate' prop directly controlled by isOpen state
           animate={isOpen ? "open" : "closed"}
-          className={
-            "fixed -right-full bottom-0 w-[50vw] bg-ft-primary-blue md:hidden"
-          }
-          // Adjust top position since we removed ref. Assuming standard header height or use fixed value.
-          style={{ top: "8vh" }} 
+          className="fixed -right-full bottom-0 w-[50vw] bg-ft-primary-blue md:hidden"
+          style={{ top: "8vh" }}
         >
           {siteConfig.navItems.map((item) => (
             <motion.li
@@ -151,6 +91,7 @@ const Navbar = ({ scrollContainerRef }: NavbarProps) => {
             </Link>
           </motion.li>
         </motion.ul>
+
         <div className="hidden md:relative md:flex">
           <ul className="flex md:items-center space-x-[4vw]">
             {siteConfig.navItems.map((item) => (
@@ -172,12 +113,11 @@ const Navbar = ({ scrollContainerRef }: NavbarProps) => {
           </Link>
         </div>
       </div>
-    </motion.nav>
+    </nav>
   );
 };
 
-interface AnimatedHamburgerProps
-  extends ButtonHTMLAttributes<HTMLButtonElement> {
+interface AnimatedHamburgerProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   stroke?: number;
   size?: number;
 }
@@ -189,7 +129,6 @@ const AnimatedHamburger = ({
   const [isOpen, setIsOpen] = useAtom(isOpenAtom);
 
   const [containerBarScope, animateContainerBar] = useAnimate();
-
   const [topBarScope, animateTopBar] = useAnimate();
   const [bottomBarScope, animateBottomBar] = useAnimate();
 
@@ -210,98 +149,67 @@ const AnimatedHamburger = ({
   useEffect(() => {
     async function animateBars() {
       if (isOpen) {
-        // Closing animation
         animateTopBar(
           topBarScope.current,
           { top: "50%" },
-          {
-            duration: 0.2,
-            type: "tween",
-            ease: "easeInOut",
-          }
+          { duration: 0.2, type: "tween", ease: "easeInOut" },
         );
         await animateBottomBar(
           bottomBarScope.current,
           { top: "50%" },
-          {
-            duration: 0.2,
-            type: "tween",
-            ease: "easeInOut",
-          }
+          { duration: 0.2, type: "tween", ease: "easeInOut" },
         );
 
-        // Spinning
         animateTopBar(
           topBarScope.current,
           { rotate: 90 },
-          {
-            duration: 1.4,
-            type: "spring",
-            bounce: 0.4,
-          }
+          { duration: 1.4, type: "spring", bounce: 0.4 },
         );
         animateContainerBar(
           containerBarScope.current,
           { rotate: 135 },
-          {
-            duration: 1.4,
-            type: "spring",
-            bounce: 0.4,
-          }
+          { duration: 1.4, type: "spring", bounce: 0.4 },
         );
       } else {
-        // Spin back
         animateContainerBar(
           containerBarScope.current,
           { rotate: -0 },
-          {
-            duration: 0.8,
-            type: "spring",
-            bounce: 0.2,
-          }
+          { duration: 0.8, type: "spring", bounce: 0.2 },
         );
         await animateTopBar(
           topBarScope.current,
           { rotate: -0 },
-          {
-            duration: 0.8,
-            type: "spring",
-            bounce: 0.2,
-          }
+          { duration: 0.8, type: "spring", bounce: 0.2 },
         );
 
-        // Opening animation
         animateTopBar(
           topBarScope.current,
           { top: "0%" },
-          {
-            duration: 0.2,
-            type: "tween",
-            ease: "easeInOut",
-          }
+          { duration: 0.2, type: "tween", ease: "easeInOut" },
         );
         animateBottomBar(
           bottomBarScope.current,
           { top: "100%" },
-          {
-            duration: 0.2,
-            type: "tween",
-            ease: "easeInOut",
-          }
+          { duration: 0.2, type: "tween", ease: "easeInOut" },
         );
       }
     }
     animateBars();
-  }, [isOpen]);
+  }, [
+    isOpen,
+    animateTopBar,
+    topBarScope,
+    animateBottomBar,
+    bottomBarScope,
+    animateContainerBar,
+    containerBarScope,
+  ]);
 
   return (
     <motion.button
       ref={containerBarScope}
       style={containerStyles}
-      onClick={() => {
-        setIsOpen(!isOpen);
-        // Removed global variable toggle as we are using state
-      }}
+      onClick={() => setIsOpen(!isOpen)}
     >
       <motion.div
         ref={topBarScope}

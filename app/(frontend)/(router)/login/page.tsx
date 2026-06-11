@@ -6,10 +6,10 @@ import Link from "next/link";
 import { Button, Input, Spinner } from "@heroui/react";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { Mail, Lock, Eye, EyeOff, ArrowRight, Loader2 } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff } from "lucide-react";
 
 // --- 1. Zod Validation Schema ---
 // Strong validation ensures bad data is caught early (Security & UX)
@@ -52,7 +52,6 @@ const LoginPage = () => {
 
   const {
     register,
-    control,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<LoginFormValues>({
@@ -67,7 +66,6 @@ const LoginPage = () => {
   // --- 4. Secure Submit Handler ---
   const onSubmit = async (data: LoginFormValues) => {
     try {
-      // API call
       const response = await axios.post("/api/v1/auth/login", data);
 
       // Success Feedback
@@ -103,7 +101,7 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="flex w-full min-h-screen bg-white overflow-hidden font-sans">
+    <div className="flex w-full min-h-screen overflow-y-hidden font-sans">
       <Toaster />
 
       {/* --- Left Section: Visual Branding --- */}

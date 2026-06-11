@@ -1,12 +1,6 @@
 "use client";
 
-import React, {
-  useState,
-  useEffect,
-  useRef,
-  type RefObject,
-  type ButtonHTMLAttributes,
-} from "react";
+import React, { type ButtonHTMLAttributes, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import axios from "axios";
@@ -16,13 +10,7 @@ import { UserPayload } from "@/app/(backend)/libs/auth";
 import { LogOut, LayoutDashboard } from "lucide-react";
 
 // Animation & State
-import {
-  type Variant,
-  motion,
-  useAnimate,
-  useScroll,
-  useMotionValueEvent,
-} from "framer-motion";
+import { type Variant, motion, useAnimate } from "framer-motion";
 import { atom, useAtom } from "jotai";
 
 // HeroUI Components for Dropdown
@@ -36,38 +24,12 @@ import {
 
 interface AdminNavbarProps {
   user: UserPayload;
-  scrollContainerRef?: RefObject<HTMLElement | null>;
 }
 
 const isOpenAtom = atom(false);
 
-const AdminNavbar = ({ user, scrollContainerRef }: AdminNavbarProps) => {
+const AdminNavbar = ({ user }: AdminNavbarProps) => {
   const [isOpen, setIsOpen] = useAtom(isOpenAtom);
-  const [hidden, setHidden] = useState(false);
-  const isOpenRef = useRef(isOpen);
-  const navRef = useRef<HTMLElement | null>(null);
-
-  // Sync ref for scroll logic
-  useEffect(() => {
-    isOpenRef.current = isOpen;
-  }, [isOpen]);
-
-  const { scrollY } = useScroll(
-    scrollContainerRef ? { container: scrollContainerRef } : undefined
-  );
-  useMotionValueEvent(scrollY, "change", (latest) => {
-    const previous = scrollY.getPrevious() ?? 0;
-    const hideThreshold = navRef.current?.offsetHeight ?? 0;
-    if (isOpenRef.current) {
-      setHidden(false);
-      return;
-    }
-    if (latest > previous && latest > hideThreshold) {
-      setHidden(true);
-    } else {
-      setHidden(false);
-    }
-  });
 
   // --- Logout Logic ---
   const handleLogout = async () => {
@@ -103,13 +65,7 @@ const AdminNavbar = ({ user, scrollContainerRef }: AdminNavbarProps) => {
   };
 
   return (
-    <motion.nav
-      ref={navRef}
-      variants={{ visible: { y: 0 }, hidden: { y: "-100%" } }}
-      animate={hidden ? "hidden" : "visible"}
-      transition={{ duration: 0.3, ease: "easeInOut" }}
-      className="sticky top-0 h-[8vh] py-[1vh] z-[99] flex w-full transition-[colors, transform] duration-300 bg-ft-primary-blue shadow-md overflow-visible"
-    >
+    <nav className="fixed top-0 left-0 h-[8vh] py-[1vh] z-[99] flex w-full bg-ft-primary-blue shadow-md overflow-visible">
       <div className="flex justify-between items-center pr-[2vw] w-full">
         {/* --- Logo Section --- */}
         <Link
@@ -279,7 +235,7 @@ const AdminNavbar = ({ user, scrollContainerRef }: AdminNavbarProps) => {
           </Dropdown>
         </div>
       </div>
-    </motion.nav>
+    </nav>
   );
 };
 
@@ -310,6 +266,9 @@ const AnimatedHamburger = ({
   };
 
   useEffect(() => {
+    // Thêm check an toàn để tránh lỗi nếu component unmount bất chợt
+    if (!scope.current) return;
+
     const topBar = scope.current.children[0];
     const bottomBar = scope.current.children[2];
     const container = scope.current;
@@ -317,7 +276,7 @@ const AnimatedHamburger = ({
     async function animateBars() {
       if (isOpen) {
         animate(topBar, { top: "50%", rotate: 90 }, { duration: 0.4 });
-        animate(bottomBar, { top: "50%", opacity: 0 }, { duration: 0.2 }); // Hide bottom or merge
+        animate(bottomBar, { top: "50%", opacity: 0 }, { duration: 0.2 });
         animate(container, { rotate: 135 }, { duration: 0.4 });
       } else {
         animate(topBar, { top: "0%", rotate: 0 }, { duration: 0.4 });
@@ -326,7 +285,7 @@ const AnimatedHamburger = ({
       }
     }
     animateBars();
-  }, [isOpen]);
+  }, [isOpen, animate, scope]); // Thêm đầy đủ dependency
 
   return (
     <button

@@ -1,4 +1,4 @@
-import "@styles/globals.css";
+import "@/styles/globals.css";
 import { fontSans } from "@/config/fonts";
 import { siteConfig } from "@/config/site";
 import clsx from "clsx";
@@ -48,7 +48,7 @@ export default async function RootLayout({
     <html className="overflow-x-hidden" lang="en" suppressHydrationWarning>
       <body
         className={clsx(
-          "min-h-screen bg-[#F9FAFB] font-sans antialiased overflow-x-hidden",
+          "bg-[#F9FAFB] font-sans antialiased overflow-x-hidden",
           fontSans.className,
         )}
       >
