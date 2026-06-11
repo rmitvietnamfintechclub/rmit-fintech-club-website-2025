@@ -5,23 +5,29 @@ const getDefaultSemester = (): string => {
   const month = today.getMonth();
   const year = today.getFullYear();
 
-  // 1. Tháng 1 - 2: Đang là cuối Sem C năm ngoái. 
-  // -> Hiện HoF của Sem B năm ngoái.
   if (month <= 1) return `${year - 1}B`;
-
-  // 2. Tháng 3 - 6: Đang là Sem A năm nay. 
-  // -> Hiện HoF của Sem C năm ngoái (Vừa xong).
   if (month >= 2 && month <= 5) return `${year - 1}C`;
-
-  // 3. Tháng 7 - 10: Đang là Sem B năm nay. 
-  // -> Hiện HoF của Sem A năm nay.
   if (month >= 6 && month <= 9) return `${year}A`;
-
-  // 4. Tháng 11 - 12: Đang là đầu Sem C năm nay. 
-  // -> Hiện HoF của Sem B năm nay.
   if (month >= 10) return `${year}B`;
 
   return `${year}A`;
+};
+
+export const getAvailableSemesters = (): string[] => {
+  const defaultSem = getDefaultSemester();
+  const maxYear = parseInt(defaultSem.slice(0, 4));
+  const maxLetter = defaultSem.slice(4);
+  const letters = ["A", "B", "C"];
+  const results: string[] = [];
+
+  for (let y = maxYear; y >= 2025; y--) {
+    for (let i = 2; i >= 0; i--) {
+      const l = letters[i];
+      if (y === maxYear && l > maxLetter) continue; 
+      results.push(`${y}${l}`);
+    }
+  }
+  return results;
 };
 
 let globalSemester = getDefaultSemester();
@@ -44,6 +50,6 @@ export const useSemester = () => {
   return {
     semester,
     setSemester,
-    semesterLabel: `Semester ${semester.slice(4)}`,
+    semesterLabel: `Semester ${semester.slice(4)} ${semester.slice(0, 4)}`, 
   };
 };

@@ -4,6 +4,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import { CheckIcon } from "@radix-ui/react-icons";
 import type { SemesterFilterProps } from "../types";
 
+// Helper format: "2026A" -> "Semester A 2026"
+const formatDisplay = (val: string) => `Semester ${val.slice(4)} ${val.slice(0, 4)}`;
+
 export default function HoFFilter({
   semesters,
   onSelect,
@@ -12,22 +15,11 @@ export default function HoFFilter({
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Logic tính toán value
-  const contextYear = selectedLabel
-    ? selectedLabel.substring(0, 4)
-    : new Date().getFullYear().toString();
-
-  const getSemesterValue = (label: string): string => {
-    const letter = label.split(" ")[1];
-    return `${contextYear}${letter}`;
-  };
-
-  const handleSelect = (label: string) => {
-    onSelect?.(getSemesterValue(label));
+  const handleSelect = (val: string) => {
+    onSelect?.(val);
     setIsOpen(false);
   };
 
-  // Click outside to close
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -41,20 +33,17 @@ export default function HoFFilter({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const displayLabel = selectedLabel
-    ? `Semester ${selectedLabel.slice(4)}`
-    : "Select semester...";
+  const displayLabel = selectedLabel ? formatDisplay(selectedLabel) : "Select semester...";
 
   return (
-    <div className="relative inline-block mb-3 xl:mr-8" ref={containerRef}>
-      {/* Trigger Button */}
+    <div className="relative inline-block md:mb-4 md:mr-4" ref={containerRef}>
       <motion.button
         whileHover={{ scale: 1.04 }}
         whileTap={{ scale: 0.94 }}
         onClick={() => setIsOpen(!isOpen)}
         className="
           bg-[#DCB968] text-[#2C305F] font-semibold
-          pr-8 pl-4 py-2 rounded-md w-44 xl:text-lg 
+          pr-8 pl-4 py-2 rounded-md w-52 xl:text-lg 
           appearance-none inline-flex items-center justify-between
           focus:outline-none shadow-md
         "
@@ -62,7 +51,6 @@ export default function HoFFilter({
         <span className="truncate">{displayLabel}</span>
       </motion.button>
 
-      {/* Triangle Arrow */}
       <div
         className={`pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-0 h-0 
         border-l-[6px] border-l-transparent 
@@ -73,7 +61,6 @@ export default function HoFFilter({
         `}
       ></div>
 
-      {/* Dropdown Menu */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -82,20 +69,18 @@ export default function HoFFilter({
             exit={{ opacity: 0, y: -10, scale: 0.95 }}
             transition={{ duration: 0.15 }}
             className="
-              absolute z-50 mt-2 w-44 
+              absolute z-50 mt-2 w-52 md:w-56 
               rounded-md bg-[#DCB968] text-[#2C305F] 
               shadow-xl border border-[#2C305F] overflow-hidden
             "
           >
-            <div className="p-1">
-              {semesters.map((label) => {
-                const isActive =
-                  displayLabel === `Semester ${label.split(" ")[1]}`; // Logic check active đơn giản (tùy chỉnh lại nếu cần)
-
+            <div className="p-1 max-h-60 overflow-y-auto custom-scrollbar">
+              {semesters.map((val) => {
+                const isActive = selectedLabel === val;
                 return (
                   <div
-                    key={label}
-                    onClick={() => handleSelect(label)}
+                    key={val}
+                    onClick={() => handleSelect(val)}
                     className={`
                       relative cursor-pointer select-none rounded px-4 py-2 text-sm font-semibold 
                       transition-colors
@@ -103,7 +88,7 @@ export default function HoFFilter({
                       ${isActive ? "bg-[#2C305F] text-[#DCB968]" : ""}
                     `}
                   >
-                    <span>{label}</span>
+                    <span>{formatDisplay(val)}</span>
                     {isActive && (
                       <span className="absolute right-2 top-1/2 -translate-y-1/2">
                         <CheckIcon />

@@ -33,17 +33,12 @@ const HallPage = ({
         </div>
 
         {/* --- MAIN CONTENT WRAPPER --- */}
-        {/* SỬA LỖI Ở ĐÂY: */}
-        {/* Mobile: w-full px-4 (để không bị sát lề nhưng vẫn rộng) */}
-        {/* Tablet: md:w-10/12 (Rộng hơn chút) */}
-        {/* Desktop: lg:w-8/12 (Giữ nguyên tỉ lệ cũ cho màn to) */}
         <div className="flex flex-col items-center py-6 md:py-10 w-full px-4 md:w-10/12 lg:w-8/12 transition-all duration-300">
           
           {/* HEADER & FILTER */}
-          <div className="flex flex-col md:flex-row md:justify-between md:items-end items-center w-full md:mb-8 gap-4">
-            {/* HeaderTitle có thể cần w-full hoặc text-center trên mobile nếu nó chưa handle */}
+          <div className="flex flex-col md:flex-row md:justify-between md:items-end items-center w-full gap-4">
             <div className="w-full md:w-auto flex justify-center md:justify-start">
-               <HeaderTitle text="Hall of Fame" />
+               <HeaderTitle text="Hall of Fame" year={semester.slice(0, 4)} />
             </div>
             
             {/* Filter */}
@@ -57,7 +52,6 @@ const HallPage = ({
           </div>
 
           {/* CONTENT AREA */}
-          {/* Đảm bảo width luôn full trong container cha */}
           <div className="w-full flex justify-center mt-4 min-h-[300px]">
             {isLoading ? (
               <div className="p-8 text-center flex flex-col items-center justify-center h-64 animate-in fade-in duration-300 w-full">

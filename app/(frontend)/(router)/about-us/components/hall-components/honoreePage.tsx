@@ -13,7 +13,7 @@ const HonoreePage = ({
 }: CategoryPageProps) => {
   const filteredMembers = useMemo(() => {
     return members.filter(
-      (m) => m.semester === semester && m.category === category
+      (m) => m.semester === semester && m.category === category,
     );
   }, [members, semester, category]);
 
@@ -21,7 +21,7 @@ const HonoreePage = ({
     <section className="relative pt-10 overflow-hidden bg-[#F9FAFB]">
       <div className="flex flex-row justify-center">
         <div className="flex flex-col items-center py-10 lg:w-7/12 md:w-7/12 w-5/12">
-          <HeaderTitle text="Hall of Fame" />
+          <HeaderTitle text="Hall of Fame" year={semester.slice(0, 4)} />
 
           {category && (
             <div>

@@ -5,10 +5,8 @@ import { useState, useEffect } from "react";
 import type { HallOfFameMember } from "./hall-components/types";
 import HonoreePage from "./hall-components/honoreePage";
 import HallPage from "./hall-components/hallPage";
-import { useSemester } from "./hall-components/hooks/useSemester";
 import HallRevealSection from "./hall-components/hall-display/HallRevealSection";
-import Image from "next/image";
-import { motion } from "framer-motion";
+import { useSemester, getAvailableSemesters } from "./hall-components/hooks/useSemester";
 
 const EmptyHallState = ({ semester }: { semester: string }) => {
   const displaySemester = semester.slice(4);
@@ -71,9 +69,9 @@ export default function HallOfFamePage() {
     "Best Department",
     "Club MVP",
   ];
-  const semesters = ["Semester A", "Semester B", "Semester C"];
+  const semesters = getAvailableSemesters(); 
 
-  const { semester } = useSemester(); // Example value: "2025C"
+  const { semester } = useSemester();
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [members, setMembers] = useState<HallOfFameMember[]>([]);
   const [error, setError] = useState<string | null>(null);

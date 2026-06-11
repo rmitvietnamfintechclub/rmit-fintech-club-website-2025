@@ -15,25 +15,27 @@ export default function FinTechInTheEyes() {
       />
 
       <section
-        className="relative z-20 flex flex-col items-center max-w-6xl px-6 mx-auto
-                   md:flex-row md:justify-center md:mr-[8vw] md:items-center"
+        className="relative z-20 flex flex-col items-center
+                   md:flex-row md:justify-center md:items-center md:gap-12 md:mr-16"
       >
-        <div className="hidden md:block md:w-auto md:mb-0">
-          <Image
-            src="https://d2uq10394z5icp.cloudfront.net/about_us/executive_board/nguyen-truong-giang-gr_yB.png"
-            alt="President Avatar"
-            className="w-full object-cover
-                       md:w-[30vw] md:aspect-auto"
-            width={400}
-            height={400}
-            fetchPriority="high"
-            loading="eager"
-            priority={true}
-          />
+        {/* === CỘT 1: IMAGE === */}
+        <div className="hidden md:block w-full md:w-[30vw] max-w-[400px]">
+          <div className="relative w-full aspect-[4/5] rounded-2xl overflow-hidden">
+            <Image
+              src="https://d2uq10394z5icp.cloudfront.net/about_us/executive_board/nguyen-truong-giang-gr_yB.png"
+              alt="President Avatar"
+              className="object-cover object-bottom"
+              fill
+              fetchPriority="high"
+              loading="eager"
+              priority={true}
+              sizes="(min-width: 768px) 30vw, 100vw"
+            />
+          </div>
         </div>
 
         {/* === CỘT 2: TEXT === */}
-        <div className="flex flex-col w-full md:w-[47vw] md:ml-12">
+        <div className="flex flex-col w-full md:w-[47vw]">
           <div className="flex flex-col items-center text-center md:items-start md:text-left">
             <h1
               className="text-5xl py-2 text-[#DBB968] font-[1000] 

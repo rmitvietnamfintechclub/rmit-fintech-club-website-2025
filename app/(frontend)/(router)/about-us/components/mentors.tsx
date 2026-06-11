@@ -161,17 +161,14 @@ export const ClubMentors = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  // Tính toán Index của thẻ đang hiển thị khi người dùng cuộn/vuốt
   const handleScroll = () => {
     if (!scrollRef.current) return;
     const scrollPosition = scrollRef.current.scrollLeft;
     const width = scrollRef.current.clientWidth;
-    // Làm tròn để tìm xem thẻ nào đang chiếm phần lớn màn hình
     const index = Math.round(scrollPosition / width);
     setActiveIndex(index);
   };
 
-  // Hàm để chuyển thẻ khi click vào dấu chấm
   const scrollTo = (index: number) => {
     if (!scrollRef.current) return;
     const width = scrollRef.current.clientWidth;
@@ -184,7 +181,7 @@ export const ClubMentors = () => {
   return (
     <div className="px-4 md:px-20">
       <div className="container mx-auto">
-        <div className="text-center pt-8 font-sans font-extrabold text-3xl md:text-6xl text-[#2C305F]">
+        <div className="text-center pt-12 font-sans font-extrabold text-3xl md:text-6xl text-[#2C305F]">
           OUR CLUB <span className="text-[#DBB968]"> MENTORS</span>
         </div>
 
@@ -194,7 +191,7 @@ export const ClubMentors = () => {
         <div
           ref={scrollRef}
           onScroll={handleScroll}
-          className="flex md:flex-wrap md:justify-between items-center md:items-start gap-10 md:gap-12 pt-4 md:pt-20 overflow-x-auto snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] pb-4"
+          className="flex md:flex-wrap md:justify-between items-center md:items-start gap-10 md:gap-12 pt-4 md:pt-8 overflow-x-auto snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] pb-4"
         >
           {mentorData.map((mentor) => (
             // Bọc MentorCard để thiết lập kích thước và Snap trên mobile
