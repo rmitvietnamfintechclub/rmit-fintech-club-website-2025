@@ -45,8 +45,6 @@ const PageHeader = () => (
   </div>
 );
 
-// 👇 ================== [ MODIFIED COMPONENT ] ================== 👇
-
 function ExecutiveBoardCard({
   photo_url,
   name,
@@ -82,64 +80,65 @@ function ExecutiveBoardCard({
       <Card
         className="
           relative overflow-hidden w-full h-full
-          rounded-xl border-0 shadow-sm mt-0
-          md:rounded-2xl md:border-[4px] md:border-[#F7D27F] md:border-solid
+          rounded-xl border-0 shadow-sm mt-0 bg-[#F5F7FA]
+          md:rounded-2xl md:border-[4px] md:border-[#F7D27F] md:border-solid md:bg-white
         "
       >
-        {/* === MOBILE LAYOUT (PREMIUM STYLE) === */}
-        <div className="md:hidden relative w-full h-56">
+        {/* === MOBILE LAYOUT === */}
+        {/* Ép tỉ lệ aspect-[3/4] để tất cả các thẻ đều cao bằng nhau */}
+        <div className="md:hidden relative w-full aspect-[3/4]">
           <Image
             alt={`${name} profile`}
             src={photo_url}
-            className="object-contain w-full h-full"
-            width={300}
-            height={400}
+            className="object-cover object-top" // Đổi thành object-cover để lấp đầy khung
+            fill // Dùng fill thay vì width/height cố định
+            sizes="(max-width: 768px) 50vw"
             fetchPriority={isPriority ? "high" : "auto"}
             loading={isPriority ? "eager" : "lazy"}
           />
           
-          {/* Gradient Overlay */}
+          {/* Gradient Overlay - Đẩy phần tối lên cao hơn chút để dễ đọc chữ */}
           <div
             className="absolute inset-0 z-10"
             style={{
               background:
-                "linear-gradient(to top, rgba(44, 48, 95, 0.95) 0%, rgba(44, 48, 95, 0.6) 35%, transparent 100%)",
+                "linear-gradient(to top, rgba(44, 48, 95, 0.95) 0%, rgba(44, 48, 95, 0.4) 40%, transparent 100%)",
             }}
           />
 
-          {/* Text Content Mobile - Cân chỉnh lại font size cho thẻ nhỏ */}
-          <div className="absolute bottom-0 left-0 w-full p-2.5 z-20 flex flex-col justify-end">
-            <h6 className="font-bold text-white text-[0.85rem] leading-tight line-clamp-2 drop-shadow-sm">
+          {/* Text Content Mobile */}
+          <div className="absolute bottom-0 left-0 w-full p-3 z-20 flex flex-col justify-end">
+            <h6 className="font-bold text-white text-[0.85rem] leading-tight line-clamp-2 drop-shadow-md">
               {name}
             </h6>
-            <div className="h-0.5 w-5 bg-[#DBB968] my-1"></div>
+            <div className="h-0.5 w-6 bg-[#DBB968] my-1.5"></div>
             <p className="text-[#F7D27F] text-[0.65rem] font-medium leading-tight line-clamp-2">
               {position}
             </p>
           </div>
 
-          {/* LinkedIn Mobile - Thu nhỏ icon lại chút */}
-          <div className="absolute top-2 right-2 z-20">
+          {/* LinkedIn Mobile - Tăng độ tương phản (Nền trắng, Icon xanh navy) */}
+          <div className="absolute top-2.5 right-2.5 z-20">
             {linkedin_url && (
               <Link
                 href={linkedin_url}
                 target="_blank"
-                className="bg-white/20 p-1 rounded-full backdrop-blur-sm block"
+                className="bg-white/95 shadow-md p-1.5 rounded-full block transition-transform active:scale-95"
               >
-                <IconBrandLinkedin size={14} color="white" strokeWidth={1.5} />
+                <IconBrandLinkedin size={16} color="#2C305F" strokeWidth={2} />
               </Link>
             )}
           </div>
         </div>
 
-        {/* === DESKTOP LAYOUT === */}
+        {/* === DESKTOP LAYOUT (Giữ nguyên của bạn) === */}
         <div className="hidden md:block">
           <CardHeader className="pb-0 pt-0 h-[14rem]">
-            <div className="z-0 w-full h-full">
+            <div className="z-0 w-full h-full relative">
               <Image
                 alt={`${name} profile`}
                 src={photo_url}
-                className="object-contain w-full h-full"
+                className="object-contain object-bottom w-full h-full"
                 width={400}
                 height={400}
                 fetchPriority={isPriority ? "high" : "auto"}
@@ -149,11 +148,11 @@ function ExecutiveBoardCard({
           </CardHeader>
           <CardBody className="relative z-10 overflow-visible pb-2 pl-3 pr-2 pt-4 bg-[#F7D27F] rounded-t-3xl">
             <div className="flex justify-between items-start">
-              <div className="flex-1">
-                <h6 className="leading-6 font-semibold text-[0.9rem] text-[#2C305F]">
+              <div className="flex-1 pr-1">
+                <h6 className="leading-5 font-semibold text-[0.9rem] text-[#2C305F]">
                   {name}
                 </h6>
-                <p className="leading-5 text-[#2C305F] text-[0.8rem] mt-1">
+                <p className="leading-4 text-[#2C305F] text-[0.75rem] mt-1 font-medium">
                   {position}
                 </p>
               </div>
@@ -165,20 +164,15 @@ function ExecutiveBoardCard({
                   className="flex-shrink-0 my-auto"
                 >
                   <IconBrandLinkedin
-                    size={40}
+                    size={36}
                     color="#2C305F"
-                    strokeWidth={0.8}
-                    className="h-auto transition duration-300 transform hover:scale-110 hover:brightness-150 hover:drop-shadow-[0_0_6px_#2C305F]"
+                    strokeWidth={1.2}
+                    className="transition duration-300 transform hover:scale-110"
                   />
                 </Link>
               ) : (
                 <div className="flex-shrink-0 my-auto">
-                  <IconBrandLinkedin
-                    size={40}
-                    color="#9CA3AF"
-                    strokeWidth={0.8}
-                    className="opacity-50 cursor-not-allowed"
-                  />
+                  <IconBrandLinkedin size={36} color="#9CA3AF" strokeWidth={1.2} className="opacity-50" />
                 </div>
               )}
             </div>
