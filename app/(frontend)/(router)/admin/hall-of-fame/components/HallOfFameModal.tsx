@@ -241,9 +241,6 @@ export const HallOfFameModal = ({
                     </div>
                   </div>
                 </div>
-                <p className="text-[10px] text-gray-400 mt-1 pl-1">
-                  Ex: 2025 - A → Result: 2025A
-                </p>
               </div>
             </div>
 

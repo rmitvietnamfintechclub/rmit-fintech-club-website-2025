@@ -8,18 +8,23 @@ import Link from "next/link";
 import { ChevronRight, Home } from "lucide-react";
 import { HallOfFameSkeleton } from "./components/HallOfFameSkeleton";
 
-import { Honoree, HOF_CATEGORIES, parseSemester } from "./types";
+// Import thêm hàm mới
+import { Honoree, HOF_CATEGORIES, parseSemester, getDefaultSemesterData } from "./types";
 import { HallOfFameCard } from "./components/HallOfFameCard";
 import { HallOfFameModal } from "./components/HallOfFameModal";
 import { ConfirmationModal } from "../ebmb/components/ConfirmationModal";
 import { deleteFileFromS3 } from "@/app/(backend)/libs/upload-client";
 
 export default function HallOfFamePage() {
+  const defaultSem = getDefaultSemesterData(); // Lấy data học kỳ hiện hành
+
   const [honorees, setHonorees] = useState<Honoree[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [availableYears, setAvailableYears] = useState<number[]>([]);
   const [filterYear, setFilterYear] = useState<number | null>(null);
-  const [filterTerm, setFilterTerm] = useState<string>("A");
+  
+  const [filterTerm, setFilterTerm] = useState<string>(defaultSem.term); 
+  
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingHonoree, setEditingHonoree] = useState<Honoree | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -33,17 +38,19 @@ export default function HallOfFamePage() {
         const years = res.data;
         if (years && years.length > 0) {
           setAvailableYears(years);
-          setFilterYear(years[0]);
+          if (years.includes(defaultSem.year)) {
+            setFilterYear(defaultSem.year);
+          } else {
+            setFilterYear(years[0]);
+          }
         } else {
-          const now = new Date().getFullYear();
-          setAvailableYears([now]);
-          setFilterYear(now);
+          setAvailableYears([defaultSem.year]);
+          setFilterYear(defaultSem.year);
         }
       } catch (error) {
         console.error("Failed to fetch years", error);
-        const now = new Date().getFullYear();
-        setAvailableYears([now]);
-        setFilterYear(now);
+        setAvailableYears([defaultSem.year]);
+        setFilterYear(defaultSem.year);
       }
     };
     fetchYears();
@@ -91,6 +98,7 @@ export default function HallOfFamePage() {
       if (editingHonoree) {
         await axios.put(`/api/v1/hall-of-fame/${editingHonoree._id}`, data);
         toast.success("Updated successfully");
+        fetchHonorees(); 
       } else {
         await axios.post("/api/v1/hall-of-fame", data);
         toast.success("Created successfully");
@@ -105,7 +113,7 @@ export default function HallOfFamePage() {
           setFilterYear(year);
           setFilterTerm(term);
         } else {
-          fetchHonorees();
+          fetchHonorees(); 
         }
       }
       setIsModalOpen(false);
@@ -201,7 +209,6 @@ export default function HallOfFamePage() {
             setEditingHonoree(null);
             setIsModalOpen(true);
           }}
-          // Nút Add dùng ft-primary-yellow để nổi bật trên nền trắng/xám
           className="bg-ft-primary-blue text-white px-5 py-2.5 rounded-xl font-bold hover:brightness-110 transition shadow-lg shadow-yellow-500/20 flex items-center gap-2"
         >
           <Plus size={20} /> Add Honoree
@@ -212,7 +219,6 @@ export default function HallOfFamePage() {
       <div className="bg-white p-2 rounded-2xl border border-gray-100 shadow-sm mb-10 flex flex-col sm:flex-row gap-2 items-center w-fit mx-auto sm:mx-0 animate-in fade-in zoom-in duration-300">
         {/* Year Selector */}
         <div className="relative group">
-          {/* Icon Calendar bên trái */}
           <Calendar
             className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-hover:text-ft-primary-yellow transition-colors pointer-events-none"
             size={18}
@@ -272,7 +278,6 @@ export default function HallOfFamePage() {
 
       {isLoading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {/* Render 4 cái skeleton nhìn cho xịn */}
           {[1, 2, 3, 4].map((i) => (
             <HallOfFameSkeleton key={i} />
           ))}

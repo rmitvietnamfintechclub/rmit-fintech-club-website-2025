@@ -9,7 +9,6 @@ export const HallOfFameSkeleton = () => {
         <div className="h-6 w-12 bg-gray-100 rounded-md animate-pulse"></div>
       </div>
 
-      {/* Image Skeleton - Quan trọng nhất */}
       <div className="relative w-full aspect-[4/3] mb-4 overflow-hidden rounded-xl bg-gray-200 animate-pulse">
         {/* Shimmer effect chạy qua */}
         <div className="absolute inset-0 -translate-x-full animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
