@@ -19,14 +19,19 @@ export async function getHonorees(
   return honorees;
 }
 
-export async function getAvailableYears() {
+export async function getHallOfFameMetadata() {
   const semesters = await HallOfFame.distinct("semester");
+  
+  const sortedSemesters = [...semesters].sort((a, b) => b.localeCompare(a));
   
   const years = Array.from(new Set(
     semesters.map((s: string) => parseInt(s.substring(0, 4)))
   )).sort((a, b) => b - a);
 
-  return years;
+  return {
+    semesters: sortedSemesters,
+    years: years
+  };
 }
 
 export async function createHonoree(data: any) {

@@ -6,7 +6,7 @@ import type { HallOfFameMember } from "./hall-components/types";
 import HonoreePage from "./hall-components/honoreePage";
 import HallPage from "./hall-components/hallPage";
 import HallRevealSection from "./hall-components/hall-display/HallRevealSection";
-import { useSemester, getAvailableSemesters } from "./hall-components/hooks/useSemester";
+import { useSemester } from "./hall-components/hooks/useSemester";
 
 const EmptyHallState = ({ semester }: { semester: string }) => {
   const displaySemester = semester.slice(4);
@@ -69,13 +69,31 @@ export default function HallOfFamePage() {
     "Best Department",
     "Club MVP",
   ];
-  const semesters = getAvailableSemesters(); 
-
-  const { semester } = useSemester();
+  const { semester, setSemester } = useSemester(); 
+  
+  const [availableSemesters, setAvailableSemesters] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [members, setMembers] = useState<HallOfFameMember[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  // FETCH METADATA
+  useEffect(() => {
+    const fetchMetadata = async () => {
+      try {
+        const res = await axios.get("/api/v1/hall-of-fame/metadata");
+        const dbSemesters = res.data.semesters;
+        
+        if (dbSemesters && dbSemesters.length > 0) {
+          setAvailableSemesters(dbSemesters);
+          setSemester(dbSemesters[0]);
+        }
+      } catch (error) {
+        console.error("Failed to load metadata", error);
+      }
+    };
+    fetchMetadata();
+  }, []);
 
   useEffect(() => {
     const fetchMembers = async () => {
@@ -139,10 +157,10 @@ export default function HallOfFamePage() {
         <div className="flex flex-col items-center w-full">
           <HallPage
             categories={categories}
-            semesters={semesters}
+            semesters={availableSemesters}
             onCategorySelect={setSelectedCategory}
             isEmpty={members.length === 0}
-            isLoading={loading} // Pass loading state down
+            isLoading={loading}
             emptyComponent={<EmptyHallState semester={semester} />}
           />
         </div>

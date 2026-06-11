@@ -8,22 +8,19 @@ import Link from "next/link";
 import { ChevronRight, Home } from "lucide-react";
 import { HallOfFameSkeleton } from "./components/HallOfFameSkeleton";
 
-// Import thêm hàm mới
-import { Honoree, HOF_CATEGORIES, parseSemester, getDefaultSemesterData } from "./types";
+import { Honoree, HOF_CATEGORIES, parseSemester } from "./types";
 import { HallOfFameCard } from "./components/HallOfFameCard";
 import { HallOfFameModal } from "./components/HallOfFameModal";
 import { ConfirmationModal } from "../ebmb/components/ConfirmationModal";
 import { deleteFileFromS3 } from "@/app/(backend)/libs/upload-client";
 
 export default function HallOfFamePage() {
-  const defaultSem = getDefaultSemesterData(); // Lấy data học kỳ hiện hành
-
   const [honorees, setHonorees] = useState<Honoree[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [availableYears, setAvailableYears] = useState<number[]>([]);
-  const [filterYear, setFilterYear] = useState<number | null>(null);
   
-  const [filterTerm, setFilterTerm] = useState<string>(defaultSem.term); 
+  const [filterYear, setFilterYear] = useState<number | null>(null);
+  const [filterTerm, setFilterTerm] = useState<string>("A"); 
   
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingHonoree, setEditingHonoree] = useState<Honoree | null>(null);
@@ -32,28 +29,40 @@ export default function HallOfFamePage() {
   const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
-    const fetchYears = async () => {
+    const fetchMetadata = async () => {
       try {
-        const res = await axios.get("/api/v1/hall-of-fame/years");
-        const years = res.data;
+        const res = await axios.get("/api/v1/hall-of-fame/metadata");
+        const { years, semesters } = res.data; 
+        
         if (years && years.length > 0) {
           setAvailableYears(years);
-          if (years.includes(defaultSem.year)) {
-            setFilterYear(defaultSem.year);
+          
+          if (semesters && semesters.length > 0) {
+            const latestDbSem = semesters[0]; 
+            const latestYear = parseInt(latestDbSem.substring(0, 4));
+            const latestTerm = latestDbSem.substring(4);
+            
+            setFilterYear(latestYear);
+            setFilterTerm(latestTerm);
           } else {
             setFilterYear(years[0]);
+            setFilterTerm("A"); 
           }
         } else {
-          setAvailableYears([defaultSem.year]);
-          setFilterYear(defaultSem.year);
+          const currentYear = new Date().getFullYear();
+          setAvailableYears([currentYear]);
+          setFilterYear(currentYear);
+          setFilterTerm("A");
         }
       } catch (error) {
-        console.error("Failed to fetch years", error);
-        setAvailableYears([defaultSem.year]);
-        setFilterYear(defaultSem.year);
+        console.error("Failed to fetch metadata", error);
+        const currentYear = new Date().getFullYear();
+        setAvailableYears([currentYear]);
+        setFilterYear(currentYear);
+        setFilterTerm("A");
       }
     };
-    fetchYears();
+    fetchMetadata();
   }, []);
 
   const fetchHonorees = async () => {
