@@ -59,7 +59,7 @@ export default function FinTechInTheEyes() {
               className={`text-4xl text-[#DBB968] font-extrabold ${fontSans.style} 
                           md:text-5xl`}
             >
-              President
+              Former President
             </h2>
             <h2
               className={`text-[#2B305E] font-extrabold ${fontSans.style} text-4xl max-md:leading-snug`}
