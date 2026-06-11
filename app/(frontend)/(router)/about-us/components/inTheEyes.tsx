@@ -7,7 +7,7 @@ export default function FinTechInTheEyes() {
       <Image
         src="https://d2uq10394z5icp.cloudfront.net/global/Mascot+-+M%E1%BA%B7t+tr%C6%B0%E1%BB%9Bc.svg"
         alt="Bear mascot"
-        className="absolute w-[190px] -top-[5rem] right-[-5.5rem] rotate-[-50deg] z-30
+        className="absolute w-[190px] -top-[4.5rem] right-[-5.5rem] rotate-[-50deg] z-30
                    md:w-[368px] md:-top-[12rem] md:right-[-8rem]"
         width={400}
         height={400}
@@ -16,11 +16,11 @@ export default function FinTechInTheEyes() {
 
       <section
         className="relative z-20 flex flex-col items-center
-                   md:flex-row md:justify-center md:items-center md:gap-12 md:mr-16"
+                   md:flex-row md:justify-center md:items-end md:gap-8 md:mr-20"
       >
         {/* === CỘT 1: IMAGE === */}
         <div className="hidden md:block w-full md:w-[30vw] max-w-[400px]">
-          <div className="relative w-full aspect-[4/5] rounded-2xl overflow-hidden">
+          <div className="relative w-full aspect-[4/5] overflow-hidden">
             <Image
               src="https://d2uq10394z5icp.cloudfront.net/about_us/executive_board/nguyen-truong-giang-gr_yB.png"
               alt="President Avatar"
@@ -35,7 +35,7 @@ export default function FinTechInTheEyes() {
         </div>
 
         {/* === CỘT 2: TEXT === */}
-        <div className="flex flex-col w-full md:w-[47vw]">
+        <div className="flex flex-col w-full md:w-[46vw] max-md:px-6">
           <div className="flex flex-col items-center text-center md:items-start md:text-left">
             <h1
               className="text-5xl py-2 text-[#DBB968] font-[1000] 

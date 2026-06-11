@@ -39,7 +39,7 @@ const DecorativeElements = () => (
 
 const PageHeader = () => (
   <div className="content grid text-right">
-    <h2 className="leading-tight text-[#5E5E92] !text-[1.75rem] md:!text-5xl font-bold">
+    <h2 className="leading-tight text-[#5E5E92] !text-[1.85rem] md:!text-5xl font-bold">
       Meet Our
     </h2>
     <h1 className="leading-tight text-[#DCB968] !text-[2.05rem] md:!text-6xl md:mt-1 font-bold">
@@ -257,7 +257,7 @@ const ManagementBoard = () => {
   }
 
   return (
-    <section className="relative max-md:pb-0 md:py-24 px-6 md:px-20">
+    <section className="relative md:py-24 px-6 md:px-20">
       <DecorativeElements />
       <main>
         <div className="md:mb-2">

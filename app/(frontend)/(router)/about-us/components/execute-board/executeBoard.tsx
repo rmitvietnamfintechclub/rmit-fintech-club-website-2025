@@ -251,7 +251,7 @@ const ExecutiveBoard = () => {
   }
 
   return (
-    <section className="relative max-md:pt-16 max-md:pb-12 md:py-24 px-6 md:px-20">
+    <section className="relative max-md:pt-12 max-md:pb-0 md:py-24 px-6 md:px-20">
       <DecorativeCircles />
       <main>
         <div className="md:mb-2">

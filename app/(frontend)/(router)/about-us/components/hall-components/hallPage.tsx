@@ -33,7 +33,7 @@ const HallPage = ({
         </div>
 
         {/* --- MAIN CONTENT WRAPPER --- */}
-        <div className="flex flex-col items-center py-6 md:py-10 w-full px-4 md:w-10/12 lg:w-8/12 transition-all duration-300">
+        <div className="flex flex-col items-center pb-6 md:py-10 w-full px-4 md:w-10/12 lg:w-8/12 transition-all duration-300">
           
           {/* HEADER & FILTER */}
           <div className="flex flex-col md:flex-row md:justify-between md:items-end items-center w-full gap-4">

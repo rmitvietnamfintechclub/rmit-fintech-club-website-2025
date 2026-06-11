@@ -181,7 +181,7 @@ export const ClubMentors = () => {
   return (
     <div className="px-4 md:px-20">
       <div className="container mx-auto">
-        <div className="text-center pt-12 font-sans font-extrabold text-3xl md:text-6xl text-[#2C305F]">
+        <div className="text-center pt-6 md:pt-12 font-sans font-extrabold text-3xl md:text-6xl text-[#2C305F]">
           OUR CLUB <span className="text-[#DBB968]"> MENTORS</span>
         </div>
 

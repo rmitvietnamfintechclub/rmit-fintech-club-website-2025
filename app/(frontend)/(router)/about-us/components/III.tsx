@@ -47,7 +47,7 @@ function III() {
     <section
       ref={ref}
       className="content relative bg-cover bg-center 
-                 pt-8 pb-16 md:pt-[55rem] md:pb-0"
+                 pt-12 pb-16 md:pt-[55rem] md:pb-0"
     >
       <h1
         className="absolute bg-[#2C305F] text-white p-[1rem] w-[60rem] h-[6rem] top-12 rounded-br-3xl text-center shadow-2xl text-[6rem]
