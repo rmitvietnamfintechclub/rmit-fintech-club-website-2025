@@ -237,7 +237,7 @@ const ClubwideProjects = () => {
           <div className="hidden lg:block flex-shrink-0">
             <div className="relative">
               {/* Main Card */}
-              <div className="w-[30rem] h-[22rem] rounded-[30px] bg-gradient-to-b from-[rgba(240,237,255,1)] to-[rgba(94,94,146,1)] z-20 relative shadow-2xl border-4 border-white/10">
+              <div className="w-[30rem] h-[22rem] rounded-[30px] bg-gradient-to-b from-[rgba(240,237,255,1)] to-[rgba(94,94,146,1)] z-20 relative shadow-2xl">
                 <div
                   className="absolute inset-0 m-[10px] bg-[length:100%_100%] bg-center bg-no-repeat rounded-3xl transition-all duration-700 ease-in-out"
                   style={{

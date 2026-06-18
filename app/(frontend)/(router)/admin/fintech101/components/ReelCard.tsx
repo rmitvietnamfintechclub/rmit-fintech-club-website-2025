@@ -56,7 +56,7 @@ export const ReelCard = ({ reel, onEdit, onDelete }: ReelCardProps) => {
       <div className="p-4 flex flex-col flex-1">
         {/* Labels */}
         <div className="flex flex-wrap gap-1.5 mb-2 h-6 overflow-hidden">
-          {reel.labels.slice(0, 3).map((label, idx) => (
+          {reel.labels.slice(0, 2).map((label, idx) => (
             <span
               key={idx}
               className="text-[10px] uppercase font-bold px-1.5 py-0.5 rounded-md bg-blue-50 text-ft-primary-blue border border-blue-100"
@@ -64,9 +64,9 @@ export const ReelCard = ({ reel, onEdit, onDelete }: ReelCardProps) => {
               {label}
             </span>
           ))}
-          {reel.labels.length > 3 && (
+          {reel.labels.length > 2 && (
             <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-gray-50 text-gray-500">
-              +{reel.labels.length - 3}
+              +{reel.labels.length - 2}
             </span>
           )}
         </div>

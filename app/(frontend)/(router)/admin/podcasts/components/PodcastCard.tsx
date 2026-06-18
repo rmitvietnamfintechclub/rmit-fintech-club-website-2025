@@ -36,14 +36,12 @@ export const PodcastCard = ({
           <button
             onClick={() => onEdit(podcast)}
             className="p-2 bg-white text-ft-primary-blue rounded-full hover:scale-110 transition-transform shadow-lg"
-            title="Edit"
           >
             <Edit2 size={18} />
           </button>
           <button
             onClick={onDelete}
             className="p-2 bg-white text-ft-danger rounded-full hover:scale-110 transition-transform shadow-lg"
-            title="Delete"
           >
             <Trash2 size={18} />
           </button>
@@ -78,9 +76,7 @@ export const PodcastCard = ({
         <h3 className="text-lg font-bold text-ft-primary-blue mb-2 line-clamp-2 group-hover:text-ft-primary-yellow transition-colors min-h-[3.5rem]">
           {podcast.title}
         </h3>
-        <p className="text-sm text-gray-500 line-clamp-3">
-          {podcast.summary}
-        </p>
+        <p className="text-sm text-gray-500 line-clamp-3">{podcast.summary}</p>
         {/* Guest Speaker Info (Mini Card) */}
         <div className="mt-4 pt-4 border-t border-gray-100 flex items-center gap-3">
           <div className="relative w-10 h-10 rounded-full overflow-hidden border border-gray-200 shrink-0">

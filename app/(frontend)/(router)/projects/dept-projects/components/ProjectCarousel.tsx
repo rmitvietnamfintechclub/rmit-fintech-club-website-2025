@@ -11,52 +11,53 @@ type CarouselProps = {
 };
 
 function ProjectCard({ item, isActive, onClick }: { item: Project; isActive: boolean; onClick: () => void }) {
-    return (
-        <div
-          onClick={onClick}
-          className={`
-            relative group/card cursor-pointer flex flex-col h-full rounded-2xl overflow-hidden transition-all duration-300
-            ${isActive 
-              ? "ring-4 ring-[#DBB968] shadow-xl scale-[1.02] z-10"
-              : "border border-gray-100 shadow-sm hover:shadow-lg hover:border-[#DBB968]/50 opacity-80 hover:opacity-100 hover:scale-[1.01] hover:z-20"
-            }
-          `}
-        >
-          <div className="relative w-full aspect-square overflow-hidden bg-gray-200">
-            {item.imageUrl ? (
-              <Image
-                src={item.imageUrl}
-                alt={item.title}
-                fill
-                sizes="(max-width: 768px) 100vw, 33vw"
-                className="object-cover transition-transform duration-500 group-hover/card:scale-110"
-              />
-            ) : (
-              <div className="absolute inset-0 flex items-center justify-center text-gray-400">
-                <ImageIcon size={32} />
-              </div>
-            )}
-            
-            {!isActive && (
-              <div className="absolute inset-0 bg-black/20 opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 flex items-center justify-center text-white backdrop-blur-[1px]">
-                <MousePointerClick size={32} className="drop-shadow-md" />
-              </div>
-            )}
+  return (
+    <div
+      onClick={onClick}
+      className={`
+        relative group/card cursor-pointer flex flex-col h-full rounded-2xl overflow-hidden transition-all duration-300
+        ${isActive 
+          ? "ring-4 ring-[#DBB968] shadow-xl scale-[1.02] z-10"
+          : "border border-gray-100 shadow-sm hover:shadow-lg hover:border-[#DBB968]/50 opacity-80 hover:opacity-100 hover:scale-[1.01] hover:z-20"
+        }
+      `}
+    >
+      <div className="relative w-full aspect-square overflow-hidden bg-gray-200">
+        {item.imageUrl ? (
+          <Image
+            src={item.imageUrl}
+            alt={item.title}
+            fill
+            sizes="(max-width: 768px) 100vw, 33vw"
+            className="object-cover transition-transform duration-500 group-hover/card:scale-110"
+          />
+        ) : (
+          <div className="absolute inset-0 flex items-center justify-center text-gray-400">
+            <ImageIcon size={32} />
           </div>
-    
-          <div className={`p-4 flex flex-col flex-1 transition-colors duration-300 ${isActive ? "bg-[#2C305F]" : "bg-white group-hover/card:bg-gray-50"}`}>
-            <h3 className={`font-bold text-base line-clamp-2 mb-2 transition-colors ${isActive ? "text-white" : "text-gray-800 group-hover/card:text-[#2C305F]"}`}>
-              {item.title}
-            </h3>
+        )}
+        
+        {!isActive && (
+          <div className="absolute inset-0 bg-black/20 opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 flex items-center justify-center text-white backdrop-blur-[1px]">
+            <MousePointerClick size={32} className="drop-shadow-md" />
           </div>
-        </div>
-      );
+        )}
+      </div>
+
+      <div className="p-4 flex flex-col flex-1 transition-colors duration-300 bg-white group-hover/card:bg-gray-50">
+        <h3 className={`font-bold text-base line-clamp-2 mb-2 transition-colors text-gray-800 group-hover/card:text-[#2C305F]`}>
+          {item.title}
+        </h3>
+      </div>
+    </div>
+  );
 }
 
 export default function ProjectCarousel({ items, activeId, onSelect }: CarouselProps) {
   const [isDesktop, setIsDesktop] = useState(false);
   const [page, setPage] = useState(0);
 
+  // 1. Hook check responsive
   useEffect(() => {
     const checkMedia = () => setIsDesktop(window.innerWidth >= 768);
     checkMedia();
@@ -64,11 +65,11 @@ export default function ProjectCarousel({ items, activeId, onSelect }: CarouselP
     return () => window.removeEventListener("resize", checkMedia);
   }, []);
 
-  if (!items || items.length === 0) return null;
-
   const itemsPerPage = isDesktop ? 3 : 1; 
 
   const pages = useMemo(() => {
+    if (!items || items.length === 0) return []; 
+    
     const chunks = [];
     for (let i = 0; i < items.length; i += itemsPerPage) {
       chunks.push(items.slice(i, i + itemsPerPage));
@@ -79,6 +80,8 @@ export default function ProjectCarousel({ items, activeId, onSelect }: CarouselP
   useEffect(() => {
     setPage(0);
   }, [items]);
+
+  if (!items || items.length === 0) return null;
 
   const canPrev = page > 0;
   const canNext = page < pages.length - 1;

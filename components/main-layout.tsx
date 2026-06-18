@@ -22,6 +22,8 @@ export default function MainLayout({
   const disableLayoutRoutes = ["/login"];
   const shouldHideLayout = disableLayoutRoutes.includes(pathname);
 
+  const shouldHideFooter = shouldHideLayout || pathname.startsWith("/admin");
+
   const renderNavbar = () => {
     if (shouldHideLayout) return null;
 
@@ -40,7 +42,7 @@ export default function MainLayout({
         {children}
       </main>
 
-      {!shouldHideLayout && !isLoggedIn && <FooterWrapper />}
+      {!shouldHideFooter && <FooterWrapper />}
     </div>
   );
 }

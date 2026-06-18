@@ -26,15 +26,16 @@ const Media = () => {
       style={{
         background: "linear-gradient(to top, #2C305F, #5E5E92)",
       }}
-      className="overflow-x-hidden" // Prevent horizontal scroll from mascots
+      className="relative overflow-hidden"
     >
-      {/* --- Decorative Circles (Desktop Only) --- */}
-      <div className="hidden md:block">
-        <div className="absolute bottom-[-11rem] right-[5rem] w-[4rem] h-[4rem] bg-[#F0EDFF] rounded-full z-10"></div>
-        <div className="absolute bottom-[-1rem] right-[-1rem] w-[4rem] h-[4rem] bg-[#A28436] rounded-full z-10"></div>
-        <div className="absolute bottom-[-8rem] right-[-1rem] w-[8rem] h-[8rem] bg-[#DCB968] rounded-full z-20"></div>
-        <div className="absolute bottom-[-2rem] right-[6.5rem] w-[2.5rem] h-[2.5rem] bg-[#F0EDFF] rounded-full z-10"></div>
-        <div className="absolute bottom-[-4rem] right-[12rem] w-[2.5rem] h-[2.5rem] bg-gradient-to-t from-[#999] to-[#FFF] rounded-full z-10"></div>
+      {/* --- Decorative Circles: Center Anchor --- */}
+      <div className="hidden md:block absolute top-1/2 right-0 -translate-y-1/2 z-10">
+        {/* Từ khung ảo này, canh tọa độ các hình tròn tỏa ra xung quanh */}
+        <div className="absolute bottom-[-3rem] right-[5rem] w-[4rem] h-[4rem] bg-[#F0EDFF] rounded-full"></div>
+        <div className="absolute bottom-[7rem] right-[-1rem] w-[4rem] h-[4rem] bg-[#A28436] rounded-full"></div>
+        <div className="absolute bottom-0 right-[-2rem] w-[8rem] h-[8rem] bg-[#DCB968] rounded-full shadow-lg"></div>
+        <div className="absolute bottom-[4rem] right-[6.5rem] w-[2.5rem] h-[2.5rem] bg-[#F0EDFF] rounded-full"></div>
+        <div className="absolute bottom-[2rem] right-[12rem] w-[2.5rem] h-[2.5rem] bg-gradient-to-t from-[#999] to-[#FFF] rounded-full"></div>
       </div>
 
       {/* === SECTION 1: ARTICLE === */}

@@ -107,15 +107,18 @@ const FileIcon = () => (
 const ActionButton = ({
   text,
   onClick,
+  icon,
 }: {
   text: string;
   onClick?: () => void;
+  icon?: React.ReactNode;
 }) => (
   <motion.button
-    className="bg-ft-primary-blue-300 text-bluePrimary font-semibold px-4 py-2 rounded-md hover:bg-yellowCream w-full transition-colors duration-200"
+    className="bg-ft-primary-blue-300 text-bluePrimary font-semibold px-4 py-2 rounded-md hover:bg-yellowCream w-full transition-colors duration-200 flex items-center justify-center gap-2"
     onClick={onClick}
   >
-    {text}
+    <span>{text}</span>
+    {icon && icon}
   </motion.button>
 );
 
@@ -161,22 +164,22 @@ export default function SpecificArticle({
   }, [params.id]);
 
   if (loading) {
-      return (
-        <div className="flex flex-col items-center justify-center w-full h-screen p-8">
-          <Spinner 
-            size="lg"
-            classNames={{
-              wrapper: "w-16 h-16",
-              circle1: "border-b-ft-primary-yellow border-[4px]", 
-              circle2: "border-b-ft-primary-yellow border-[4px]",
-            }}
-          />
-          <p className="mt-5 text-lg font-semibold text-[#5E5E92] animate-pulse tracking-wide">
-            Loading Article...
-          </p>
-        </div>
-      );
-    }
+    return (
+      <div className="flex flex-col items-center justify-center w-full h-screen p-8">
+        <Spinner
+          size="lg"
+          classNames={{
+            wrapper: "w-16 h-16",
+            circle1: "border-b-ft-primary-yellow border-[4px]",
+            circle2: "border-b-ft-primary-yellow border-[4px]",
+          }}
+        />
+        <p className="mt-5 text-lg font-semibold text-[#5E5E92] animate-pulse tracking-wide">
+          Loading Article...
+        </p>
+      </div>
+    );
+  }
 
   // --- ERROR STATE ---
   if (error) {
@@ -272,15 +275,32 @@ export default function SpecificArticle({
                 background: "linear-gradient(to top, #474A6E, #DBB968)",
               }}
             >
-              <ActionButton
-                text="Read Article"
-                onClick={() => {
-                  const element = document.getElementById("article");
-                  if (element) {
-                    element.scrollIntoView({ behavior: "smooth" });
+              <Link
+                href={article.content_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full"
+              >
+                <ActionButton 
+                  text="Read Article" 
+                  icon={
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                      <polyline points="15 3 21 3 21 9"></polyline>
+                      <line x1="10" y1="14" x2="21" y2="3"></line>
+                    </svg>
                   }
-                }}
-              />
+                />
+              </Link>
             </div>
             <div
               className="w-full sm:w-fit h-fit rounded-md p-[2px] mt-[0.5rem]"

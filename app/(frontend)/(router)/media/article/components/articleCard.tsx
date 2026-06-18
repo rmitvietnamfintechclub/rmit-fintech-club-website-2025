@@ -23,12 +23,8 @@ const ArticleCard: FC<ArticleCardProps> = ({
 }) => {
   return (
     <motion.div
-      whileHover={{ scale: 1.02 }}
+      whileHover={{ scale: 1.01 }}
       transition={{ type: "spring", stiffness: 400, damping: 10 }}
-      // --- RESPONSIVE LAYOUT ---
-      // Stacks vertically on mobile, row on desktop
-      // Height is auto on mobile, fixed on desktop
-      // Width is full on mobile, max-w-6xl on desktop
       className="flex flex-col md:flex-row rounded-xl shadow-lg border border-transparent hover:border-[#DBB968] overflow-hidden 
                  w-full max-w-lg mx-auto md:max-w-6xl h-auto md:h-[25rem] mb-8 cursor-pointer"
     >

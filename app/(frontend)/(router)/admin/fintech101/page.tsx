@@ -29,7 +29,7 @@ export default function ReelPage() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [filterLabel, setFilterLabel] = useState("");
-  const limit = 8;
+  const limit = 6;
 
   // Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -193,7 +193,7 @@ export default function ReelPage() {
 
       {/* Content */}
       {isLoading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-8">
           {[...Array(4)].map((_, i) => (
             <ReelCardSkeleton key={i} />
           ))}
@@ -214,7 +214,7 @@ export default function ReelPage() {
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-8">
             {reels.map((reel) => (
               <ReelCard
                 key={reel._id}
