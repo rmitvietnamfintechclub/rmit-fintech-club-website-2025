@@ -1,4 +1,3 @@
-// src/app/.../DeptProjectsPage.tsx
 "use client";
 
 import React from "react";

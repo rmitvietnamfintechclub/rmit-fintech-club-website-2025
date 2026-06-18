@@ -45,7 +45,7 @@ function ProjectCard({ item, isActive, onClick }: { item: Project; isActive: boo
       </div>
 
       <div className="p-4 flex flex-col flex-1 transition-colors duration-300 bg-white group-hover/card:bg-gray-50">
-        <h3 className={`font-bold text-base line-clamp-2 mb-2 transition-colors text-gray-800 group-hover/card:text-[#2C305F]`}>
+        <h3 className={`font-bold text-base line-clamp-2 transition-colors text-gray-800 group-hover/card:text-[#2C305F] ${isActive ? "text-[#2C305F]" : ""}`}>
           {item.title}
         </h3>
       </div>
@@ -57,7 +57,10 @@ export default function ProjectCarousel({ items, activeId, onSelect }: CarouselP
   const [isDesktop, setIsDesktop] = useState(false);
   const [page, setPage] = useState(0);
 
-  // 1. Hook check responsive
+  // State quản lý tọa độ chạm vuốt trên Mobile
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+
   useEffect(() => {
     const checkMedia = () => setIsDesktop(window.innerWidth >= 768);
     checkMedia();
@@ -65,7 +68,7 @@ export default function ProjectCarousel({ items, activeId, onSelect }: CarouselP
     return () => window.removeEventListener("resize", checkMedia);
   }, []);
 
-  const itemsPerPage = isDesktop ? 3 : 1; 
+  const itemsPerPage = isDesktop ? 3 : 2; 
 
   const pages = useMemo(() => {
     if (!items || items.length === 0) return []; 
@@ -86,15 +89,41 @@ export default function ProjectCarousel({ items, activeId, onSelect }: CarouselP
   const canPrev = page > 0;
   const canNext = page < pages.length - 1;
 
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > 50;
+    const isRightSwipe = distance < -50;
+
+    if (isLeftSwipe && canNext) setPage((p) => p + 1);
+    if (isRightSwipe && canPrev) setPage((p) => p - 1);
+
+    setTouchStart(null);
+    setTouchEnd(null);
+  };
+
   return (
-    <div className="relative w-full group/carousel px-1">
+    <div 
+      className="relative w-full group/carousel px-1 touch-pan-y"
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+    >
       <div className="overflow-visible rounded-xl py-2"> 
         <div
           className="flex transition-transform duration-500 ease-out"
           style={{ transform: `translateX(-${page * 100}%)` }}
         >
           {pages.map((group, i) => (
-            <div key={i} className="w-full shrink-0 grid grid-cols-1 md:grid-cols-3 gap-8 px-1">
+            <div key={i} className="w-full shrink-0 grid grid-cols-2 md:grid-cols-3 gap-8 px-1">
               {group.map((item) => (
                 <ProjectCard 
                   key={item.id} 
@@ -128,13 +157,13 @@ export default function ProjectCarousel({ items, activeId, onSelect }: CarouselP
           </button>
 
           {/* Dots Indicator */}
-          <div className="flex justify-center mt-4 gap-1.5">
+          <div className="flex justify-center mt-4 gap-2 py-2">
             {pages.map((_, i) => (
               <button
                 key={i}
                 onClick={() => setPage(i)}
-                className={`h-1.5 rounded-full transition-all duration-300 ${
-                  i === page ? "w-6 bg-[#2C305F]" : "w-1.5 bg-gray-300 hover:bg-[#DBB968]"
+                className={`h-2 rounded-full transition-all duration-300 ${
+                  i === page ? "w-6 bg-[#2C305F]" : "w-2 bg-[#2C305F]/10 hover:bg-[#DBB968]"
                 }`}
                 aria-label={`Go to page ${i + 1}`}
               />
