@@ -281,8 +281,8 @@ export default function SpecificArticle({
                 rel="noopener noreferrer"
                 className="w-full"
               >
-                <ActionButton 
-                  text="Read Article" 
+                <ActionButton
+                  text="Read Article"
                   icon={
                     <svg
                       width="14"
@@ -428,7 +428,7 @@ export default function SpecificArticle({
           )}
 
           <div>
-            <h2 className="text-3xl font-bold text-ft-primary-yellow-100 mb-4">
+            <h2 className="text-3xl font-bold text-ft-primary-yellow-100 max-md:mt-4 mb-4">
               {sidebarTitle}
             </h2>
             <div
@@ -436,10 +436,9 @@ export default function SpecificArticle({
                 flex flex-row md:flex-col 
                 gap-4 
                 overflow-x-auto snap-x snap-mandatory md:overflow-visible 
-                pb-4 md:pb-0 
-                scrollbar-hide /* Cần thêm plugin hoặc style ẩn scrollbar */
+                pb-4 md:pb-0
+                no-scrollbar
             "
-              style={{ msOverflowStyle: "none", scrollbarWidth: "none" }}
             >
               {sidebarArticles.map((item) => (
                 <Link
@@ -447,7 +446,6 @@ export default function SpecificArticle({
                   key={item._id}
                   className="
                     group flex flex-col bg-white rounded-lg overflow-hidden border-2 border-gray-200 md:border-transparent hover:border-[#DBB968] hover:shadow-lg transition-all duration-300
-                    /* --- CAROUSEL STYLES --- */
                     flex-shrink-0 
                     w-[80vw] sm:w-[45vw] md:w-full
                     snap-center
@@ -472,8 +470,6 @@ export default function SpecificArticle({
                   </div>
                 </Link>
               ))}
-              {/* Spacer for mobile scroll */}
-              <div className="w-2 md:hidden flex-shrink-0"></div>
             </div>
           </div>
 

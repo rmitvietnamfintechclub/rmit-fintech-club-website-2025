@@ -179,3 +179,5 @@ dist
 .flaskenv*
 !.env.project
 !.env.vault
+.vercel
+.env*.local

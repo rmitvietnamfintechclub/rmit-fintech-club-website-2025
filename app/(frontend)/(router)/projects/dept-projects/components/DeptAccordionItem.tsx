@@ -13,7 +13,6 @@ export default function DeptAccordionItem({ value, label, color, isOpen, renderC
   const borderClass = BORDER_COLORS[color] ?? "border-current";
   const itemRef = useRef<HTMLDivElement>(null);
 
-  // UX Tinh tế: Khi bấm mở tab trên Mobile, tự động cuộn nhẹ màn hình để ôm trọn vẹn nội dung mới
   useEffect(() => {
     if (isOpen && window.innerWidth < 1024) {
       const timeout = setTimeout(() => {
@@ -21,7 +20,7 @@ export default function DeptAccordionItem({ value, label, color, isOpen, renderC
           behavior: "smooth",
           block: "start",
         });
-      }, 350); // Delay nhẹ khớp với thời gian chạy animation mở h-full của accordion
+      }, 350);
       return () => clearTimeout(timeout);
     }
   }, [isOpen]);
@@ -34,7 +33,7 @@ export default function DeptAccordionItem({ value, label, color, isOpen, renderC
         group border-none w-full lg:w-auto
         lg:flex lg:items-stretch lg:min-w-0
         transition-[flex-basis] ease-[cubic-bezier(0.4,0,0.2,1)] duration-[var(--acc-dur)]
-        scroll-mt-[8vh] /* Chừa khoảng trống an toàn bằng chiều cao Navbar cố định */
+        scroll-mt-[8vh]
         ${isOpen ? "lg:flex-[1_1_var(--acc-open-w)]" : "lg:flex-[0_0_var(--acc-tab-w)]"}
       `}
     >
@@ -66,7 +65,7 @@ export default function DeptAccordionItem({ value, label, color, isOpen, renderC
           ${isOpen ? `opacity-100 visible h-full border-4 ${borderClass}` : "border-0 opacity-0 invisible lg:hidden"}
         `}
       >
-        <div className="h-full w-full overflow-y-auto overflow-x-hidden p-5 md:p-8 md:pb-4">
+        <div className="h-full w-full overflow-y-auto overflow-x-hidden max-md:px-5 max-md:pt-5 md:p-8 md:pb-4">
            {renderContent()}
         </div>
       </AccordionContent>

@@ -54,9 +54,9 @@ export default function DeptSection({ label, items }: Props) {
         style={{ clipPath: "polygon(0 0, 85% 0, 100% 50%, 85% 100%, 0 100%)" }}
       />
 
-      <div className="relative z-10 mb-6 lg:mb-8">
+      <div className="relative z-10 mb-4 lg:mb-8">
         <header className="flex flex-col gap-1 lg:gap-2 mb-2 lg:mb-4">
-          <h1 className="leading-tight text-2xl md:text-4xl lg:text-5xl">
+          <h1 className="leading-tight text-xl md:text-4xl lg:text-5xl">
             <span className="font-light text-gray-800">Visit </span>
             <span className="font-extrabold tracking-wide text-[#DBB968]">
               {label}
@@ -71,7 +71,6 @@ export default function DeptSection({ label, items }: Props) {
 
       {/* DYNAMIC PROJECT DESCRIPTION AREA */}
       <div className="relative z-10 flex-1 flex flex-col gap-6">
-        {/* Detail View Box - Tối ưu hóa thu gọn chiều cao trên Mobile */}
         <div className="bg-gray-50 rounded-2xl p-5 md:p-8 border border-gray-100 shadow-inner min-h-fit lg:min-h-[310px] transition-all duration-300">
           {activeProject && (
             <div

@@ -223,7 +223,7 @@ const ClubwideProjects = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.6, ease: "easeInOut" }}
+          transition={{ duration: 0.4, ease: "easeInOut" }}
           className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-all"
           style={{ backgroundImage: `url(${currentProject.image})` }}
         >
@@ -271,7 +271,7 @@ const ClubwideProjects = () => {
               transition={{ duration: 0.45, ease: [0.25, 1, 0.5, 1] }}
             >
               {/* Labels Row */}
-              <div className="flex flex-wrap gap-2 mb-4 justify-start">
+              <div className="flex flex-wrap gap-2 mb-4 justify-center md:justify-start">
                 {currentProject.labels.map((label, index) => (
                   <span
                     key={index}
@@ -282,7 +282,7 @@ const ClubwideProjects = () => {
                 ))}
               </div>
 
-              <h2 className="text-3xl lg:text-[2.5rem] font-[1000] mb-4 leading-tight drop-shadow-md tracking-wide uppercase">
+              <h2 className="text-2xl lg:text-[2.5rem] font-[1000] mb-4 text-center md:text-left leading-tight drop-shadow-md tracking-wide uppercase">
                 {currentProject.title}
               </h2>
 

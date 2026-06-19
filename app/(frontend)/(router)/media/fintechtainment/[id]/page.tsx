@@ -143,7 +143,7 @@ export default function SpecificPodcast({
           }}
         />
         <p className="mt-5 text-lg font-semibold text-[#5E5E92] animate-pulse tracking-wide">
-          Loading...
+          Loading Podcast...
         </p>
       </div>
     );
@@ -164,7 +164,7 @@ export default function SpecificPodcast({
               }}
             >
               <Link href="/media/fintechtainment">
-                <ActionButton text="Back to Fintechtainment Library" />
+                <ActionButton text="Back to Podcast Library" />
               </Link>
             </div>
           </div>
@@ -197,7 +197,7 @@ export default function SpecificPodcast({
               }}
             >
               <Link href="/media/fintechtainment">
-                <ActionButton text="Back to Fintechtainment Library" />
+                <ActionButton text="Back to Podcast Library" />
               </Link>
             </div>
           </div>
@@ -305,7 +305,7 @@ export default function SpecificPodcast({
       {/* --- CONTENT AREA --- */}
       <div
         id="podcast-episode"
-        className="flex flex-col md:flex-row justify-center pb-8 md:pb-12 px-4 md:px-16 md:gap-12 max-w-7xl mx-auto"
+        className="flex flex-col md:flex-row justify-center pb-4 md:pb-12 px-4 md:px-16 md:gap-12 max-w-7xl mx-auto"
       >
         {/* Main Content Area (Left) */}
         <div className="w-full md:max-w-4xl">
@@ -345,7 +345,7 @@ export default function SpecificPodcast({
                   {podcast.guest_speaker.name}
                 </h3>
 
-                <p className="text-[#000000] mt-2 text-sm md:text-base text-center md:text-left">
+                <p className="text-[#000000] mt-2 text-sm md:text-base text-justify">
                   {podcast.guest_speaker.description}
                 </p>
 
@@ -388,13 +388,13 @@ export default function SpecificPodcast({
             }}
           >
             <Link href="/media/fintechtainment">
-              <ActionButton text="Back to FinTechTainment Library" />
+              <ActionButton text="Back to Podcast Library" />
             </Link>
           </div>
         </div>
 
         {/* Right Sidebar / Bottom Carousel (Mobile) */}
-        <div className="w-full md:w-full md:max-w-[17.75rem] mt-8 md:mt-0">
+        <div className="w-full md:w-full md:max-w-[17.75rem]">
           <h2 className="text-2xl md:text-3xl font-bold text-[#0D1742] mb-4 md:mb-6">
             {sidebarTitle}
           </h2>
@@ -439,8 +439,6 @@ export default function SpecificPodcast({
               </Link>
             ))}
 
-            {/* Spacer for mobile scroll padding right */}
-            <div className="w-2 md:hidden flex-shrink-0"></div>
             {/* Mascot - Desktop Only */}
             <div className="absolute right-[-12.5rem] bottom-[-22rem] hidden md:block pointer-events-none">
               <Image
@@ -452,6 +450,16 @@ export default function SpecificPodcast({
                 className="w-[25vw] h-auto -rotate-[35deg]"
               />
             </div>
+          </div>
+          <div
+            className="md:hidden w-fit h-fit rounded-md p-[2px] mt-[1.75rem] mx-auto"
+            style={{
+              background: "linear-gradient(to top, #474A6E, #DBB968)",
+            }}
+          >
+            <Link href="/media/fintechtainment">
+              <ActionButton text="Back to Podcast Library" />
+            </Link>
           </div>
         </div>
       </div>
