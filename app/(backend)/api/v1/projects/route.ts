@@ -16,19 +16,25 @@ export const GET = publicRoute(async (req) => {
   const department = searchParams.get("department");
   const year = searchParams.get("year");
 
-  // Case 1: Completed by Year
-  if (status === "completed") {
-  const result = await getCompletedProjects(year || undefined);
-  return NextResponse.json({ data: result });
-}
+  // Case 1: Large Scaled & Completed
+  if (type === "large-scaled" && status === "completed") {
+    const result = await getCompletedProjects(year || undefined, "large-scaled");
+    return NextResponse.json({ data: result });
+  }
 
-  // Case 2: Large Scaled & Ongoing
+  // Case 2: Completed nói chung
+  if (status === "completed") {
+    const result = await getCompletedProjects(year || undefined, type || undefined);
+    return NextResponse.json({ data: result });
+  }
+
+  // Case 3: Large Scaled & Ongoing
   if (type === "large-scaled" && status === "ongoing") {
     const result = await getLargeScaledOngoingProjects();
     return NextResponse.json({ data: result });
   }
 
-  // Case 3: Department & Ongoing
+  // Case 4: Department & Ongoing
   if (type === "department" && status === "ongoing" && department) {
     const result = await getDepartmentProjects(department);
     return NextResponse.json({ data: result });

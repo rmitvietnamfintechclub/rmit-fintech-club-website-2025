@@ -65,7 +65,7 @@ export async function getDepartmentProjects(department: string) {
   };
 }
 
-export async function getCompletedProjects(year?: string) {
+export async function getCompletedProjects(year?: string, type?: string) { 
   const query: any = { status: "completed" };
 
   if (year) {
@@ -73,6 +73,10 @@ export async function getCompletedProjects(year?: string) {
     if (!isNaN(yearNum)) {
       query.year = yearNum;
     }
+  }
+
+  if (type) {
+    query.type = type;
   }
 
   const projects = await ProjectModel.find(query)
