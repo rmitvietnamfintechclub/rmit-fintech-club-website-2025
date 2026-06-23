@@ -65,6 +65,21 @@ export async function getDepartmentProjects(department: string) {
   };
 }
 
+export async function getAllOngoingDepartmentProjects() {
+  const projects = await ProjectModel.find({
+    type: "department",
+    status: "ongoing",
+  })
+    .sort({ createdAt: -1 })
+    .limit(100)
+    .lean();
+
+  return {
+    projects: projects as unknown as Project[],
+    count: projects.length,
+  };
+}
+
 export async function getCompletedProjects(year?: string, type?: string) { 
   const query: any = { status: "completed" };
 

@@ -10,6 +10,7 @@ import {
   Layers,
   Building2,
   CheckCircle2,
+  Award,
 } from "lucide-react";
 import toast, { Toaster } from "react-hot-toast";
 import Link from "next/link";
@@ -20,18 +21,22 @@ import { ProjectModal } from "./components/ProjectModal";
 import { ProjectCardSkeleton } from "./components/ProjectCardSkeleton";
 import { ConfirmationModal } from "../ebmb/components/ConfirmationModal";
 import { deleteFileFromS3 } from "@/app/(backend)/libs/upload-client";
+import { Pagination } from "./components/Pagination";
 
-// Helper để class active tab
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
+
+const ITEMS_PER_PAGE = 6;
 
 export default function ProjectsPage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState(0);
 
-  // State filter năm
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // Filter State
   const [selectedYear, setSelectedYear] = useState<string>("");
   const [availableYears, setAvailableYears] = useState<number[]>([]);
 
@@ -42,27 +47,35 @@ export default function ProjectsPage() {
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  // --- 1. FETCH YEARS FUNCTION (Tách ra để tái sử dụng) ---
   const fetchYears = useCallback(async () => {
     try {
       const res = await axios.get("/api/v1/projects/years");
-      setAvailableYears(res.data.data || []);
+      const yearsData = res.data.data || [];
+      setAvailableYears(yearsData);
+
+      if (activeTab === 2 && !selectedYear && yearsData.length > 0) {
+        setSelectedYear(yearsData[0].toString());
+      }
     } catch (error) {
       console.error("Failed to fetch years", error);
     }
-  }, []);
+  }, [activeTab, selectedYear]);
 
-  // Gọi fetchYears khi mount
   useEffect(() => {
     fetchYears();
   }, [fetchYears]);
 
-  // --- 2. FETCH PROJECTS ---
+  useEffect(() => {
+    if (activeTab === 2 && availableYears.length > 0 && !selectedYear) {
+      setSelectedYear(availableYears[0].toString());
+    }
+  }, [activeTab, availableYears, selectedYear]);
+
   const fetchProjects = async () => {
     setIsLoading(true);
     setProjects([]);
     try {
-      const params: any = { limit: 100 };
+      const params: any = {};
 
       if (activeTab === 0) {
         params.type = "large-scaled";
@@ -74,17 +87,30 @@ export default function ProjectsPage() {
         params.status = "completed";
         if (selectedYear) {
           params.year = selectedYear;
+        } else {
+          setIsLoading(false);
+          return;
         }
       }
 
       const res = await axios.get("/api/v1/projects", { params });
       const data = res.data.data || {};
 
+      let fetchedProjects: Project[] = [];
       if (activeTab === 1 && data.departmentData) {
-        setProjects(data.departmentData.projects || []);
+        fetchedProjects = data.departmentData.projects || [];
       } else {
-        setProjects(data.projects || []);
+        fetchedProjects = data.projects || [];
       }
+
+      // Sắp xếp mới nhất lên đầu
+      const sortedProjects = fetchedProjects.sort((a, b) => {
+        const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+        const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+        return dateB - dateA;
+      });
+
+      setProjects(sortedProjects);
     } catch (error) {
       console.error(error);
       toast.error("Failed to load projects");
@@ -94,11 +120,11 @@ export default function ProjectsPage() {
   };
 
   useEffect(() => {
-    if (activeTab !== 2) setSelectedYear("");
+    setCurrentPage(1);
     fetchProjects();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab, selectedYear]);
 
-  // --- 3. HANDLERS (Update fetchYears here) ---
   const handleSubmit = async (data: any) => {
     setIsSubmitting(true);
     try {
@@ -111,9 +137,8 @@ export default function ProjectsPage() {
       }
       setIsModalOpen(false);
 
-      // 🔥 REFRESH DATA & YEARS
       fetchProjects();
-      fetchYears(); // Cập nhật lại list năm (phòng trường hợp thêm mới project completed có năm mới)
+      fetchYears();
     } catch (error: any) {
       toast.error(error.response?.data?.message || "Error saving project");
     } finally {
@@ -143,20 +168,29 @@ export default function ProjectsPage() {
   };
 
   const projectToDelete = projects.find((p) => p._id === deleteId);
-
   const deleteConfirmationContent = projectToDelete ? (
     <div className="space-y-4 text-left">
       <p className="text-gray-600 text-sm text-center">
-        Are you sure you want to delete project <br />{" "}
+        Are you sure you want to delete project{" "}
         <span className="font-bold text-gray-900">{projectToDelete.title}</span>
-        ? <br /> This action cannot be undone.
+        ? This action cannot be undone.
       </p>
     </div>
   ) : null;
 
-  // --- RENDER SECTIONS ---
-  const renderDepartmentSection = () => {
+  const EmptyState = ({ message = "No projects found" }) => (
+    <div className="flex flex-col items-center justify-center py-20 bg-white rounded-2xl border-2 border-dashed border-gray-300 w-full">
+      <Briefcase className="text-gray-300 mb-4" size={48} />
+      <h3 className="text-lg font-bold text-gray-800">{message}</h3>
+    </div>
+  );
+
+  // --- 1. RENDER: ONGOING DEPARTMENTS ---
+  const renderOngoingDepartments = () => {
     const depts = ["Technology", "Business", "Marketing", "Human Resources"];
+    if (projects.length === 0) {
+      return <EmptyState message="No ongoing department projects" />;
+    }
     return (
       <div className="space-y-10">
         {depts.map((deptName) => {
@@ -193,24 +227,113 @@ export default function ProjectsPage() {
             </div>
           );
         })}
-        {projects.length === 0 && !isLoading && <EmptyState />}
       </div>
     );
   };
 
-  const EmptyState = () => (
-    <div className="flex flex-col items-center justify-center py-20 bg-white rounded-2xl border-2 border-dashed border-gray-300">
-      <Briefcase className="text-gray-400 mb-4" size={48} />
-      <h3 className="text-lg font-bold text-gray-900">No Projects Found</h3>
-      <p className="text-gray-500 text-sm">No projects in this category yet.</p>
-    </div>
+  // --- 2. RENDER: COMPLETED PROJECTS (GROUPED VIEW) ---
+  const renderCompletedProjects = () => {
+    const largeScaled = projects.filter((p) => p.type === "large-scaled");
+    const depts = ["Technology", "Business", "Marketing", "Human Resources"];
+    const departmentProjects = projects.filter((p) => p.type === "department");
+
+    if (projects.length === 0) {
+      return (
+        <EmptyState message={`No completed projects in ${selectedYear}`} />
+      );
+    }
+
+    return (
+      <div className="space-y-12 w-full">
+        {/* Nhóm 1: Large Scaled */}
+        {largeScaled.length > 0 && (
+          <div className="animate-in fade-in slide-in-from-bottom-2 duration-500">
+            <h3 className="text-2xl font-black text-[#2C305F] mb-6 flex items-center gap-2">
+              <Award className="text-[#DBB968]" size={28} />
+              Club-wide Project Highlights
+              <span className="text-sm font-bold text-white bg-[#DBB968] px-2.5 py-0.5 rounded-full ml-2 shadow-sm">
+                {largeScaled.length}
+              </span>
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {largeScaled.map((project) => (
+                <ProjectCard
+                  key={project._id}
+                  project={project}
+                  onEdit={(p) => {
+                    setEditingProject(p);
+                    setIsModalOpen(true);
+                  }}
+                  onDelete={() => setDeleteId(project._id)}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Nhóm 2: Departments */}
+        {departmentProjects.length > 0 && (
+          <div className="animate-in fade-in slide-in-from-bottom-2 duration-500 delay-100">
+            <h3 className="text-2xl font-black text-[#2C305F] mb-6 flex items-center gap-2 border-t border-gray-200 pt-8">
+              <Layers className="text-[#2C305F]" size={28} />
+              Department Project Archives
+            </h3>
+
+            <div className="space-y-10 pl-0 md:pl-4 border-l-0 md:border-l-[3px] border-gray-100">
+              {depts.map((deptName) => {
+                const deptItems = departmentProjects.filter(
+                  (p) => p.department === deptName,
+                );
+                if (deptItems.length === 0) return null;
+
+                return (
+                  <div key={deptName} className="relative">
+                    <div className="hidden md:block absolute -left-[23px] top-2 w-3 h-3 bg-gray-200 rounded-full ring-4 ring-ft-background" />
+
+                    <h4 className="text-lg font-bold text-gray-600 mb-4 flex items-center gap-2">
+                      <Building2 size={20} />
+                      {deptName}
+                    </h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      {deptItems.map((project) => (
+                        <ProjectCard
+                          key={project._id}
+                          project={project}
+                          onEdit={(p) => {
+                            setEditingProject(p);
+                            setIsModalOpen(true);
+                          }}
+                          onDelete={() => setDeleteId(project._id)}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  // --- LOGIC PHÂN TRANG (Chỉ áp dụng cho Large Scaled Ongoing) ---
+  const totalPages = Math.ceil(projects.length / ITEMS_PER_PAGE);
+  const currentDisplayedProjects = projects.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE,
   );
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   return (
     <div className="min-h-screen bg-ft-background p-6 md:p-10">
       <Toaster position="top-center" />
 
-      {/* Breadcrumbs */}
+      {/* Breadcrumbs & Header (Giữ nguyên) */}
       <nav className="flex items-center gap-2 text-sm text-gray-500 mb-6">
         <Link
           href="/admin"
@@ -222,7 +345,6 @@ export default function ProjectsPage() {
         <span className="font-semibold text-gray-800">Projects</span>
       </nav>
 
-      {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
           <h1 className="text-3xl font-extrabold text-ft-primary-blue flex items-center gap-2">
@@ -243,10 +365,9 @@ export default function ProjectsPage() {
 
       {/* TABS & FILTERS CONTAINER */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
-        {/* Tabs Group */}
         <div className="flex space-x-1 rounded-xl bg-white p-1 shadow-sm border border-gray-100">
           {[
-            { name: "Large Scaled", icon: Layers },
+            { name: "Clubwide", icon: Layers },
             { name: "Departments", icon: Building2 },
             { name: "Completed", icon: CheckCircle2 },
           ].map((tab, idx) => (
@@ -269,15 +390,16 @@ export default function ProjectsPage() {
           ))}
         </div>
 
-        {/* Year Filter (Chỉ hiện khi ở tab Completed) */}
         {activeTab === 2 && (
-          <div className="animate-in fade-in slide-in-from-right-4 duration-300 w-full sm:w-auto">
+          <div className="animate-in fade-in slide-in-from-right-4 duration-300 w-full sm:w-auto flex items-center gap-3">
+            <span className="text-sm font-bold text-gray-500 hidden sm:block">
+              Filter by year:
+            </span>
             <select
               value={selectedYear}
               onChange={(e) => setSelectedYear(e.target.value)}
-              className="bg-white border border-gray-200 text-gray-700 text-sm rounded-xl focus:ring-ft-primary-blue focus:border-ft-primary-blue block w-full sm:w-48 p-2.5 shadow-sm font-semibold cursor-pointer outline-none transition-all hover:border-ft-primary-blue"
+              className="bg-white border border-gray-200 text-[#2C305F] text-sm rounded-xl focus:ring-[#DBB968] focus:border-[#DBB968] block w-full sm:w-24 p-2.5 shadow-sm font-extrabold cursor-pointer outline-none transition-all"
             >
-              <option value="">All Years</option>
               {availableYears.length > 0 ? (
                 availableYears.map((y) => (
                   <option key={y} value={y}>
@@ -286,7 +408,7 @@ export default function ProjectsPage() {
                 ))
               ) : (
                 <option value="" disabled>
-                  No year available
+                  No data
                 </option>
               )}
             </select>
@@ -297,32 +419,43 @@ export default function ProjectsPage() {
       {/* CONTENT AREA */}
       {isLoading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[...Array(3)].map((_, i) => (
+          {[...Array(6)].map((_, i) => (
             <ProjectCardSkeleton key={i} />
           ))}
         </div>
       ) : (
         <>
-          {activeTab === 1 ? (
-            // Render Grouped by Department
-            renderDepartmentSection()
-          ) : // Render Grid Normally (Large Scaled or Completed)
-          projects.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-in fade-in slide-in-from-bottom-2 duration-500">
-              {projects.map((project) => (
-                <ProjectCard
-                  key={project._id}
-                  project={project}
-                  onEdit={(p) => {
-                    setEditingProject(p);
-                    setIsModalOpen(true);
-                  }}
-                  onDelete={() => setDeleteId(project._id)}
-                />
-              ))}
-            </div>
-          ) : (
-            <EmptyState />
+          {/* TAB 1: ONGOING DEPARTMENT PROJECTS */}
+          {activeTab === 1 && renderOngoingDepartments()}
+
+          {/* TAB 2: COMPLETED PROJECTS */}
+          {activeTab === 2 && renderCompletedProjects()}
+
+          {/* TAB 0: ONGOING CLUBWIDE PROJECTS */}
+          {activeTab === 0 && (
+            projects.length > 0 ? (
+              <>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-in fade-in slide-in-from-bottom-2 duration-500">
+                  {currentDisplayedProjects.map((project) => (
+                    <ProjectCard
+                      key={project._id}
+                      project={project}
+                      onEdit={(p) => { setEditingProject(p); setIsModalOpen(true); }}
+                      onDelete={() => setDeleteId(project._id)}
+                    />
+                  ))}
+                </div>
+                {totalPages > 1 && (
+                  <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={handlePageChange}
+                  />
+                )}
+              </>
+            ) : (
+              <EmptyState message="No ongoing club-wide projects" />
+            )
           )}
         </>
       )}

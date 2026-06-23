@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import {
   getLargeScaledOngoingProjects,
   getDepartmentProjects,
+  getAllOngoingDepartmentProjects,
   getCompletedProjects,
   getAllProjects,
   createProject
@@ -37,6 +38,12 @@ export const GET = publicRoute(async (req) => {
   // Case 4: Department & Ongoing
   if (type === "department" && status === "ongoing" && department) {
     const result = await getDepartmentProjects(department);
+    return NextResponse.json({ data: result });
+  }
+
+  // Case 5: Tất cả Department & Ongoing (Admin Page)
+  if (type === "department" && status === "ongoing" && !department) {
+    const result = await getAllOngoingDepartmentProjects();
     return NextResponse.json({ data: result });
   }
   
