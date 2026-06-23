@@ -61,7 +61,7 @@ export default function PastHighlightedProjects() {
         />
 
         <p className="mt-5 text-lg font-semibold text-[#5E5E92] animate-pulse tracking-wide">
-          Loading Past Highlighted Projects...
+          Loading Past Projects...
         </p>
       </div>
     );
