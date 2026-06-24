@@ -1,6 +1,7 @@
 "use client";
 
-import { Button, Spinner } from "@heroui/react";
+import { Button } from "@heroui/react";
+import { BulletproofSpinner } from "@/components/BulletproofSpinner";
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
@@ -160,23 +161,25 @@ const ClubwideProjects = () => {
   };
 
   const imageCardVariants = {
-    enter: (dir: number) => ({ opacity: 0, x: dir > 0 ? 60 : -60, scale: 0.96 }),
+    enter: (dir: number) => ({
+      opacity: 0,
+      x: dir > 0 ? 60 : -60,
+      scale: 0.96,
+    }),
     center: { opacity: 1, x: 0, scale: 1 },
     exit: (dir: number) => ({ opacity: 0, x: dir > 0 ? -60 : 40, scale: 0.96 }),
-  };  
+  };
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center w-full h-screen p-8">
-        <Spinner
-          size="lg"
-          classNames={{
-            wrapper: "w-16 h-16",
-            circle1: "border-b-ft-primary-yellow border-[4px]",
-            circle2: "border-b-ft-primary-yellow border-[4px]",
+      <div className="flex flex-col items-center justify-center w-full h-screen p-8 bg-[#2C305F]">
+        <BulletproofSpinner />
+        <p
+          className="mt-5 text-lg font-semibold text-[#DBB968] tracking-wide uppercase"
+          style={{
+            animation: "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
           }}
-        />
-        <p className="mt-5 text-lg font-semibold text-[#5E5E92] animate-pulse tracking-wide">
+        >
           Loading Clubwide Projects...
         </p>
       </div>

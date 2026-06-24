@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useMemo } from "react";
 import { usePastHighlightedData } from "./hooks/usePastHighlightedData";
-import { Spinner } from "@heroui/react";
+import { BulletproofSpinner } from "@/components/BulletproofSpinner";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import YearSelector from "./components/YearSelector";
@@ -49,18 +49,13 @@ export default function PastHighlightedProjects() {
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center w-full h-screen p-8">
-        <Spinner
-          size="lg"
-          classNames={{
-            wrapper: "w-16 h-16",
-
-            circle1: "border-b-ft-primary-yellow border-[4px]",
-
-            circle2: "border-b-ft-primary-yellow border-[4px]",
+        <BulletproofSpinner />
+        <p
+          className="mt-5 text-lg font-semibold text-[#5E5E92] tracking-wide uppercase"
+          style={{
+            animation: "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
           }}
-        />
-
-        <p className="mt-5 text-lg font-semibold text-[#5E5E92] animate-pulse tracking-wide">
+        >
           Loading Past Projects...
         </p>
       </div>

@@ -1,6 +1,10 @@
 "use client";
 import React, { useEffect, useRef } from "react";
-import { AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
+import {
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from "@/components/ui/accordion";
 import StackedLabel from "./StackedLabel";
 import { AccordionItemProps } from "./DepartmentAccordion";
 
@@ -9,20 +13,31 @@ const BORDER_COLORS: Record<string, string> = {
   "bg-[#2C305F]": "border-[#2C305F]",
 };
 
-export default function DeptAccordionItem({ value, label, color, isOpen, renderContent }: AccordionItemProps & { isOpen: boolean }) {
+export default function DeptAccordionItem({
+  value,
+  label,
+  color,
+  isOpen,
+  renderContent,
+}: AccordionItemProps & { isOpen: boolean }) {
   const borderClass = BORDER_COLORS[color] ?? "border-current";
   const itemRef = useRef<HTMLDivElement>(null);
+  const prevIsOpen = useRef(isOpen);
 
   useEffect(() => {
-    if (isOpen && window.innerWidth < 1024) {
+    if (!prevIsOpen.current && isOpen && window.innerWidth < 1024) {
       const timeout = setTimeout(() => {
         itemRef.current?.scrollIntoView({
           behavior: "smooth",
           block: "start",
         });
       }, 350);
+
+      prevIsOpen.current = isOpen;
       return () => clearTimeout(timeout);
     }
+
+    prevIsOpen.current = isOpen;
   }, [isOpen]);
 
   return (
@@ -58,7 +73,7 @@ export default function DeptAccordionItem({ value, label, color, isOpen, renderC
 
       <AccordionContent
         forceMount
-        style={{ height: `${isOpen ? '100%' : '0'}` }}
+        style={{ height: `${isOpen ? "100%" : "0"}` }}
         className={`
           w-full bg-white
           transition-opacity ease-[cubic-bezier(0.4,0,0.2,1)] duration-[var(--acc-dur)]
@@ -66,7 +81,7 @@ export default function DeptAccordionItem({ value, label, color, isOpen, renderC
         `}
       >
         <div className="h-full w-full overflow-hidden max-md:px-5 max-md:pt-5 md:p-8 md:pb-4">
-           {renderContent()}
+          {renderContent()}
         </div>
       </AccordionContent>
     </AccordionItem>
