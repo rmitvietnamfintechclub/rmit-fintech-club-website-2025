@@ -34,6 +34,7 @@ function ProjectCard({
             ? "ring-4 ring-[#DBB968] scale-[1.02] z-10"
             : "border border-gray-100 hover:shadow-lg hover:border-[#DBB968]/50 opacity-80 hover:opacity-100 hover:scale-[1.01] hover:z-20"
         }
+
       `}
     >
       <div className="relative w-full aspect-square overflow-hidden bg-gray-200">
@@ -48,12 +49,6 @@ function ProjectCard({
         ) : (
           <div className="absolute inset-0 flex items-center justify-center text-gray-400">
             <ImageIcon size={32} />
-          </div>
-        )}
-
-        {!isActive && (
-          <div className="absolute inset-0 bg-black/20 opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 flex items-center justify-center text-white backdrop-blur-[1px]">
-            <MousePointerClick size={32} className="drop-shadow-md" />
           </div>
         )}
       </div>
@@ -99,18 +94,12 @@ export default function ProjectCarousel({
 
   return (
     <div className="relative w-full group/carousel">
-      {/* NATIVE MOBILE CAROUSEL */}
-      <div
-        className="flex md:hidden flex-row gap-2 overflow-x-auto snap-x snap-mandatory pb-4"
-        style={{
-          WebkitOverflowScrolling: "touch",
-        }}
-      >
+      {/* ========================================== */}
+      {/* 📱 NATIVE MOBILE CAROUSEL */}
+      {/* ========================================== */}
+      <div className="flex md:hidden flex-row gap-6 overflow-x-auto snap-x snap-mandatory px-2 pb-6 pt-2 no-scrollbar">
         {items.map((item) => (
-          <div
-            key={`mb-${item.id}`}
-            className="w-[60vw] shrink-0 snap-center m-2"
-          >
+          <div key={`mb-${item.id}`} className="w-[60vw] shrink-0 snap-center">
             <ProjectCard
               item={item}
               isActive={item.id === activeId}
@@ -120,65 +109,69 @@ export default function ProjectCarousel({
         ))}
       </div>
 
-      {/* DESKTOP GRID CAROUSEL */}
-      <div className="hidden md:block overflow-visible rounded-xl py-2">
-        <div
-          className="flex transition-transform duration-500 ease-out"
-          style={{ transform: `translateX(-${page * 100}%)` }}
-        >
-          {pages.map((group, i) => (
-            <div
-              key={i}
-              className="w-full shrink-0 grid grid-cols-3 gap-8 px-1"
+      {/* ========================================== */}
+      {/* 💻 DESKTOP GRID CAROUSEL */}
+      {/* ========================================== */}
+      <div className="hidden md:block relative w-full px-1">
+        <div className="overflow-x-hidden overflow-y-visible py-6 -my-6 px-2">
+          <div
+            className="flex gap-8 transition-transform duration-700 ease-[cubic-bezier(0.25,1,0.5,1)]"
+            style={{
+              transform: `translateX(calc(-${page * 100}% - ${page * 2}rem))`,
+            }}
+          >
+            {pages.map((group, i) => (
+              <div key={i} className="w-full shrink-0 grid grid-cols-3 gap-8">
+                {group.map((item: Project) => (
+                  <ProjectCard
+                    key={`dk-${item.id}`}
+                    item={item}
+                    isActive={item.id === activeId}
+                    onClick={() => onSelect(item.id)}
+                  />
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* --- DESKTOP CONTROLS --- */}
+        {pages.length > 1 && (
+          <>
+            <button
+              onClick={() => canPrev && setPage((p) => p - 1)}
+              disabled={!canPrev}
+              className="absolute top-1/2 -left-5 -translate-y-1/2 z-30 p-2.5 rounded-full bg-white/95 shadow-xl text-[#2C305F] hover:bg-[#DBB968] border border-gray-100 disabled:opacity-0 disabled:pointer-events-none transition-all scale-90 hover:scale-100"
             >
-              {group.map((item) => (
-                <ProjectCard
-                  key={`dk-${item.id}`}
-                  item={item}
-                  isActive={item.id === activeId}
-                  onClick={() => onSelect(item.id)}
+              <ChevronLeft size={22} strokeWidth={2.5} />
+            </button>
+
+            <button
+              onClick={() => canNext && setPage((p) => p + 1)}
+              disabled={!canNext}
+              className="absolute top-1/2 -right-5 -translate-y-1/2 z-30 p-2.5 rounded-full bg-white/95 shadow-xl text-[#2C305F] hover:bg-[#DBB968] border border-gray-100 disabled:opacity-0 disabled:pointer-events-none transition-all scale-90 hover:scale-100"
+            >
+              <ChevronRight size={22} strokeWidth={2.5} />
+            </button>
+
+            {/* Dots Indicator Desktop */}
+            <div className="flex justify-center mt-4 gap-2">
+              {pages.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setPage(i)}
+                  className={`h-2 rounded-full transition-all duration-300 ${
+                    i === page
+                      ? "w-6 bg-[#2C305F]"
+                      : "w-2 bg-[#2C305F]/20 hover:bg-[#DBB968]"
+                  }`}
+                  aria-label={`Go to page ${i + 1}`}
                 />
               ))}
             </div>
-          ))}
-        </div>
+          </>
+        )}
       </div>
-
-      {pages.length > 1 && (
-        <>
-          <button
-            onClick={() => canPrev && setPage((p) => p - 1)}
-            disabled={!canPrev}
-            className="hidden md:block absolute top-1/2 -left-5 -translate-y-1/2 z-30 p-2 rounded-full bg-white/90 shadow-lg text-[#2C305F] hover:bg-[#DBB968] border border-gray-100 disabled:opacity-0 disabled:pointer-events-none transition-all scale-90 hover:scale-100"
-          >
-            <ChevronLeft size={20} />
-          </button>
-
-          <button
-            onClick={() => canNext && setPage((p) => p + 1)}
-            disabled={!canNext}
-            className="absolute top-1/2 -right-5 -translate-y-1/2 z-30 p-2 rounded-full bg-white/90 shadow-lg text-[#2C305F] hover:bg-[#DBB968] border border-gray-100 disabled:opacity-0 disabled:pointer-events-none transition-all scale-90 hover:scale-100 hidden md:block"
-          >
-            <ChevronRight size={20} />
-          </button>
-
-          {/* Dots Indicator Desktop */}
-          <div className="hidden md:flex justify-center mt-4 gap-1.5">
-            {pages.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => setPage(i)}
-                className={`h-1.5 rounded-full transition-all duration-300 ${
-                  i === page
-                    ? "w-6 bg-[#2C305F]"
-                    : "w-1.5 bg-gray-300 hover:bg-[#DBB968]"
-                }`}
-                aria-label={`Go to page ${i + 1}`}
-              />
-            ))}
-          </div>
-        </>
-      )}
     </div>
   );
 }

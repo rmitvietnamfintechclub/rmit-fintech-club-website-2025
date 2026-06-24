@@ -122,7 +122,7 @@ const Footer: React.FC = () => {
         </div>
 
         <div className="flex flex-col items-center lg:items-start text-center lg:pr-[2vw] lg:text-left mx-auto lg:mx-0 lg:w-[40%] max-w-max">
-          <h5 className="text-ft-primary-yellow font-bold text-lg lg:mb-[2vh]">
+          <h5 className="text-ft-primary-yellow font-bold text-lg mb-[2vh]">
             ABOUT US
           </h5>
           <p className="text-base w-full text-justify">

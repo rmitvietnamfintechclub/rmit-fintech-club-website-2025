@@ -65,7 +65,7 @@ export default function DeptAccordionItem({ value, label, color, isOpen, renderC
           ${isOpen ? `opacity-100 visible h-full border-4 ${borderClass}` : "border-0 opacity-0 invisible lg:hidden"}
         `}
       >
-        <div className="h-full w-full overflow-y-auto overflow-x-hidden max-md:px-5 max-md:pt-5 md:p-8 md:pb-4">
+        <div className="h-full w-full overflow-hidden max-md:px-5 max-md:pt-5 md:p-8 md:pb-4">
            {renderContent()}
         </div>
       </AccordionContent>

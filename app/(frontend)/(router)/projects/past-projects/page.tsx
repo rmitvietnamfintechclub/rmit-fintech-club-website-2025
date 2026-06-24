@@ -72,7 +72,7 @@ export default function PastHighlightedProjects() {
   return (
     <section className="w-full max-w-[1400px] mx-auto flex flex-col py-8 md:py-12 px-0 md:px-16 border-t border-gray-100 bg-[#F9FAFB]/50">
       <div className="flex flex-col items-center text-center mb-8 px-6 md:px-0">
-        <h2 className="text-[#2C305F] text-2xl md:text-4xl font-[1000] tracking-wider uppercase flex items-center gap-2">
+        <h2 className="text-[#2C305F] text-2xl md:text-4xl font-[1000] tracking-tight uppercase flex items-center gap-2">
           PAST HIGHLIGHTED PROJECTS
         </h2>
         <div className="w-16 md:w-24 h-1 bg-[#2C305F] mt-3 rounded-full" />
@@ -87,11 +87,11 @@ export default function PastHighlightedProjects() {
       {/* Lưới dự án */}
       <div id="past-projects-grid" className="w-full scroll-mt-[10vh]">
         {/* Mobile View: Swipe ngang */}
-        <div className="md:hidden flex flex-row overflow-x-auto snap-x snap-mandatory gap-4 px-6 pb-8 no-scrollbar">
+        <div className="md:hidden flex flex-row overflow-x-auto snap-x snap-mandatory gap-4 px-6 pb-6 no-scrollbar">
           {currentYearItems.map((item) => (
             <div
               key={`mb-${item.id}`}
-              className="w-[85vw] shrink-0 snap-center"
+              className="w-[75vw] shrink-0 snap-center"
             >
               <ProjectCard
                 item={item}
@@ -99,7 +99,6 @@ export default function PastHighlightedProjects() {
               />
             </div>
           ))}
-          <div className="w-2 shrink-0" />
         </div>
 
         {/* Desktop View: Grid + Pagination */}

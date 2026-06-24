@@ -447,11 +447,11 @@ export default function SpecificArticle({
                   className="
                     group flex flex-col bg-white rounded-lg overflow-hidden border-2 border-gray-200 md:border-transparent hover:border-[#DBB968] hover:shadow-lg transition-all duration-300
                     flex-shrink-0 
-                    w-[80vw] sm:w-[45vw] md:w-full
+                    w-[70vw] md:w-full
                     snap-center
                   "
                 >
-                  <div className="relative w-full h-96 md:h-72 overflow-hidden">
+                  <div className="relative w-full h-72 overflow-hidden">
                     <Image
                       src={item.illustration_url}
                       alt={item.title}

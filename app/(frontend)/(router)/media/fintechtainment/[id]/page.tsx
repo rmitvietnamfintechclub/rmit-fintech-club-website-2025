@@ -419,7 +419,7 @@ export default function SpecificPodcast({
                     snap-center
                   "
               >
-                <div className="relative w-full h-48 md:h-40 overflow-hidden bg-gray-200">
+                <div className="relative w-full h-44 md:h-40 overflow-hidden bg-gray-200">
                   <Image
                     src={item.thumbnail_url}
                     alt={item.title}
@@ -452,7 +452,7 @@ export default function SpecificPodcast({
             </div>
           </div>
           <div
-            className="md:hidden w-fit h-fit rounded-md p-[2px] mt-[1.75rem] mx-auto"
+            className="md:hidden w-fit h-fit rounded-md p-[2px] mt-[1rem] mx-auto"
             style={{
               background: "linear-gradient(to top, #474A6E, #DBB968)",
             }}
