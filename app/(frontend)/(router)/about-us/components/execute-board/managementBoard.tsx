@@ -6,6 +6,7 @@ import { motion, useInView } from "framer-motion";
 import Link from "next/link";
 import axios from "axios";
 import useMediaQuery from "./useMediaQuery";
+import { BulletproofSpinner } from "@/components/BulletproofSpinner";
 
 // --- Type Definition ---
 type ManagementBoardMember = {
@@ -15,7 +16,6 @@ type ManagementBoardMember = {
   linkedin_url: string;
   generation: number;
 };
-
 
 const DecorativeElements = () => (
   <>
@@ -99,7 +99,7 @@ function ManagementBoardCard({
             fetchPriority={isPriority ? "high" : "auto"}
             loading={isPriority ? "eager" : "lazy"}
           />
-          
+
           <div
             className="absolute inset-0 z-10"
             style={{
@@ -132,7 +132,7 @@ function ManagementBoardCard({
           </div>
         </div>
 
-        {/* === DESKTOP LAYOUT (Giữ nguyên của bạn) === */}
+        {/* === DESKTOP LAYOUT === */}
         <div className="hidden md:block">
           <CardHeader className="pb-0 pt-0 h-[14rem]">
             <div className="z-0 w-full h-full relative">
@@ -173,7 +173,12 @@ function ManagementBoardCard({
                 </Link>
               ) : (
                 <div className="flex-shrink-0 my-auto">
-                  <IconBrandLinkedin size={36} color="#9CA3AF" strokeWidth={1.2} className="opacity-50" />
+                  <IconBrandLinkedin
+                    size={36}
+                    color="#9CA3AF"
+                    strokeWidth={1.2}
+                    className="opacity-50"
+                  />
                 </div>
               )}
             </div>
@@ -185,9 +190,11 @@ function ManagementBoardCard({
 }
 
 const ManagementBoard = () => {
-  const [groupedMembers, setGroupedMembers] = useState<Record<number, ManagementBoardMember[]>>({});
+  const [groupedMembers, setGroupedMembers] = useState<
+    Record<number, ManagementBoardMember[]>
+  >({});
   const [generations, setGenerations] = useState<number[]>([]);
-  const [selectedGen, setSelectedGen] = useState<number>(0); 
+  const [selectedGen, setSelectedGen] = useState<number>(0);
 
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
@@ -200,17 +207,20 @@ const ManagementBoard = () => {
 
         // Fetch TOÀN BỘ data
         const response = await axios.get("/api/v1/managementBoard");
-        
+
         if (response.data.status === 200 && response.data.members) {
           const allMembers: ManagementBoardMember[] = response.data.members;
 
           // Group by Generation
-          const grouped = allMembers.reduce((acc, member) => {
-            const gen = member.generation;
-            if (!acc[gen]) acc[gen] = [];
-            acc[gen].push(member);
-            return acc;
-          }, {} as Record<number, ManagementBoardMember[]>);
+          const grouped = allMembers.reduce(
+            (acc, member) => {
+              const gen = member.generation;
+              if (!acc[gen]) acc[gen] = [];
+              acc[gen].push(member);
+              return acc;
+            },
+            {} as Record<number, ManagementBoardMember[]>,
+          );
 
           // Sắp xếp Generation (a - b: cũ sang mới)
           const sortedGens = Object.keys(grouped)
@@ -221,12 +231,14 @@ const ManagementBoard = () => {
           setGenerations(sortedGens);
 
           // Set default là thế hệ active
-          const defaultGen = grouped[currentGenNum] ? currentGenNum : sortedGens[0];
+          const defaultGen = grouped[currentGenNum]
+            ? currentGenNum
+            : sortedGens[0];
           setSelectedGen(defaultGen);
         } else {
           setError(
             response.data.message ||
-              "Failed to load management board data. Please try again later."
+              "Failed to load management board data. Please try again later.",
           );
         }
       } catch (err: any) {
@@ -245,9 +257,14 @@ const ManagementBoard = () => {
         <DecorativeElements />
         <main className="mx-6 md:mx-16 2xl:mx-[10rem]">
           <PageHeader />
-          <div className="p-8 text-center flex flex-col items-center justify-center h-64">
-            <div className="w-12 h-12 border-[5px] border-[#F0EDFF] border-t-[#DCB968] rounded-full animate-spin"></div>
-            <p className="mt-4 text-lg md:text-xl text-[#5E5E92] animate-pulse">
+          <div className="p-8 text-center flex flex-col items-center justify-center h-[80vh]">
+            <BulletproofSpinner />
+            <p
+              className="mt-5 text-lg font-semibold text-ft-primary-blue tracking-wide uppercase"
+              style={{
+                animation: "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+              }}
+            >
               Loading Management Board...
             </p>
           </div>
@@ -261,7 +278,7 @@ const ManagementBoard = () => {
       <DecorativeElements />
       <main>
         <div className="md:mb-2">
-           <PageHeader />
+          <PageHeader />
         </div>
 
         {error ? (
@@ -284,14 +301,20 @@ const ManagementBoard = () => {
                         key={gen}
                         onClick={() => setSelectedGen(gen)}
                         className={`relative px-6 md:px-8 py-2.5 rounded-full text-sm font-bold transition-colors duration-300 z-10 whitespace-nowrap ${
-                          isActive ? "text-white" : "text-[#5E5E92] hover:text-[#2C305F]"
+                          isActive
+                            ? "text-white"
+                            : "text-[#5E5E92] hover:text-[#2C305F]"
                         }`}
                       >
                         {isActive && (
                           <motion.div
                             layoutId="activeGenTabManagement" // Đổi tên layoutId để ko bị đụng chạm với ExecutiveBoard
                             className="absolute inset-0 bg-[#2C305F] rounded-full -z-10 shadow-md"
-                            transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                            transition={{
+                              type: "spring",
+                              stiffness: 400,
+                              damping: 30,
+                            }}
                           />
                         )}
                         Generation {gen}
@@ -311,7 +334,11 @@ const ManagementBoard = () => {
               className="md:pt-4 md:pb-8 w-full grid grid-cols-2 gap-3 md:grid-cols-2 lg:grid-cols-4 md:gap-8 pb-10"
             >
               {(groupedMembers[selectedGen] || []).map((item, index) => (
-                <ManagementBoardCard key={`${selectedGen}-${index}`} {...item} index={index} />
+                <ManagementBoardCard
+                  key={`${selectedGen}-${index}`}
+                  {...item}
+                  index={index}
+                />
               ))}
             </motion.div>
           </>

@@ -3,16 +3,17 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Button, Input, Spinner } from "@heroui/react";
+import { Button, Input } from "@heroui/react";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Mail, Lock, Eye, EyeOff } from "lucide-react";
+import { BulletproofSpinner } from "@/components/BulletproofSpinner";
+
 
 // --- 1. Zod Validation Schema ---
-// Strong validation ensures bad data is caught early (Security & UX)
 const loginSchema = z.object({
   email: z
     .string()
@@ -217,12 +218,22 @@ const LoginPage = () => {
             <Button
               type="submit"
               size="lg"
-              isLoading={isSubmitting}
-              spinner={<Spinner color="white" size="sm" />}
-              className="w-full bg-ft-primary-yellow text-white font-bold text-base shadow-lg shadow-orange-500/20 transition-all hover:opacity-90 active:scale-[0.98] h-12 rounded-lg"
+              isDisabled={isSubmitting} 
+              className={`
+                w-full font-bold text-base shadow-lg shadow-orange-500/20 
+                transition-all h-12 rounded-lg
+                ${
+                  isSubmitting 
+                  ? "bg-ft-primary-yellow/70 text-white cursor-not-allowed"
+                  : "bg-ft-primary-yellow text-white hover:opacity-90 active:scale-[0.98]"
+                }
+              `}
             >
               {isSubmitting ? (
-                "Signing In..."
+                <div className="flex items-center justify-center gap-2">
+                  <BulletproofSpinner size={20} />
+                  <span className="opacity-80">Signing In...</span>
+                </div>
               ) : (
                 <span className="flex items-center gap-2">Sign In</span>
               )}

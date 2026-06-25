@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Spinner } from "@heroui/react";
+import { BulletproofSpinner } from "@/components/BulletproofSpinner";
 import Image from "next/image";
 import axios from "axios";
 
@@ -166,15 +166,13 @@ export default function SpecificArticle({
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center w-full h-screen p-8">
-        <Spinner
-          size="lg"
-          classNames={{
-            wrapper: "w-16 h-16",
-            circle1: "border-b-ft-primary-yellow border-[4px]",
-            circle2: "border-b-ft-primary-yellow border-[4px]",
+        <BulletproofSpinner />
+        <p
+          className="mt-5 text-lg font-semibold text-ft-primary-blue tracking-wide uppercase"
+          style={{
+            animation: "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
           }}
-        />
-        <p className="mt-5 text-lg font-semibold text-[#5E5E92] animate-pulse tracking-wide">
+        >
           Loading Article...
         </p>
       </div>
@@ -254,7 +252,7 @@ export default function SpecificArticle({
             {article.labels?.map((label) => (
               <div
                 key={label}
-                className="p-2 rounded-lg bg-ft-primary-yellow-200 text-sm font-medium"
+                className="p-2 rounded-lg bg-ft-primary-yellow-200 text-sm font-semibold"
               >
                 {label}
               </div>

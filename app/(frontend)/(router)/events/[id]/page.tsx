@@ -12,97 +12,33 @@ import {
   ArrowLeft,
   CheckCircle2,
   ArrowRight,
+  Calendar,
+  Users,
+  ExternalLink,
 } from "lucide-react";
-import { Spinner } from "@heroui/react";
+import { Button } from "@heroui/react";
 import { Toaster, toast } from "react-hot-toast";
 
 import { Event } from "../types";
 import { EventCountdown } from "../components/EventCountdown";
+import { EventCard } from "../components/EventCard";
+import { BulletproofSpinner } from "@/components/BulletproofSpinner";
 
 // --- HELPER COMPONENTS ---
 
 const LoadingScreen = () => (
-  <div className="flex flex-col items-center justify-center w-full h-screen p-8 bg-[#F9FAFB]">
-    <Spinner
-      size="lg"
-      classNames={{
-        wrapper: "w-16 h-16",
-        circle1: "border-b-ft-primary-yellow border-[4px]",
-        circle2: "border-b-ft-primary-yellow border-[4px]",
+  <div className="flex flex-col items-center justify-center w-full h-screen p-8">
+    <BulletproofSpinner />
+    <p
+      className="mt-5 text-lg font-semibold text-ft-primary-blue tracking-wide uppercase"
+      style={{
+        animation: "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
       }}
-    />
-    <p className="mt-5 text-lg font-semibold text-[#5E5E92] animate-pulse tracking-wide">
+    >
       Loading Event Details...
     </p>
   </div>
 );
-
-const OtherEventCard = ({ event }: { event: Event }) => {
-  const dateObj = new Date(event.date);
-  const day = dateObj.getDate();
-  const month = dateObj.toLocaleString("en-US", { month: "short" });
-
-  return (
-    <Link href={`/events/${event._id}`} className="group h-full">
-      <div className="flex flex-col h-full bg-white rounded-3xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-        {/* Image Container */}
-        <div className="relative w-full h-48 overflow-hidden">
-          <Image
-            src={event.posterUrl}
-            alt={event.name}
-            fill
-            className="object-fill transition-transform duration-500 group-hover:scale-110"
-          />
-          {/* Date Badge */}
-          <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm rounded-xl px-3 py-2 text-center shadow-lg">
-            <span className="block text-xl font-bold text-[#2C305F] leading-none">
-              {day}
-            </span>
-            <span className="block text-xs font-bold text-[#DCB968] uppercase">
-              {month}
-            </span>
-          </div>
-          {/* Mode Badge */}
-          <div className="absolute top-4 right-4 bg-[#2C305F]/90 backdrop-blur-sm rounded-lg px-2 py-1 shadow-lg">
-            <span className="text-[10px] font-bold text-white uppercase tracking-wider">
-              {event.mode}
-            </span>
-          </div>
-        </div>
-
-        {/* Content */}
-        <div className="flex flex-col flex-1 p-5">
-          <h3
-            className="text-lg font-bold text-[#2C305F] line-clamp-1 mb-3 group-hover:text-[#DCB968] transition-colors"
-            title={event.name}
-          >
-            {event.name}
-          </h3>
-
-          <div className="mt-auto space-y-2 text-sm text-gray-500">
-            <div className="flex items-center gap-2">
-              <Clock size={16} className="text-[#DCB968]" />
-              <span>{event.startTime}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <MapPin size={16} className="text-[#DCB968]" />
-              <span className="line-clamp-1">{event.location}</span>
-            </div>
-          </div>
-
-          {/* Mini Button */}
-          <div className="mt-4 pt-4 border-t border-gray-100 flex items-center justify-between text-[#2C305F] font-semibold text-sm">
-            <span>Details</span>
-            <ArrowRight
-              size={16}
-              className="group-hover:translate-x-1 transition-transform"
-            />
-          </div>
-        </div>
-      </div>
-    </Link>
-  );
-};
 
 export default function EventDetailPage() {
   const params = useParams();
@@ -139,7 +75,6 @@ export default function EventDetailPage() {
 
   const { event, otherEvents } = data;
 
-  // Format Date Main Event
   const eventDate = new Date(event.date);
   const dateStr = eventDate.toLocaleDateString("en-GB", {
     weekday: "long",
@@ -155,75 +90,101 @@ export default function EventDetailPage() {
 
   const isExpired = deadline && now > deadline;
   const hasLink = !!event.registrationLink;
-
   const hasSidebar = event.agenda && event.agenda.length > 0;
 
   return (
-    <div className="min-h-screen bg-[#F9FAFB] pb-20">
+    <div className="min-h-screen bg-[#F9FAFB] pb-16 font-sans">
       <Toaster position="top-center" />
 
-      {/* --- HERO SECTION --- */}
-      <section
-        className="relative w-full text-white py-12 px-4 overflow-hidden"
-        style={{
-          background: "linear-gradient(to top, #2C305F, #5E5E92)",
-        }}
-      >
-        <div className="absolute top-0 right-0 w-96 h-96 bg-[#DCB968] rounded-full blur-[150px] opacity-20 translate-x-1/2 -translate-y-1/2" />
-        <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-400 rounded-full blur-[120px] opacity-10 -translate-x-1/2 translate-y-1/2" />
+      {/* --- PREMIUM HERO SECTION --- */}
+      <section className="relative w-full min-h-[90vh] lg:min-h-[85vh] flex items-center bg-[#2C305F] overflow-hidden">
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-all"
+          style={{ backgroundImage: `url(${event.posterUrl})` }}
+        >
+          <div
+            className="absolute inset-0"
+            style={{
+              background: `linear-gradient(to bottom, 
+                rgba(44, 48, 95, 0.85) 0%,
+                rgba(28, 31, 66, 0.9) 40%,
+                rgba(8, 13, 73, 0.95) 75%,
+                rgba(249, 250, 251, 1) 100% 
+              )`,
+            }}
+          />
+        </div>
 
-        <div className="container mx-auto max-w-6xl relative z-10">
-          <Link
-            href="/events"
-            className="inline-flex items-center text-[#DCB968] hover:text-white transition-colors mb-8 font-medium"
-          >
-            <ArrowLeft size={20} className="mr-2" /> Back to Events
-          </Link>
+        {/* Content Container */}
+        <div className="relative z-10 w-full max-w-[1400px] mx-auto flex flex-col lg:flex-row items-center justify-between gap-10 lg:gap-16 px-6 md:px-16 pt-20 pb-16 lg:pb-24">
+          {/* Top Floating Back Button */}
+          <div className="absolute top-4 left-6 md:left-16 z-20">
+            <Link
+              href="/events"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full text-white font-semibold text-sm transition-all border border-white/10 shadow-sm"
+            >
+              <ArrowLeft size={16} /> Back to Events
+            </Link>
+          </div>
 
-          <div className="flex flex-col lg:flex-row gap-12 items-start">
-            {/* Left: Text Info */}
-            <div className="flex-1 space-y-6">
-              <span className="inline-block px-4 py-1 rounded-full bg-[#DCB968]/20 text-[#DCB968] font-bold text-sm tracking-wider border border-[#DCB968]/50 uppercase">
+          {/* Left Side: Text Info */}
+          <div className="w-full lg:max-w-2xl text-white flex flex-col order-2 lg:order-1 mt-6 lg:mt-0">
+            {/* Tags */}
+            <div className="flex flex-wrap gap-2.5 mb-4 justify-center md:justify-start">
+              <span className="bg-[#F7D27F] text-[#2C305F] px-4 py-1.5 rounded-md text-xs lg:text-sm font-bold shadow-sm uppercase tracking-widest">
                 {event.mode} Event
               </span>
-              <h1 className="text-4xl md:text-5xl font-extrabold leading-tight tracking-tight">
-                {event.name}
-              </h1>
-              <p className="text-lg text-gray-300 leading-relaxed max-w-xl">
-                {event.description}
-              </p>
+            </div>
 
-              <div className="pt-4 flex flex-wrap gap-4">
-                {hasLink && !isExpired ? (
-                  <a
+            {/* Title */}
+            <h2 className="text-xl lg:text-4xl font-[1000] mb-3 text-center md:text-left leading-tight drop-shadow-md tracking-wide uppercase">
+              {event.name}
+            </h2>
+
+            {/* Description */}
+            <p className="text-base lg:text-lg leading-relaxed mb-4 text-gray-200 text-justify md:text-left opacity-95">
+              {event.description}
+            </p>
+
+            {/* Call to Action Button */}
+            <div className="w-full flex justify-center md:justify-start">
+              {hasLink && !isExpired ? (
+                <div
+                  className="w-fit h-fit rounded-md p-[2px] mt-[0.5rem]"
+                  style={{
+                    background: "linear-gradient(to top, #474A6E, #DBB968)",
+                  }}
+                >
+                  <Button
+                    className="bg-ft-primary-blue-300 text-bluePrimary font-bold px-4 py-2 rounded-md hover:bg-yellowCream w-fit md:w-full transition-colors duration-200"
+                    as="a"
                     href={event.registrationLink}
                     target="_blank"
                     rel="noreferrer"
-                    className="px-8 py-4 bg-[#DCB968] text-[#2C305F] font-bold text-lg rounded-full hover:bg-white transition-all shadow-[0_0_20px_rgba(220,185,104,0.4)] hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] transform hover:-translate-y-1"
+                    endContent={<ExternalLink size={18} />}
                   >
                     Register Now
-                  </a>
-                ) : hasLink && isExpired ? (
-                  <button
-                    disabled
-                    className="px-8 py-4 bg-gray-500 text-white font-bold text-lg rounded-full cursor-not-allowed opacity-70"
-                  >
-                    Registrations Closed
-                  </button>
-                ) : null}
-              </div>
+                  </Button>
+                </div>
+              ) : null}
             </div>
+          </div>
 
-            {/* Right: Poster */}
-            <div className="w-full lg:w-[40%] relative group">
+          {/* Right Side: Dynamic Rotated Poster */}
+          <div className="w-full lg:w-[40%] relative group order-1 lg:order-2 shrink-0 mt-8 lg:mt-0 flex justify-center">
+            <div className="relative w-[85vw] max-w-[450px] lg:max-w-none lg:w-full">
               <div className="absolute inset-0 bg-[#DCB968] rounded-3xl rotate-6 opacity-30 group-hover:rotate-3 transition-transform duration-500" />
-              <div className="relative aspect-[16/10] w-full rounded-3xl overflow-hidden shadow-2xl border-4 border-white/10">
-                <Image
-                  src={event.posterUrl}
-                  alt={event.name}
-                  fill
-                  className="object-fill"
-                />
+              <div className="relative aspect-[16/10] w-full rounded-[1.5rem] lg:rounded-[30px] p-[4px] lg:p-[6px] bg-gradient-to-b from-[rgba(240,237,255,1)] to-[rgba(94,94,146,1)] shadow-2xl transition-transform duration-500">
+                <div className="relative w-full h-full rounded-[1.25rem] lg:rounded-[24px] overflow-hidden bg-[#2C305F]">
+                  <Image
+                    src={event.posterUrl}
+                    alt={event.name}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    className="object-cover group-hover:scale-105 transition-transform duration-700"
+                    priority
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -232,52 +193,57 @@ export default function EventDetailPage() {
 
       {/* --- COUNTDOWN SECTION --- */}
       {event.registrationDeadline && (
-        <section className="-mt-7 relative z-20 container mx-auto max-w-4xl px-4">
-          <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 md:p-8">
+        <section className="-mt-12 relative z-20 container mx-auto px-4 md:px-20">
+          <div className="bg-white rounded-3xl shadow-2xl border border-gray-100">
             <EventCountdown date={new Date(event.registrationDeadline)} />
           </div>
         </section>
       )}
 
       {/* --- MAIN CONTENT GRID --- */}
-      <section className="container mx-auto max-w-6xl px-4 py-16">
+      <section className="container mx-auto max-w-6xl px-4 pt-16 pb-12">
         <div
-          className={`grid grid-cols-1 gap-12 ${
-            hasSidebar ? "lg:grid-cols-3" : "lg:grid-cols-1 mx-auto"
-          }`}
+          className={`grid grid-cols-1 gap-12 ${hasSidebar ? "lg:grid-cols-3" : "lg:grid-cols-1 mx-auto max-w-4xl"}`}
         >
           <div
             className={hasSidebar ? "lg:col-span-2 space-y-12" : "space-y-12"}
           >
-            {/* 1. Event Timeline & Info */}
+            {/* 1. Event Details Block */}
             <div className="bg-white rounded-[2rem] p-8 shadow-sm border border-gray-100">
               <h2 className="text-2xl font-bold text-[#2C305F] mb-6 flex items-center gap-2">
                 <span className="w-2 h-8 bg-[#DCB968] rounded-full" />
                 Event Details
               </h2>
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="flex items-start gap-4 p-4 bg-[#F9FAFB] rounded-2xl">
+                <div className="flex items-start gap-4 p-4 bg-[#F9FAFB] rounded-2xl border border-gray-50">
                   <div className="p-3 bg-white rounded-xl shadow-sm text-[#DCB968]">
                     <Clock size={24} />
                   </div>
+
                   <div>
                     <p className="text-sm text-gray-500 font-semibold uppercase tracking-wider">
                       Time
                     </p>
+
                     <p className="text-[#2C305F] font-bold text-lg">
                       {event.startTime} - {event.endTime}
                     </p>
+
                     <p className="text-[#2C305F]/70 text-sm">{dateStr}</p>
                   </div>
                 </div>
-                <div className="flex items-start gap-4 p-4 bg-[#F9FAFB] rounded-2xl">
+
+                <div className="flex items-start gap-4 p-4 bg-[#F9FAFB] rounded-2xl border border-gray-50">
                   <div className="p-3 bg-white rounded-xl shadow-sm text-[#DCB968]">
                     <MapPin size={24} />
                   </div>
+
                   <div>
                     <p className="text-sm text-gray-500 font-semibold uppercase tracking-wider">
                       Location / Platform
                     </p>
+
                     <p className="text-[#2C305F] font-bold text-lg line-clamp-2">
                       {event.location}
                     </p>
@@ -286,15 +252,18 @@ export default function EventDetailPage() {
               </div>
 
               {event.audience && event.audience.length > 0 && (
-                <div className="mt-6 p-4 bg-[#F9FAFB] rounded-2xl">
-                  <p className="text-sm text-gray-500 font-semibold uppercase tracking-wider mb-2">
-                    Who should attend?
-                  </p>
-                  <div className="flex flex-wrap gap-2">
+                <div className="mt-6 p-6 bg-[#F9FAFB] rounded-2xl border border-gray-50">
+                  <div className="flex items-center gap-3 mb-4">
+                    <Users size={20} className="text-[#DCB968]" />
+                    <p className="text-sm text-gray-500 font-bold uppercase tracking-wider">
+                      Target Audience
+                    </p>
+                  </div>
+                  <div className="flex flex-wrap gap-2.5">
                     {event.audience.map((aud, idx) => (
                       <span
                         key={idx}
-                        className="px-3 py-1 bg-white border border-gray-200 rounded-full text-[#2C305F] text-sm font-medium"
+                        className="px-4 py-1.5 bg-white border border-gray-200 shadow-sm rounded-full text-[#2C305F] text-sm font-bold"
                       >
                         {aud}
                       </span>
@@ -306,20 +275,19 @@ export default function EventDetailPage() {
 
             {/* 2. Guest Speakers */}
             {event.guest_speaker && event.guest_speaker.length > 0 && (
-              <div className="bg-white rounded-[2rem] p-8 shadow-sm border border-gray-100">
-                <h2 className="text-2xl font-bold text-[#2C305F] mb-8 text-center uppercase tracking-wider">
+              <div className="bg-white rounded-[2rem] p-8 md:p-10 shadow-sm border border-gray-100">
+                <h2 className="text-2xl md:text-3xl font-[900] text-[#2C305F] mb-10 text-center uppercase tracking-wide">
                   Our Guest Speakers
                 </h2>
-
-                <div className="flex flex-wrap justify-center gap-8 md:gap-12">
+                <div className="flex flex-wrap justify-center gap-10 md:gap-14">
                   {event.guest_speaker.map((speaker, idx) => (
                     <div
                       key={idx}
                       className="group flex flex-col items-center text-center w-40 md:w-48"
                     >
-                      {/* Avatar Container */}
+                      {/* Avatar Container with Gradient Border */}
                       <div
-                        className="relative w-32 h-32 md:w-40 md:h-40 mb-4 rounded-full p-1 shadow-lg group-hover:scale-105 transition-transform duration-300"
+                        className="relative w-36 h-36 md:w-44 md:h-44 mb-5 rounded-full p-1 shadow-lg group-hover:scale-105 transition-transform duration-300"
                         style={{
                           background:
                             "linear-gradient(to bottom right, #DCB968, #2C305F)",
@@ -333,17 +301,17 @@ export default function EventDetailPage() {
                             }
                             alt={speaker.name}
                             fill
-                            className="object-contain"
+                            className="object-cover"
                           />
                         </div>
 
-                        {/* LinkedIn Button (Only visible on hover) */}
+                        {/* LinkedIn Hover Button */}
                         {speaker.linkedIn_url && (
                           <a
                             href={speaker.linkedIn_url}
                             target="_blank"
                             rel="noreferrer"
-                            className="absolute bottom-0 right-0 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md text-[#2C305F] z-20 hover:bg-[#2C305F] hover:text-white"
+                            className="absolute bottom-1 right-1 w-11 h-11 bg-white rounded-full flex items-center justify-center shadow-lg text-[#0077b5] z-20 hover:bg-[#0077b5] hover:text-white transition-colors border-2 border-white"
                             title="Connect on LinkedIn"
                           >
                             <Linkedin size={20} />
@@ -352,11 +320,10 @@ export default function EventDetailPage() {
                       </div>
 
                       {/* Info */}
-                      <h3 className="text-lg md:text-xl font-bold text-[#2C305F] leading-tight group-hover:text-[#DCB968] transition-colors">
+                      <h3 className="text-lg md:text-xl font-[900] text-[#2C305F] leading-tight group-hover:text-[#DCB968] transition-colors">
                         {speaker.name}
                       </h3>
-
-                      <p className="text-sm text-gray-500 mt-2">
+                      <p className="text-sm text-gray-500 font-medium mt-2">
                         {speaker.bio}
                       </p>
                     </div>
@@ -367,15 +334,15 @@ export default function EventDetailPage() {
 
             {/* 3. Partners */}
             {event.partners && event.partners.length > 0 && (
-              <div className="bg-white rounded-[2rem] p-8 shadow-sm border border-gray-100">
-                <h2 className="text-2xl font-bold text-[#2C305F] mb-8 text-center uppercase tracking-wider">
+              <div className="bg-white rounded-[2rem] p-8 md:p-10 shadow-sm border border-gray-100">
+                <h2 className="text-2xl md:text-3xl font-[900] text-[#2C305F] mb-10 text-center uppercase tracking-wide">
                   Our Partners
                 </h2>
-                <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12 opacity-80">
+                <div className="flex flex-wrap justify-center items-center gap-8 md:gap-14 transition-all duration-500">
                   {event.partners.map((logoUrl, idx) => (
                     <div
                       key={idx}
-                      className="relative h-12 w-32 md:h-16 md:w-40"
+                      className="relative h-14 w-32 md:h-20 md:w-44 hover:scale-105 transition-transform"
                     >
                       <Image
                         src={logoUrl}
@@ -390,31 +357,34 @@ export default function EventDetailPage() {
             )}
           </div>
 
-          {/* RIGHT COL (1/3) - Sticky Sidebar */}
+          {/* RIGHT COL (1/3) - Sticky Sidebar Agenda */}
           {hasSidebar && (
             <div className="lg:col-span-1">
               <div className="sticky top-24 space-y-8">
-                <div className="bg-white rounded-[2rem] p-6 shadow-lg border-t-4 border-[#DCB968]">
-                  <h3 className="text-xl font-bold text-[#2C305F] mb-6">
-                    What to Expect
+                <div className="bg-white rounded-[2rem] p-8 shadow-xl border-t-[6px] border-[#DCB968]">
+                  <h3 className="text-2xl font-[900] text-[#2C305F] mb-8 uppercase tracking-wide">
+                    Agenda
                   </h3>
                   <div className="space-y-0">
                     {event.agenda.map((item, idx) => (
                       <div
                         key={idx}
-                        className="flex gap-4 pb-6 last:pb-0 relative"
+                        className="flex gap-5 pb-8 last:pb-0 relative group"
                       >
+                        {/* Timeline Connector Line */}
                         {idx !== event.agenda!.length - 1 && (
-                          <div className="absolute left-[11px] top-8 bottom-0 w-[2px] bg-gray-100" />
+                          <div className="absolute left-[15px] top-8 bottom-0 w-[2px] bg-gray-100 group-hover:bg-[#DCB968]/30 transition-colors" />
                         )}
-                        <div className="relative z-10 mt-1">
+                        {/* Icon Marker */}
+                        <div className="relative z-10 mt-0.5 shrink-0">
                           <CheckCircle2
-                            size={24}
-                            className="text-[#DCB968] bg-white"
+                            size={32}
+                            className="text-[#DCB968] bg-white rounded-full shadow-sm"
                           />
                         </div>
-                        <div>
-                          <p className="text-gray-700 font-medium leading-relaxed">
+                        {/* Content */}
+                        <div className="pt-1">
+                          <p className="text-[#2C305F] font-bold text-base leading-relaxed">
                             {item}
                           </p>
                         </div>
@@ -430,40 +400,39 @@ export default function EventDetailPage() {
 
       {/* --- OTHER EVENTS SECTION --- */}
       {otherEvents && otherEvents.length > 0 && (
-        <section>
-          <div className="container mx-auto max-w-6xl px-4">
-            <div className="flex items-center justify-between mb-8">
-              <div>
-                <h2 className="text-3xl md:text-4xl font-extrabold text-[#2C305F] uppercase">
-                  Other Events
-                </h2>
-              </div>
-              <Link
-                href="/events"
-                className="hidden md:flex items-center gap-2 px-6 py-3 rounded-full border border-[#2C305F]/20 text-[#2C305F] font-semibold hover:bg-[#2C305F] hover:text-white transition-all"
-              >
-                View All Events
-              </Link>
+        <div className="container mx-auto max-w-6xl px-4">
+          <div className="flex items-center justify-between mb-8">
+            <div>
+              <h2 className="text-3xl md:text-4xl font-extrabold text-[#2C305F] uppercase">
+                Other Events
+              </h2>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {otherEvents.map((ev) => (
-                <div key={ev._id} className="h-full">
-                  <OtherEventCard event={ev} />
-                </div>
-              ))}
-            </div>
-
-            <div className="md:hidden mt-8 text-center">
-              <Link
-                href="/events"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-[#2C305F]/20 text-[#2C305F] font-semibold hover:bg-[#2C305F] hover:text-white transition-all"
-              >
-                View All Events
-              </Link>
-            </div>
+            <Link
+              href="/events"
+              className="hidden md:flex items-center gap-2 px-6 py-3 rounded-full border border-[#2C305F]/20 text-[#2C305F] font-semibold hover:bg-[#2C305F] hover:text-white transition-all"
+            >
+              View All Events
+            </Link>
           </div>
-        </section>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {otherEvents.map((ev) => (
+              <div key={ev._id} className="h-full">
+                <EventCard event={ev} />
+              </div>
+            ))}
+          </div>
+
+          <div className="md:hidden mt-8 text-center">
+            <Link
+              href="/events"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-[#2C305F]/20 text-[#2C305F] font-semibold hover:bg-[#2C305F] hover:text-white transition-all"
+            >
+              View All Events
+            </Link>
+          </div>
+        </div>
       )}
     </div>
   );

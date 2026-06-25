@@ -6,7 +6,7 @@ import LabelSort from "./components/labelSort";
 import ArticleCard from "./components/articleCard";
 import { motion } from "framer-motion";
 import PaginationRounded from "./components/pagination";
-import { Spinner } from "@heroui/react";
+import { BulletproofSpinner } from "@/components/BulletproofSpinner";
 import Image from "next/image";
 import axios from "axios";
 
@@ -90,10 +90,10 @@ export default function ArticleLibrary() {
     const fetchAllLabels = async () => {
       try {
         const response = await axios.get(`/api/v1/article/labels`);
-        
+
         const uniqueLabels: string[] = response.data || [];
         const sortedLabels = uniqueLabels.sort();
-        
+
         setAvailableLabels(["All", ...sortedLabels]);
       } catch (err) {
         console.error("Failed to fetch unique labels:", err);
@@ -120,7 +120,7 @@ export default function ArticleLibrary() {
         }
 
         const response = await axios.get(
-          `/api/v1/article?${params.toString()}`
+          `/api/v1/article?${params.toString()}`,
         );
         const {
           articles: fetchedArticles = [],
@@ -136,7 +136,7 @@ export default function ArticleLibrary() {
             imageAlt: article.title,
             labels: article.labels,
             date: formatArticleDate(article.publicationDate),
-          })
+          }),
         );
 
         setArticles(formattedArticles);
@@ -162,16 +162,14 @@ export default function ArticleLibrary() {
   const renderArticleContent = () => {
     if (loading) {
       return (
-        <div className="flex flex-col items-center justify-center w-full h-64 p-8">
-          <Spinner 
-            size="lg"
-            classNames={{
-              wrapper: "w-16 h-16",
-              circle1: "border-b-ft-primary-yellow border-[4px]", 
-              circle2: "border-b-ft-primary-yellow border-[4px]",
+        <div className="flex flex-col items-center justify-center w-full h-80 p-8">
+          <BulletproofSpinner />
+          <p
+            className="mt-5 text-lg font-semibold text-ft-primary-blue tracking-wide uppercase"
+            style={{
+              animation: "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
             }}
-          />
-          <p className="mt-5 text-lg font-semibold text-[#5E5E92] animate-pulse tracking-wide">
+          >
             Loading Articles...
           </p>
         </div>
@@ -295,9 +293,7 @@ export default function ArticleLibrary() {
             <ChevronRightIcon />
           </li>
           <li>
-            <span 
-              className="text-black font-semibold truncate max-w-[150px] md:max-w-none cursor-default"
-            >
+            <span className="text-black font-semibold truncate max-w-[150px] md:max-w-none cursor-default">
               Article Library
             </span>
           </li>

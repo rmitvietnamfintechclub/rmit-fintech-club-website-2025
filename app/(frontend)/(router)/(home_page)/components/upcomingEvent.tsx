@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleRight, faAngleLeft } from "@fortawesome/free-solid-svg-icons";
 import { SearchX } from "lucide-react";
-import { Spinner } from "@heroui/react";
+import { BulletproofSpinner } from "@/components/BulletproofSpinner";
 import styles from "@/styles/upcoming.module.css";
 import clsx from "clsx";
 import axios from "axios";
@@ -47,8 +47,8 @@ const formatEventDate = (isoString: string): { day: string; month: string } => {
 const NoEventsDisplay = () => (
   <div className="w-full px-4 md:px-20 flex justify-center">
     <div className="w-full md:mt-8 p-10 md:p-16 flex flex-col items-center justify-center text-center bg-white/60 backdrop-blur-md rounded-[2.5rem] border-2 border-dashed border-gray-300/80 shadow-sm transition-all">
-      <div className="bg-gray-100 p-6 rounded-full mb-6 shadow-inner">
-        <SearchX size={48} className="text-gray-400" />
+      <div className="mb-6">
+        <SearchX size={48} />
       </div>
       <div className="space-y-3 mx-auto">
         <h3 className="text-2xl md:text-3xl font-bold text-[#2C305F]">
@@ -245,15 +245,14 @@ export default function UpcomingEvent() {
     if (loading) {
       return (
         <div className="flex flex-col items-center justify-center w-full py-20">
-          <Spinner
-            size="lg"
-            classNames={{
-              wrapper: "w-16 h-16",
-              circle1: "border-b-ft-primary-yellow border-[4px]",
-              circle2: "border-b-ft-primary-yellow border-[4px]",
+          <BulletproofSpinner />
+
+          <p
+            className="mt-5 text-lg font-semibold text-ft-primary-blue tracking-wide uppercase"
+            style={{
+              animation: "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
             }}
-          />
-          <p className="mt-6 text-lg font-semibold text-ft-primary-blue animate-pulse tracking-wide">
+          >
             Loading Upcoming Events...
           </p>
         </div>
@@ -446,10 +445,10 @@ export default function UpcomingEvent() {
   };
 
   return (
-    <div className="h-fit w-[100vw] pt-6 md:pt-12 pb-8 relative flex flex-col items-center overflow-x-hidden">
+    <div className="h-fit w-[100vw] pt-4 md:pt-12 pb-8 relative flex flex-col items-center overflow-x-hidden">
       {/* Header (Preserved) */}
-      <div className="h-fit w-fit relative mx-auto mt-[2vh] mb-[2vh] md:mb-[4vh]">
-        <p className="text-3xl md:text-[4vw] text-[#2C305F] drop-shadow-[0_4px_4px_rgba(255,204,102,0.6)] font-bold text-center">
+      <div className="h-fit w-fit relative mx-auto mt-[2vh] mb-[3vh] md:mb-[4vh]">
+        <p className="text-3xl md:text-[4vw] font-extrabold text-ft-primary-blue drop-shadow-[0_4px_4px_rgba(255,204,102,0.6)] uppercase tracking-wider text-center">
           Upcoming Events
         </p>
         <div

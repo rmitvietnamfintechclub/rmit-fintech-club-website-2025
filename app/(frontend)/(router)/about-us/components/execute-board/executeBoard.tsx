@@ -6,6 +6,7 @@ import { IconBrandLinkedin } from "@tabler/icons-react";
 import { motion, useInView } from "framer-motion";
 import axios from "axios";
 import useMediaQuery from "./useMediaQuery";
+import { BulletproofSpinner } from "@/components/BulletproofSpinner";
 
 // --- Type Definition ---
 type ExecutiveBoardMember = {
@@ -97,7 +98,7 @@ function ExecutiveBoardCard({
             fetchPriority={isPriority ? "high" : "auto"}
             loading={isPriority ? "eager" : "lazy"}
           />
-          
+
           {/* Gradient Overlay - Đẩy phần tối lên cao hơn chút để dễ đọc chữ */}
           <div
             className="absolute inset-0 z-10"
@@ -173,7 +174,12 @@ function ExecutiveBoardCard({
                 </Link>
               ) : (
                 <div className="flex-shrink-0 my-auto">
-                  <IconBrandLinkedin size={36} color="#9CA3AF" strokeWidth={1.2} className="opacity-50" />
+                  <IconBrandLinkedin
+                    size={36}
+                    color="#9CA3AF"
+                    strokeWidth={1.2}
+                    className="opacity-50"
+                  />
                 </div>
               )}
             </div>
@@ -185,10 +191,12 @@ function ExecutiveBoardCard({
 }
 
 const ExecutiveBoard = () => {
-  const [groupedMembers, setGroupedMembers] = useState<Record<number, ExecutiveBoardMember[]>>({});
+  const [groupedMembers, setGroupedMembers] = useState<
+    Record<number, ExecutiveBoardMember[]>
+  >({});
   const [generations, setGenerations] = useState<number[]>([]);
-  const [selectedGen, setSelectedGen] = useState<number>(0); 
-  
+  const [selectedGen, setSelectedGen] = useState<number>(0);
+
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
 
@@ -196,7 +204,7 @@ const ExecutiveBoard = () => {
     const fetchExecutiveBoard = async () => {
       try {
         const settingsRes = await axios.get("/api/v1/settings");
-        const currentGenNum = Number(settingsRes.data.value); 
+        const currentGenNum = Number(settingsRes.data.value);
 
         const response = await axios.get("/api/v1/executivemembers");
 
@@ -204,13 +212,15 @@ const ExecutiveBoard = () => {
           const allMembers: ExecutiveBoardMember[] = response.data.members;
 
           // Group by Generation
-          const grouped = allMembers.reduce((acc, member) => {
-            const gen = member.generation;
-            if (!acc[gen]) acc[gen] = [];
-            acc[gen].push(member);
-            return acc;
-          }, {} as Record<number, ExecutiveBoardMember[]>);
-
+          const grouped = allMembers.reduce(
+            (acc, member) => {
+              const gen = member.generation;
+              if (!acc[gen]) acc[gen] = [];
+              acc[gen].push(member);
+              return acc;
+            },
+            {} as Record<number, ExecutiveBoardMember[]>,
+          );
 
           const sortedGens = Object.keys(grouped)
             .map(Number)
@@ -218,9 +228,11 @@ const ExecutiveBoard = () => {
 
           setGroupedMembers(grouped);
           setGenerations(sortedGens);
-          
+
           // Kiểm tra xem Gen từ DB (settings) có tồn tại trong dữ liệu thực tế không
-          const defaultGen = grouped[currentGenNum] ? currentGenNum : sortedGens[0];
+          const defaultGen = grouped[currentGenNum]
+            ? currentGenNum
+            : sortedGens[0];
           setSelectedGen(defaultGen);
         } else {
           setError("Failed to load executive board data.");
@@ -241,9 +253,16 @@ const ExecutiveBoard = () => {
         <DecorativeCircles />
         <main>
           <PageHeader />
-          <div className="p-8 text-center flex flex-col items-center justify-center h-64">
-            <div className="w-12 h-12 border-[5px] border-[#F0EDFF] border-t-[#DCB968] rounded-full animate-spin"></div>
-            <p className="mt-4 text-lg text-[#5E5E92]">Loading Executive Board...</p>
+          <div className="p-8 text-center flex flex-col items-center justify-center h-[80vh]">
+            <BulletproofSpinner />
+            <p
+              className="mt-5 text-lg font-semibold text-ft-primary-blue tracking-wide uppercase"
+              style={{
+                animation: "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+              }}
+            >
+              Loading Executive Board...
+            </p>
           </div>
         </main>
       </section>
@@ -278,14 +297,20 @@ const ExecutiveBoard = () => {
                         key={gen}
                         onClick={() => setSelectedGen(gen)}
                         className={`relative px-6 md:px-8 py-2.5 rounded-full text-sm font-bold transition-colors duration-300 z-10 whitespace-nowrap ${
-                          isActive ? "text-white" : "text-[#5E5E92] hover:text-[#2C305F]"
+                          isActive
+                            ? "text-white"
+                            : "text-[#5E5E92] hover:text-[#2C305F]"
                         }`}
                       >
                         {isActive && (
                           <motion.div
                             layoutId="activeGenTab"
                             className="absolute inset-0 bg-[#2C305F] rounded-full -z-10 shadow-md"
-                            transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                            transition={{
+                              type: "spring",
+                              stiffness: 400,
+                              damping: 30,
+                            }}
                           />
                         )}
                         Generation {gen}
@@ -305,7 +330,11 @@ const ExecutiveBoard = () => {
               className="w-full grid grid-cols-2 gap-3 md:grid-cols-2 lg:grid-cols-4 md:gap-8 pb-10"
             >
               {(groupedMembers[selectedGen] || []).map((item, index) => (
-                <ExecutiveBoardCard key={`${selectedGen}-${index}`} {...item} index={index} />
+                <ExecutiveBoardCard
+                  key={`${selectedGen}-${index}`}
+                  {...item}
+                  index={index}
+                />
               ))}
             </motion.div>
           </>

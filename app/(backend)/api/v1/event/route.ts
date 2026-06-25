@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { 
   getAllEvents, 
   getUpcomingEvents, 
+  getPastEvents,
   createEvent 
 } from "@/app/(backend)/controllers/eventController";
 import { publicRoute, adminRoute } from "@/app/(backend)/libs/api-handler";
@@ -23,8 +24,13 @@ export const GET = publicRoute(async (req) => {
     return NextResponse.json({ data: result });
   }
 
-  // Case 2: Admin Dashboard / List
-  // 2. Truyền status và mode vào hàm getAllEvents
+  // Case 2: Lấy sự kiện đã qua (Past Archive)
+  if (type === "past") {
+    const result = await getPastEvents(page, limit); 
+    return NextResponse.json({ data: result });
+  }
+
+  /// Case 3: Admin Dashboard / List Get All (Có lọc Status và Mode)
   const result = await getAllEvents(page, limit, status, mode);
   
   return NextResponse.json({ data: result });

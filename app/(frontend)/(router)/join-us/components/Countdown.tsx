@@ -205,7 +205,7 @@ export default function Countdown({ date }: Pick<CountdownProps, "date">) {
     setMounted(true);
   }, []);
 
-  if (!mounted) return null; // Or a static loading skeleton to prevent hydration mismatch
+  if (!mounted) return null;
 
   return <ReactCountdown date={date} renderer={renderer} />;
 }

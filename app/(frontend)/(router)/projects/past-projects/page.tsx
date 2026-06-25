@@ -51,7 +51,7 @@ export default function PastHighlightedProjects() {
       <div className="flex flex-col items-center justify-center w-full h-screen p-8">
         <BulletproofSpinner />
         <p
-          className="mt-5 text-lg font-semibold text-[#5E5E92] tracking-wide uppercase"
+          className="mt-5 text-lg font-semibold text-ft-primary-blue tracking-wide uppercase"
           style={{
             animation: "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
           }}

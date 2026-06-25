@@ -1,8 +1,9 @@
 "use client";
 
 import { Button } from "@heroui/react";
+import { ExternalLink } from "lucide-react";
 import { BulletproofSpinner } from "@/components/BulletproofSpinner";
-import { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
 import { ApiProject } from "../types";
@@ -175,7 +176,7 @@ const ClubwideProjects = () => {
       <div className="flex flex-col items-center justify-center w-full h-screen p-8 bg-[#2C305F]">
         <BulletproofSpinner />
         <p
-          className="mt-5 text-lg font-semibold text-[#DBB968] tracking-wide uppercase"
+          className="mt-5 text-lg font-semibold text-ft-primary-yellow tracking-wide uppercase"
           style={{
             animation: "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
           }}
@@ -192,7 +193,9 @@ const ClubwideProjects = () => {
         <div className="relative w-full max-w-2xl p-[4px] rounded-lg bg-gradient-to-b from-[#DCB968] to-[#F7D27F]">
           <div className="flex flex-col items-center justify-center w-full py-10 bg-[#F9FAFB] rounded-[7px] text-center px-4">
             <p className="text-5xl font-bold mb-4">⚠️</p>
-            <p className="text-[#2C305F] text-xl font-semibold">{error}</p>
+            <p className="text-ft-primary-blue text-xl font-semibold">
+              {error}
+            </p>
           </div>
         </div>
       </div>
@@ -278,32 +281,40 @@ const ClubwideProjects = () => {
                 {currentProject.labels.map((label, index) => (
                   <span
                     key={index}
-                    className="bg-[#F7D27F] hover:bg-[#DCB968] text-[#2C305F] px-3 py-1 rounded-md text-xs lg:text-sm font-bold shadow-sm transition-colors"
+                    className="bg-[#F7D27F] text-[#2C305F] px-3 py-1 rounded-md text-xs lg:text-sm font-semibold shadow-sm transition-colors"
                   >
                     {label}
                   </span>
                 ))}
               </div>
 
-              <h2 className="text-2xl lg:text-[2.5rem] font-[1000] mb-4 text-center md:text-left leading-tight drop-shadow-md tracking-wide uppercase">
+              <h2 className="text-xl lg:text-4xl font-[1000] mb-4 text-center md:text-left leading-tight drop-shadow-md tracking-wide uppercase">
                 {currentProject.title}
               </h2>
 
-              <p className="text-sm lg:text-base leading-relaxed mb-6 text-gray-100 text-justify opacity-95">
+              <p className="text-sm lg:text-base leading-relaxed mb-3 md:mb-4 text-gray-100 text-justify opacity-95">
                 {currentProject.description}
               </p>
 
               {currentProject.link && (
-                <div className="w-full flex justify-center lg:justify-start">
-                  <Button
-                    className="bg-[#DCB968] hover:bg-[#DCB968]/80 text-[#2C305F] text-sm lg:text-[16px] py-5 lg:py-6 px-6 lg:px-8 font-bold rounded-xl transition-all hover:scale-105 shadow-lg"
-                    as="a"
-                    href={currentProject.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                <div className="flex justify-center md:justify-start">
+                  <div
+                    className="w-fit h-fit rounded-md p-[2px] mt-[0.5rem]"
+                    style={{
+                      background: "linear-gradient(to top, #474A6E, #DBB968)",
+                    }}
                   >
-                    Explore More
-                  </Button>
+                    <Button
+                      className="bg-ft-primary-blue-300 text-bluePrimary font-semibold px-4 py-2 rounded-md hover:bg-yellowCream w-fit md:w-full transition-colors duration-200"
+                      as="a"
+                      href={currentProject.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      endContent={<ExternalLink size={18} />}
+                    >
+                      Explore More
+                    </Button>
+                  </div>
                 </div>
               )}
             </motion.div>

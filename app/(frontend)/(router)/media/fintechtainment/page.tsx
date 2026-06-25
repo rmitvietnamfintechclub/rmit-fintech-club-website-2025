@@ -7,7 +7,7 @@ import PodcastCard from "./components/podcastCard";
 import ReelPlayer from "./components/reelPlayer";
 import ReelLibraryGrid from "./components/ReelLibraryGrid";
 import { motion } from "framer-motion";
-import { Spinner } from "@heroui/react";
+import { BulletproofSpinner } from "@/components/BulletproofSpinner";
 import PaginationRounded from "./components/pagination";
 import Image from "next/image";
 import axios from "axios";
@@ -249,16 +249,14 @@ export default function PodcastLibrary() {
   const renderPodcastContent = () => {
     if (podcastsLoading) {
       return (
-        <div className="flex flex-col items-center justify-center w-full h-64 p-8">
-          <Spinner
-            size="lg"
-            classNames={{
-              wrapper: "w-16 h-16",
-              circle1: "border-b-ft-primary-yellow border-[4px]",
-              circle2: "border-b-ft-primary-yellow border-[4px]",
-            }}
-          />
-          <p className="mt-5 text-lg font-semibold text-[#5E5E92] animate-pulse tracking-wide">
+        <div className="flex flex-col items-center justify-center w-full h-80 p-8">
+          <BulletproofSpinner />
+        <p
+          className="mt-5 text-lg font-semibold text-ft-primary-blue tracking-wide uppercase"
+          style={{
+            animation: "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+          }}
+        >
             Loading Podcasts...
           </p>
         </div>
@@ -303,16 +301,14 @@ export default function PodcastLibrary() {
   const renderReelContent = () => {
     if (reelsLoading) {
       return (
-        <div className="flex flex-col items-center justify-center w-full h-64 p-8">
-          <Spinner
-            size="lg"
-            classNames={{
-              wrapper: "w-16 h-16",
-              circle1: "border-b-ft-primary-yellow border-[4px]",
-              circle2: "border-b-ft-primary-yellow border-[4px]",
-            }}
-          />
-          <p className="mt-5 text-lg font-semibold text-[#5E5E92] animate-pulse tracking-wide">
+        <div className="flex flex-col items-center justify-center w-full h-80 p-8">
+          <BulletproofSpinner />
+        <p
+          className="mt-5 text-lg font-semibold text-ft-primary-blue tracking-wide uppercase"
+          style={{
+            animation: "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+          }}
+        >
             Loading FinTech101...
           </p>
         </div>

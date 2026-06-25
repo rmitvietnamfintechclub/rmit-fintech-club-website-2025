@@ -58,12 +58,12 @@ export const EventTicket = ({ event }: EventTicketProps) => {
 
   return (
     <div className="w-full flex justify-center">
-      <article className="group w-full flex flex-col md:flex-row drop-shadow-xl transition-transform duration-300 hover:-translate-y-1 relative z-0 mt-8">
+      <article className="group w-full flex flex-col md:flex-row transition-transform duration-300 hover:-translate-y-1 relative z-0 mt-8">
         {/* =========================================================
             1. LEFT: MAIN BODY (White)
             ========================================================= */}
         <div
-          className="flex-1 flex flex-col md:flex-row bg-white relative z-10 overflow-hidden"
+          className="flex-1 flex flex-col md:flex-row bg-white border-1 border-dark relative z-10 overflow-hidden"
           style={{
             borderTopLeftRadius: "0px",
             borderBottomLeftRadius: "0px",
@@ -78,7 +78,7 @@ export const EventTicket = ({ event }: EventTicketProps) => {
               src={event.posterUrl}
               alt={event.name}
               fill
-              className="object-fill transition-transform duration-700 group-hover:scale-105"
+              className="object-fill transition-transform duration-700 "
             />
             <div className="absolute inset-0 bg-gradient-to-r from-black/5 to-transparent pointer-events-none" />
           </div>
@@ -135,7 +135,7 @@ export const EventTicket = ({ event }: EventTicketProps) => {
 
           {/* Đường đứt nét */}
           <div className="absolute inset-0 flex items-center justify-center z-10">
-            <div className="w-full h-[2px] md:w-[2px] md:h-full border-t-5 md:border-t-0 md:border-l-5 border-dashed border-ft-primary-blue mx-4 md:mx-0 my-2 md:my-0"></div>
+            <div className="w-full h-[2px] md:w-[2px] md:h-full border-t-8 md:border-t-0 md:border-l-8 border-dashed border-ft-primary-blue mx-4 md:mx-0 my-2 md:my-0"></div>
           </div>
         </div>
 
@@ -159,7 +159,7 @@ export const EventTicket = ({ event }: EventTicketProps) => {
           <div className="relative z-10">
             {/* Desktop */}
             <div className="hidden md:block -rotate-90">
-              <span className="text-[#DCB968] font-bold tracking-[0.3em] text-sm uppercase whitespace-nowrap drop-shadow-md group-hover/btn:tracking-[0.4em] transition-all duration-300">
+              <span className="text-[#DCB968] font-bold tracking-[0.3em] text-sm uppercase whitespace-nowrap drop-shadow-md transition-all duration-300">
                 Explore More
               </span>
             </div>
