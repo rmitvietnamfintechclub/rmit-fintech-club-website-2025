@@ -14,7 +14,7 @@ import { EventMobileCard } from "./components/EventMobileCard";
 
 const LoadingState = () => {
   return (
-    <div className="flex flex-col items-center justify-center w-full py-24">
+    <div className="flex flex-col items-center justify-center w-full py-40">
       <BulletproofSpinner />
       <p
         className="mt-5 text-lg font-bold text-ft-primary-blue tracking-wide uppercase"
@@ -101,7 +101,7 @@ export default function EventsPage() {
   };
 
   return (
-    <div className="bg-ft-background relative min-h-screen font-sans">
+    <div className="bg-ft-background relative font-sans">
       <Toaster position="top-center" />
 
       <div className="container px-4 md:px-16 pt-8 relative z-10 mx-auto max-w-7xl">
