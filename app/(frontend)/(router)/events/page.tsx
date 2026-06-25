@@ -9,18 +9,19 @@ import { BulletproofSpinner } from "@/components/BulletproofSpinner";
 
 import { Event } from "./types";
 import { EventTicket } from "./components/EventTicket";
-import { EventCard } from "./components/EventCard"; 
+import { EventCard } from "./components/EventCard";
+import { EventMobileCard } from "./components/EventMobileCard";
 
 const LoadingState = () => {
   return (
     <div className="flex flex-col items-center justify-center w-full py-24">
       <BulletproofSpinner />
-          <p
-            className="mt-5 text-lg font-bold text-ft-primary-blue tracking-wide uppercase"
-            style={{
-              animation: "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
-            }}
-          >
+      <p
+        className="mt-5 text-lg font-bold text-ft-primary-blue tracking-wide uppercase"
+        style={{
+          animation: "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+        }}
+      >
         Loading Events...
       </p>
     </div>
@@ -34,26 +35,30 @@ export default function EventsPage() {
   const [pastEvents, setPastEvents] = useState<Event[]>([]);
   const [pastPage, setPastPage] = useState(1);
   const [loadingMore, setLoadingMore] = useState(false);
-  const [hasMorePast, setHasMorePast] = useState(true); 
+  const [hasMorePast, setHasMorePast] = useState(true);
 
-  const PAST_LIMIT = 1;
+  const PAST_LIMIT = 3;
 
   useEffect(() => {
     const fetchAllEvents = async () => {
       try {
         setLoading(true);
         const [upcomingRes, pastRes] = await Promise.all([
-          axios.get("/api/v1/event", { params: { type: "upcoming", limit: 5 } }),
-          axios.get("/api/v1/event", { params: { type: "past", page: 1, limit: PAST_LIMIT } })
+          axios.get("/api/v1/event", {
+            params: { type: "upcoming", limit: 5 },
+          }),
+          axios.get("/api/v1/event", {
+            params: { type: "past", page: 1, limit: PAST_LIMIT },
+          }),
         ]);
 
         setUpcomingEvents(upcomingRes.data.data?.events || []);
-        
+
         const initialPastEvents = pastRes.data.data?.events || [];
-        const totalPastCount = pastRes.data.data?.totalCount || 0; 
-        
+        const totalPastCount = pastRes.data.data?.totalCount || 0;
+
         setPastEvents(initialPastEvents);
-        
+
         setHasMorePast(initialPastEvents.length < totalPastCount);
       } catch (error: any) {
         console.error("Failed to fetch events:", error);
@@ -68,18 +73,18 @@ export default function EventsPage() {
 
   const handleLoadMore = async () => {
     if (loadingMore || !hasMorePast) return;
-    
+
     setLoadingMore(true);
     const nextPage = pastPage + 1;
 
     try {
-      const res = await axios.get("/api/v1/event", { 
-        params: { type: "past", page: nextPage, limit: PAST_LIMIT } 
+      const res = await axios.get("/api/v1/event", {
+        params: { type: "past", page: nextPage, limit: PAST_LIMIT },
       });
-      
+
       const newEvents = res.data.data?.events || [];
       const totalPastCount = res.data.data?.totalCount || 0;
-      
+
       const updatedEvents = [...pastEvents, ...newEvents];
       setPastEvents(updatedEvents);
       setPastPage(nextPage);
@@ -99,8 +104,7 @@ export default function EventsPage() {
     <div className="bg-ft-background relative min-h-screen font-sans">
       <Toaster position="top-center" />
 
-      <div className="container px-4 md:px-16 py-12 relative z-10 mx-auto max-w-7xl">
-        
+      <div className="container px-4 md:px-16 pt-8 relative z-10 mx-auto max-w-7xl">
         {/* =========================================================
             1. KHU VỰC SỰ KIỆN SẮP TỚI (UPCOMING)
             ========================================================= */}
@@ -125,9 +129,17 @@ export default function EventsPage() {
             {loading ? (
               <LoadingState />
             ) : upcomingEvents.length > 0 ? (
-              <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
+              <div className="space-y-6 md:space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-700">
                 {upcomingEvents.map((event) => (
-                  <EventTicket key={event._id} event={event} />
+                  <React.Fragment key={event._id}>
+                    <div className="hidden md:block">
+                      <EventTicket event={event} />
+                    </div>
+
+                    <div className="block md:hidden">
+                      <EventMobileCard event={event} />
+                    </div>
+                  </React.Fragment>
                 ))}
               </div>
             ) : (
@@ -141,7 +153,9 @@ export default function EventsPage() {
                       No Upcoming Events
                     </h3>
                     <p className="text-base text-gray-500 font-medium">
-                      We're busy planning more exciting events for you. <br className="hidden md:block" /> Please check back later!
+                      We're busy planning more exciting events for you.{" "}
+                      <br className="hidden md:block" /> Please check back
+                      later!
                     </p>
                   </div>
                 </div>
@@ -153,22 +167,26 @@ export default function EventsPage() {
         {/* =========================================================
             2. KHU VỰC LỊCH SỬ SỰ KIỆN (PAST EVENTS ARCHIVE)
             ========================================================= */}
-        {(!loading && pastEvents.length > 0) && (
-          <div className="pt-8 border-t border-gray-200/60 animate-in fade-in duration-1000">
-            <div className="flex flex-col md:flex-row items-center justify-between mb-8 gap-4">
+        {!loading && pastEvents.length > 0 && (
+          <div className="pt-8 mb-12 border-t border-gray-200/60 animate-in fade-in duration-1000">
+            <div className="flex flex-col md:flex-row items-center justify-between mb-4 md:mb-8 gap-4">
               <div className="flex items-center gap-3">
-                <History className="text-[#DCB968]" size={32} strokeWidth={2.5} />
+                <History
+                  className="text-[#DCB968]"
+                  size={32}
+                  strokeWidth={2.5}
+                />
                 <h2 className="text-2xl md:text-4xl font-[900] text-[#2C305F] uppercase tracking-wide">
                   Event Archive
                 </h2>
               </div>
-              <p className="text-gray-500 font-medium text-sm md:text-base">
+              <p className="max-md:hidden text-gray-500 font-medium text-sm md:text-base">
                 Discover what we've accomplished
               </p>
             </div>
 
-            {/* Grid hiển thị danh sách Past Events */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* List hiển thị danh sách Past Events */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               {pastEvents.map((event) => (
                 <EventCard key={event._id} event={event} />
               ))}
@@ -176,11 +194,13 @@ export default function EventsPage() {
 
             {/* Nút Load More Tự động Giấu */}
             {hasMorePast && (
-              <div className="flex justify-center w-full mt-8">
+              <div className="flex justify-center w-full mt-4 md:mt-8">
                 <Button
                   onClick={handleLoadMore}
                   isLoading={loadingMore}
-                  spinner={<BulletproofSpinner size={20} className="text-white" />}
+                  spinner={
+                    <BulletproofSpinner size={20} className="text-white" />
+                  }
                   className="bg-[#2C305F] hover:bg-[#1a1d3a] text-white font-bold px-8 py-6 rounded-full shadow-lg shadow-blue-900/20 hover:scale-105 transition-all flex items-center gap-2"
                 >
                   {!loadingMore && (
@@ -193,7 +213,6 @@ export default function EventsPage() {
             )}
           </div>
         )}
-
       </div>
     </div>
   );

@@ -65,7 +65,7 @@ export const EventCard = ({ event }: EventCardProps) => {
             <div className="flex items-center gap-2">
               <Clock size={16} className="text-[#DCB968]" />
 
-              <span>{event.startTime}</span>
+              <span>{event.startTime} - {event.endTime}</span>
             </div>
 
             <div className="flex items-center gap-2">
