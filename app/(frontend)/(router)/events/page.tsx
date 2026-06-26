@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { SearchX, History, ChevronDown } from "lucide-react";
+import { SearchX, History, ChevronDown, ChevronRight } from "lucide-react";
 import { Button } from "@heroui/react";
 import { Toaster, toast } from "react-hot-toast";
 import { BulletproofSpinner } from "@/components/BulletproofSpinner";
@@ -108,7 +108,7 @@ export default function EventsPage() {
         {/* =========================================================
             1. KHU VỰC SỰ KIỆN SẮP TỚI (UPCOMING)
             ========================================================= */}
-        <div className="mb-12">
+        <div className="mb-8 md:mb-12">
           <div className="text-center space-y-6">
             <div className="flex items-center justify-center gap-2 md:gap-6">
               <div className="relative h-[3px] w-8 md:w-24 bg-ft-primary-blue rounded-full opacity-70">
@@ -143,8 +143,8 @@ export default function EventsPage() {
                 ))}
               </div>
             ) : (
-              <div className="w-full flex justify-center mt-8">
-                <div className="w-full max-w-3xl p-10 md:p-14 flex flex-col items-center justify-center text-center bg-white/50 backdrop-blur-md rounded-[2rem] border-2 border-dashed border-gray-300 shadow-sm">
+              <div className="w-full flex justify-center mt-4 md:mt-8">
+                <div className="w-full p-10 md:p-14 flex flex-col items-center justify-center text-center bg-white/50 backdrop-blur-md rounded-[2rem] border-2 border-dashed border-gray-300 shadow-sm">
                   <div className="mb-5 text-gray-400">
                     <SearchX size={56} strokeWidth={1.5} />
                   </div>
@@ -168,8 +168,8 @@ export default function EventsPage() {
             2. KHU VỰC LỊCH SỬ SỰ KIỆN (PAST EVENTS ARCHIVE)
             ========================================================= */}
         {!loading && pastEvents.length > 0 && (
-          <div className="pt-8 mb-12 border-t border-gray-200/60 animate-in fade-in duration-1000">
-            <div className="flex flex-col md:flex-row items-center justify-between mb-4 md:mb-8 gap-4">
+          <div className="pt-6 md:pt-8 mb-8 md:mb-12 border-t border-gray-200/60 animate-in fade-in duration-1000">
+            <div className="flex flex-col md:flex-row items-center justify-between mb-2 md:mb-6 gap-4">
               <div className="flex items-center gap-3">
                 <History
                   className="text-[#DCB968]"
@@ -186,15 +186,20 @@ export default function EventsPage() {
             </div>
 
             {/* List hiển thị danh sách Past Events */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="flex md:grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 overflow-x-auto snap-x snap-mandatory pb-6 pt-2 -mx-4 px-4 md:mx-0 md:px-0">
               {pastEvents.map((event) => (
-                <EventCard key={event._id} event={event} />
+                <div
+                  key={event._id}
+                  className="min-w-[85vw] sm:min-w-[60vw] md:min-w-0 snap-center shrink-0"
+                >
+                  <EventCard event={event} />
+                </div>
               ))}
             </div>
 
             {/* Nút Load More Tự động Giấu */}
             {hasMorePast && (
-              <div className="flex justify-center w-full mt-4 md:mt-8">
+              <div className="flex justify-center w-full max-md:mt-2">
                 <Button
                   onClick={handleLoadMore}
                   isLoading={loadingMore}
@@ -205,7 +210,9 @@ export default function EventsPage() {
                 >
                   {!loadingMore && (
                     <>
-                      View More Events <ChevronDown size={18} />
+                      View More Events{" "}
+                      <ChevronDown size={18} className="max-md:hidden" />{" "}
+                      <ChevronRight size={18} className="md:hidden" />
                     </>
                   )}
                 </Button>

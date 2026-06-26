@@ -166,15 +166,19 @@ export const EventCountdown = ({ date }: Pick<CountdownProps, "date">) => {
   return (
     <div className="w-full py-8">
       {isCompleted ? (
-        <div className="flex flex-col items-center justify-center text-center space-y-4">
-          <div className="flex items-center justify-center bg-[#DCB968] p-4 rounded-full">
-            <Megaphone size={48} className=" text-[#2C305F] animate-bounce" />
+        <div className="flex flex-col items-center justify-center text-center md:space-y-4">
+          <div className="max-md:hidden flex items-center justify-center bg-[#DCB968] p-4 rounded-full">
+            <Megaphone size={40} className="text-[#2C305F] animate-bounce" />
           </div>
 
-          <h3 className="text-2xl md:text-3xl font-bold text-[#2C305F] uppercase tracking-wider">
+          <div className="md:hidden flex items-center justify-center bg-[#DCB968] p-4 rounded-full">
+            <Megaphone size={32} className="text-[#2C305F] animate-bounce" />
+          </div>
+
+          <h3 className="text-xl md:text-3xl font-bold text-[#2C305F] uppercase tracking-wider max-md:mt-4">
             Registration Has Closed
           </h3>
-          <p className="text-lg font-medium text-[#2C305F]">
+          <p className="text-base md:text-lg font-medium text-[#2C305F] max-md:mt-2">
             Thank you for your interest! Stay tuned for future events.
           </p>
         </div>

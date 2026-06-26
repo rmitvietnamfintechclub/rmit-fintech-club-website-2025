@@ -43,7 +43,6 @@ export const EventCard = ({ event }: EventCardProps) => {
           </div>
 
           {/* Mode Badge */}
-
           <div className="absolute top-4 right-4 bg-[#2C305F]/90 backdrop-blur-sm rounded-lg px-2 py-1 shadow-lg">
             <span className="text-[10px] font-bold text-white uppercase tracking-wider">
               {event.mode}
@@ -52,16 +51,15 @@ export const EventCard = ({ event }: EventCardProps) => {
         </div>
 
         {/* Content */}
-
-        <div className="flex flex-col flex-1 p-5">
+        <div className="flex flex-col flex-1 p-4 md:p-5">
           <h3
-            className="text-lg font-bold text-[#2C305F] line-clamp-1 mb-3 group-hover:text-[#DCB968] transition-colors"
+            className="text-lg font-bold text-[#2C305F] line-clamp-2 max-md:truncate max-md:max-w-[300px] mb-3 group-hover:text-[#DCB968] transition-colors"
             title={event.name}
           >
             {event.name}
           </h3>
 
-          <div className="mt-auto space-y-2 text-sm text-gray-500">
+          <div className="mt-auto space-y-2 text-sm font-medium text-gray-500">
             <div className="flex items-center gap-2">
               <Clock size={16} className="text-[#DCB968]" />
 

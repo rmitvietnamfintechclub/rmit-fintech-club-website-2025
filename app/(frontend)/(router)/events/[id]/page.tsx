@@ -93,7 +93,7 @@ export default function EventDetailPage() {
   const hasSidebar = event.agenda && event.agenda.length > 0;
 
   return (
-    <div className="min-h-screen bg-[#F9FAFB] pb-16 font-sans">
+    <div className="min-h-screen bg-[#F9FAFB] pb-12 font-sans">
       <Toaster position="top-center" />
 
       {/* --- PREMIUM HERO SECTION --- */}
@@ -116,7 +116,7 @@ export default function EventDetailPage() {
         </div>
 
         {/* Content Container */}
-        <div className="relative z-10 w-full max-w-[1400px] mx-auto flex flex-col lg:flex-row items-center justify-between gap-10 lg:gap-16 px-6 md:px-16 pt-20 pb-16 lg:pb-24">
+        <div className="relative z-10 w-full max-w-[1400px] mx-auto flex flex-col lg:flex-row items-center justify-between gap-4 lg:gap-16 px-6 lg:px-16 pt-14 lg:pt-20 pb-16 lg:pb-24">
           {/* Top Floating Back Button */}
           <div className="absolute top-4 left-6 md:left-16 z-20">
             <Link
@@ -181,7 +181,7 @@ export default function EventDetailPage() {
                     alt={event.name}
                     fill
                     sizes="(max-width: 768px) 100vw, 50vw"
-                    className="object-cover group-hover:scale-105 transition-transform duration-700"
+                    className="object-fill group-hover:scale-105 transition-transform duration-700"
                     priority
                   />
                 </div>
@@ -201,12 +201,16 @@ export default function EventDetailPage() {
       )}
 
       {/* --- MAIN CONTENT GRID --- */}
-      <section className="container mx-auto max-w-6xl px-4 pt-16 pb-12">
+      <section className="container mx-auto max-w-6xl px-4 pt-12 md:pt-14 pb-10 md:pb-12">
         <div
-          className={`grid grid-cols-1 gap-12 ${hasSidebar ? "lg:grid-cols-3" : "lg:grid-cols-1 mx-auto max-w-4xl"}`}
+          className={`grid grid-cols-1 gap-8 md:gap-12 ${hasSidebar ? "lg:grid-cols-3" : "lg:grid-cols-1 mx-auto"}`}
         >
           <div
-            className={hasSidebar ? "lg:col-span-2 space-y-12" : "space-y-12"}
+            className={
+              hasSidebar
+                ? "lg:col-span-2 space-y-8 md:space-y-12"
+                : "space-y-8 md:space-y-12"
+            }
           >
             {/* 1. Event Details Block */}
             <div className="bg-white rounded-[2rem] p-8 shadow-sm border border-gray-100">
@@ -360,7 +364,7 @@ export default function EventDetailPage() {
           {/* RIGHT COL (1/3) - Sticky Sidebar Agenda */}
           {hasSidebar && (
             <div className="lg:col-span-1">
-              <div className="sticky top-24 space-y-8">
+              <div className="sticky top-24 space-y-6">
                 <div className="bg-white rounded-[2rem] p-8 shadow-xl border-t-[6px] border-[#DCB968]">
                   <h3 className="text-2xl font-[900] text-[#2C305F] mb-8 uppercase tracking-wide">
                     Agenda
@@ -369,7 +373,7 @@ export default function EventDetailPage() {
                     {event.agenda.map((item, idx) => (
                       <div
                         key={idx}
-                        className="flex gap-5 pb-8 last:pb-0 relative group"
+                        className="flex gap-5 pb-6 last:pb-0 relative group"
                       >
                         {/* Timeline Connector Line */}
                         {idx !== event.agenda!.length - 1 && (
@@ -401,7 +405,7 @@ export default function EventDetailPage() {
       {/* --- OTHER EVENTS SECTION --- */}
       {otherEvents && otherEvents.length > 0 && (
         <div className="container mx-auto max-w-6xl px-4">
-          <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center justify-between mb-2 md:mb-4">
             <div>
               <h2 className="text-3xl md:text-4xl font-extrabold text-[#2C305F] uppercase">
                 Other Events
@@ -416,15 +420,20 @@ export default function EventDetailPage() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="flex md:grid md:grid-cols-3 gap-4 md:gap-8 overflow-x-auto snap-x snap-mandatory pb-6 pt-2 -mx-4 px-4 md:mx-0 md:px-0">
             {otherEvents.map((ev) => (
-              <div key={ev._id} className="h-full">
+              <div
+                key={ev._id}
+                className={`snap-center shrink-0 h-full  ${
+                  otherEvents.length > 1 ? "w-[85vw] sm:w-[60vw] md:w-auto" : "w-full"
+                }`}
+              >
                 <EventCard event={ev} />
               </div>
             ))}
           </div>
 
-          <div className="md:hidden mt-8 text-center">
+          <div className="md:hidden mt-4 text-center">
             <Link
               href="/events"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-[#2C305F]/20 text-[#2C305F] font-semibold hover:bg-[#2C305F] hover:text-white transition-all"

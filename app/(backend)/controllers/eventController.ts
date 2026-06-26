@@ -93,7 +93,7 @@ export async function getEventById(id: string) {
     _id: { $ne: id },
     date: { $gte: currentDate },
   })
-    .select("name posterUrl date startTime mode location")
+    .select("name posterUrl date startTime endTime mode location")
     .sort({ date: 1 })
     .limit(3)
     .lean();
@@ -105,7 +105,7 @@ export async function getEventById(id: string) {
       _id: { $ne: id },
       date: { $lt: currentDate },
     })
-      .select("name posterUrl date startTime mode location")
+      .select("name posterUrl date startTime endTime mode location")
       .sort({ date: -1 })
       .limit(limitNeeded)
       .lean();
