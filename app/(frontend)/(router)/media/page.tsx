@@ -41,7 +41,6 @@ const Media = () => {
       {/* === SECTION 1: ARTICLE === */}
       {/* Mobile: Column layout. Desktop: Row layout. */}
       <section className="relative flex flex-col md:flex-row justify-center gap-8 md:gap-[5rem] items-center pt-16 md:pt-[3rem] pb-12 md:pb-[6rem] px-6 md:px-12">
-        
         {/* --- Text Content (Order 2 on mobile, 1 on desktop) --- */}
         <div className="flex flex-col items-center md:items-start order-2 md:order-1 z-10">
           <h1 className="text-4xl md:text-[4rem] font-bold text-[#EBEBEB] text-center md:text-left">
@@ -119,7 +118,6 @@ const Media = () => {
       {/* === SECTION 2: PODCAST === */}
       {/* Mobile: Column layout. Desktop: Row layout (Image first). */}
       <section className="relative flex flex-col md:flex-row justify-center gap-8 md:gap-[5rem] items-center pt-0 md:pt-[6rem] pb-16 md:pb-[5rem] px-6 md:px-12">
-        
         {/* --- Text Content (Order 2 on mobile AND desktop) --- */}
         <div className="flex flex-col items-center md:items-start md:self-start md:mt-8 order-2 md:order-2 z-10">
           <h1 className="text-4xl md:text-[4rem] font-bold text-[#EBEBEB] text-center md:text-left">
@@ -128,15 +126,14 @@ const Media = () => {
           <p className="text-base text-[#EBEBEB] max-w-[90vw] md:max-w-[45vw] text-justify mt-6">
             FinTechTainment is play of words between <strong>"Fintech"</strong>{" "}
             and
-            <strong> "Entertainment"</strong>. It is a media project
-            aimed at interviewing industry professionals with topics in the
-            fields of:{" "}
+            <strong> "Entertainment"</strong>. It is a media project aimed at
+            interviewing industry professionals with topics in the fields of{" "}
             <strong>
               {" "}
               Business, Finance, Technology, and Entrepreneurship
             </strong>
             . Our approach is to have casual conversations about insightful
-            academic/industry topics, in a way that is relatable and
+            academic/industry topics in a way that is relatable and
             understandable by students.
           </p>
           <div
@@ -156,7 +153,7 @@ const Media = () => {
             </Button>
           </div>
         </div>
-        
+
         {/* --- Image Content (Order 1 on mobile AND desktop) --- */}
         <div className="relative order-1 md:order-1">
           {/* Desktop-only elements */}
