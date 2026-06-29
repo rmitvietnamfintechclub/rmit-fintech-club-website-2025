@@ -1,6 +1,7 @@
 "use client";
 
-import React from "react";
+import React, { Suspense, useEffect, useRef } from "react";
+import { useSearchParams } from "next/navigation";
 import { BulletproofSpinner } from "@/components/BulletproofSpinner";
 import DepartmentAccordion from "./components/DepartmentAccordion";
 import DeptSection from "./components/DeptContentSection";
@@ -8,36 +9,36 @@ import { useDepartmentData } from "./hooks/useDepartmentData";
 import { DeptTabConfig } from "../types";
 
 const DEPT_TABS: DeptTabConfig[] = [
-  {
-    value: "technology",
-    label: "TECHNOLOGY",
-    color: "bg-[#DBB968]",
-    apiDept: "Technology",
-  },
-  {
-    value: "business",
-    label: "BUSINESS",
-    color: "bg-[#2C305F]",
-    apiDept: "Business",
-  },
-  {
-    value: "marketing",
-    label: "MARKETING",
-    color: "bg-[#DBB968]",
-    apiDept: "Marketing",
-  },
-  {
-    value: "human-resources",
-    label: "HUMAN RESOURCES",
-    color: "bg-[#2C305F]",
-    apiDept: "Human Resources",
-  },
+  { value: "technology", label: "TECHNOLOGY", color: "bg-[#DBB968]", apiDept: "Technology" },
+  { value: "business", label: "BUSINESS", color: "bg-[#2C305F]", apiDept: "Business" },
+  { value: "marketing", label: "MARKETING", color: "bg-[#DBB968]", apiDept: "Marketing" },
+  { value: "human-resources", label: "HUMAN RESOURCES", color: "bg-[#2C305F]", apiDept: "Human Resources" },
 ];
 
 const apiDepts = Array.from(new Set(DEPT_TABS.map((d) => d.apiDept)));
 
-export default function DeptProjectsPage() {
+function DeptProjectsContent() {
+  const searchParams = useSearchParams();
+  const deptQuery = searchParams.get("dept");
+  
+  const defaultTab = DEPT_TABS.find((t) => t.value === deptQuery)?.value || "technology";
+
   const { departmentProjects, loading, error } = useDepartmentData(apiDepts);
+  
+  const hasAutoScrolled = useRef(false);
+  useEffect(() => {
+    if (deptQuery && !loading && !hasAutoScrolled.current) {
+      const timeout = setTimeout(() => {
+        const section = document.getElementById("department-projects");
+        if (section) {
+          section.scrollIntoView({ behavior: "smooth", block: "start" });
+          hasAutoScrolled.current = true;
+        }
+      }, 400);
+
+      return () => clearTimeout(timeout);
+    }
+  }, [deptQuery, loading]);
 
   if (loading) {
     return (
@@ -45,9 +46,7 @@ export default function DeptProjectsPage() {
         <BulletproofSpinner />
         <p
           className="mt-5 text-lg font-semibold text-ft-primary-blue tracking-wide uppercase"
-          style={{
-            animation: "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
-          }}
+          style={{ animation: "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite" }}
         >
           Loading Department Projects...
         </p>
@@ -75,5 +74,21 @@ export default function DeptProjectsPage() {
     ),
   }));
 
-  return <DepartmentAccordion items={items} defaultOpen="technology" />;
+  return (
+    <div id="department-projects" className="w-full relative z-20 scroll-mt-12">
+      <DepartmentAccordion items={items} defaultOpen={defaultTab} />
+    </div>
+  );
+}
+
+export default function DeptProjectsPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex items-center justify-center w-full py-20">
+        <BulletproofSpinner />
+      </div>
+    }>
+      <DeptProjectsContent />
+    </Suspense>
+  );
 }

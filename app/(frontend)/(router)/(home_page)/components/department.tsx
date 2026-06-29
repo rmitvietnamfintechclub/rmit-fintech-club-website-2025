@@ -1,5 +1,6 @@
 "use client";
 import Image from "next/image";
+import Link from "next/link";
 import React, { useState } from "react";
 import { Button } from "@heroui/react";
 
@@ -23,7 +24,7 @@ const departments: Record<DepartmentId, DepartmentInfo> = {
     name: "TECHNOLOGY DEPARTMENT",
     button: "Technology",
     description:
-      "The Technology Department is an innovation hub for tech enthusiasts, fostering both technical expertise and cutting-edge Fintech innovation through development sprints, collaborative workshops, and industry partnerships. This semester, we’re working on three exciting projects: a blockchain-powered History Chess Game blending strategy with Vietnamese history, a peer-to-peer learning hub for mastering foundational Data Structures and Algorithms, and an immersive bootcamp where members learn web development fundamentals.",
+      "The Technology Department is an innovation hub for those passionate about cutting-edge technology and its application in the world of FinTech. We foster both technical expertise and FinTech innovation through practical development sprints, peer-to-peer learning hubs, and industry partnerships. This semester, we're driving three exciting projects: an integrated platform that digitizes our recruitment lifecycle, an automated AI-driven financial news sentiment pipeline, and a learning initiative that provides a practical, step-by-step intuition on how machine learning engines actually work under the hood.",
     background:
       "https://d2uq10394z5icp.cloudfront.net/home/department-mascot/Technology_Mascot.png",
   },
@@ -32,7 +33,7 @@ const departments: Record<DepartmentId, DepartmentInfo> = {
     name: "BUSINESS DEPARTMENT",
     button: "Business",
     description:
-      "The Business Department is a dynamic space for curious minds to grow through peer-to-peer learning, hands-on projects, and industry connections, fostering academic excellence and real-world Fintech experience. This semester, members are gaining a professional edge by diving into investment fundamentals with FPT Securities in the Breaking the Curve Workshop, mastering market-aware content creation by producing the bi-weekly FinTech Spotlight series, and thinking like analysts in our new CFA Learning Hub.",
+      "The Business Department is a dynamic space for curious minds to grow through peer-to-peer learning, hands-on projects, and academic initiatives, fostering deep FinTech knowledge and real-world skills. This semester, members are gaining a professional edge by transforming complex industry concepts into engaging educational articles in the FinTech Insights probation project, conducting in-depth data analysis to publish structured academic Research Papers, and strengthening their finance fundamentals to conquer exam topics in our bi-weekly CFA Learning Hub.",
     background:
       "https://d2uq10394z5icp.cloudfront.net/home/department-mascot/Business_Mascot.png",
   },
@@ -41,7 +42,7 @@ const departments: Record<DepartmentId, DepartmentInfo> = {
     name: "MARKETING DEPARTMENT",
     button: "Marketing",
     description:
-      "The Marketing Department is a creative hub for orchestrating campaigns and internal skill trainings, fostering both marketing expertise and an engaged Fintech community. This semester, we are elevating our brand's voice by producing a cinematic Short Film, an original FTC Music Video, and a story-driven Photoshoot Series. Members will master the full content lifecycle — from strategy and trend-spotting for our TikTok and Instagram platforms to professional production and digital analytics — all while building a vibrant online community and a professional creative portfolio.",
+      "The Marketing Department is a creative hub for orchestrating campaigns and internal skill training, fostering both marketing expertise and an engaged FinTech community. This semester, we are elevating our brand's voice by producing a cinematic Short Film to master emotional storytelling alongside FTC Inside Out, an exclusive behind-the-scenes video series showcasing our diverse club culture. Members will also drive our digital presence by leveraging modern algorithms in our dynamic TikTok Project and curating academic insights through our visually engaging Monthly Facebook Recaps.",
     background:
       "https://d2uq10394z5icp.cloudfront.net/home/department-mascot/Marketing_Mascot.png",
   },
@@ -50,7 +51,7 @@ const departments: Record<DepartmentId, DepartmentInfo> = {
     name: "HUMAN RESOURCES DEPARTMENT",
     button: "Human Resources",
     description:
-      "The Human Resources Department plays a pivotal role in shaping the FinTech Club’s culture, managing all internal bonding projects, and fostering a welcoming and supportive home for every member. This semester, we're building community by organizing our high-energy FinTech Olympic sports event, hosting the annual Secret Santa celebration, and exploring the potential for an unforgettable End of Semester Trip.",
+      "The Human Resources Department plays a pivotal role in shaping the FinTech Club’s culture and fostering a welcoming, supportive environment for every member. This semester, we are building a vibrant community by organizing our high-energy FinTech Olympic sports event, strengthening cross-departmental connections through our engaging Club-Wide Picnic, and offering an unforgettable End-of-Semester Trip.",
     background:
       "https://d2uq10394z5icp.cloudfront.net/home/department-mascot/HR_Mascot.png",
   },
@@ -106,7 +107,7 @@ const DepartmentButton: React.FC<DepartmentButtonProps> = ({
 // =================================================================
 const Department = () => {
   const [activeDepartment, setActiveDepartment] = useState<DepartmentInfo>(
-    departments.Technology
+    departments.Technology,
   );
 
   return (
@@ -233,7 +234,15 @@ const Department = () => {
           </p>
 
           {/* Explore Button */}
-          <Button className="text-[#F0EDFF] bg-[#5E5E92] rounded-xl w-fit px-6 py-2 max-md:mt-4 font-semibold drop-shadow-lg text-[1rem]">
+          <Button
+            as={Link}
+            href={`/projects?dept=${
+              activeDepartment.id === "HumanResources"
+                ? "human-resources"
+                : activeDepartment.id.toLowerCase()
+            }`}
+            className="text-[#F0EDFF] bg-[#5E5E92] rounded-xl w-fit px-6 py-2 max-md:mt-4 font-semibold drop-shadow-lg text-[1rem]"
+          >
             Explore more
           </Button>
 

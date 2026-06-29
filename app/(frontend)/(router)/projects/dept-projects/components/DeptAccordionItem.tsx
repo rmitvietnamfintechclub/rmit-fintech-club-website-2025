@@ -25,13 +25,13 @@ export default function DeptAccordionItem({
   const prevIsOpen = useRef(isOpen);
 
   useEffect(() => {
-    if (!prevIsOpen.current && isOpen && window.innerWidth < 1024) {
+    if (!prevIsOpen.current && isOpen) {
       const timeout = setTimeout(() => {
         itemRef.current?.scrollIntoView({
           behavior: "smooth",
           block: "start",
         });
-      }, 350);
+      }, 350); // Chờ 350ms để animation mở Accordion chạy xong rồi mới cuộn
 
       prevIsOpen.current = isOpen;
       return () => clearTimeout(timeout);

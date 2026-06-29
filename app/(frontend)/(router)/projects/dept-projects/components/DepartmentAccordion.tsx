@@ -21,6 +21,12 @@ const ANIMATION_DURATION = 300;
 export default function DepartmentAccordion({ items, defaultOpen }: Props) {
   const [openItem, setOpenItem] = useState<string | undefined>(defaultOpen ?? items[0]?.value);
 
+  React.useEffect(() => {
+    if (defaultOpen) {
+      setOpenItem(defaultOpen);
+    }
+  }, [defaultOpen]);
+
   const cssVars = {
     "--acc-dur": `${ANIMATION_DURATION}ms`,
     "--acc-tab-w": `${DEFAULT_TAB_WIDTH}px`,
