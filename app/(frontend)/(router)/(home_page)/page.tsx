@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import React from "react";
 import Department from "./components/department";
 import HeroSection from "./components/hero";
 import HerosectionVid from "./components/heroVideoSection";

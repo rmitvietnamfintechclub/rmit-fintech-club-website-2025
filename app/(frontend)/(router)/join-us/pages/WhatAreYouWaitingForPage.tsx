@@ -15,7 +15,7 @@ const WhatAreYouWaitingFor = ({ id }: WhatAreYouWaitingForProps) => {
     <div
       id={id}
       ref={ref}
-      className="flex flex-col md:flex-row justify-center items-center w-full px-4 md:px-16 py-12 md:py-24 bg-white relative md:min-vh-100 overflow-visible"
+      className="flex flex-col md:flex-row justify-center items-center w-full px-4 md:px-16 py-12 bg-white relative md:min-vh-100 overflow-visible"
     >
       <Image
         src="https://d2uq10394z5icp.cloudfront.net/global/Mascot+-+M%E1%BA%B7t+tr%C6%B0%E1%BB%9Bc.svg"
@@ -25,7 +25,7 @@ const WhatAreYouWaitingFor = ({ id }: WhatAreYouWaitingForProps) => {
         fetchPriority="high"
         priority={true}
         loading="eager"
-        className="absolute top-[-3rem] left-[-5rem] w-[12vw] md:w-[14vw] lg:w-[16vw] rotate-[25deg] pointer-events-none"
+        className="absolute top-[-8rem] left-[-5rem] w-[12vw] md:w-[14vw] lg:w-[16vw] rotate-[25deg] pointer-events-none"
       />
 
       {/* --- SPEECH BUBBLE CONTAINER --- */}

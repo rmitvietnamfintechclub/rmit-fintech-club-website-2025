@@ -33,15 +33,15 @@ export default function CountdownPage() {
     <div className="flex flex-col">
       {/* Hero Section with Yellow background */}
       <div
-        className="relative flex flex-col items-center justify-center md:rounded-b-[80px]"
+        className="relative flex flex-col items-center justify-center min-h-[calc(85vh-var(--nav-h))] md:min-h-[calc(90vh-var(--nav-h))] md:rounded-b-[80px]"
         style={{
-          minHeight: `calc(90vh - ${navbarHeight}px)`,
+          "--nav-h": `${navbarHeight}px`,
           backgroundColor: "#DBB968",
           backgroundImage: "url('/joinUsPage/background-pattern.svg')",
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
           backgroundPosition: "center",
-        }}
+        } as React.CSSProperties}
       >
         <div className={`${isShortHeight ? "mb-8" : ""}`}>
           <Countdown date={new Date("2026-07-14T23:59:00")} />

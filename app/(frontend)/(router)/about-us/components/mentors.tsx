@@ -87,7 +87,9 @@ const LinkedInIcon = ({ className }: { className?: string }) => (
 );
 
 const OutlookIcon = ({ className }: { className?: string }) => (
-  <div className={`p-[0.3rem] border-[2px] border-[#2C305F] rounded-md ${className}`}>
+  <div
+    className={`p-[0.3rem] border-[2px] border-[#2C305F] rounded-md ${className}`}
+  >
     <Image
       src="/outlook.svg"
       alt="Outlook"
@@ -110,13 +112,12 @@ const MentorCard = ({
   isPriority,
 }: MentorCardProps) => {
   return (
-    <div className="flex flex-col items-center w-full max-w-[280px] md:max-w-[21rem] mx-auto">
-      <div className="font-bold text-xl md:text-2xl text-[#2C305F] text-center md:mb-4 px-2 h-14 flex items-center justify-center">
+    <div className="flex flex-col items-center w-full h-full max-w-[280px] md:max-w-[21rem] mx-auto">
+      <div className="font-bold text-xl md:text-2xl text-[#2C305F] text-center md:mb-4 px-2 h-14 flex items-center justify-center shrink-0">
         <span>{name}</span>
       </div>
-
       {/* Image Container */}
-      <div className="w-full aspect-square relative object-cover overflow-hidden rounded-[40px] md:rounded-[50px] border-[#2C305F] border-4 md:border-5">
+      <div className="w-full aspect-square relative object-cover overflow-hidden rounded-[40px] md:rounded-[50px] border-[#2C305F] border-4 md:border-5 shrink-0">
         <Image
           src={imageUrl}
           alt={`Mentor ${name}`}
@@ -126,14 +127,13 @@ const MentorCard = ({
           priority={isPriority}
         />
       </div>
-
       <div className="relative w-full mt-4 md:mt-6">
         {/* Info Box */}
         <div className="relative z-0 rounded-[30px] md:rounded-[50px] w-full min-h-[80px] md:min-h-[100px] bg-[#DBB968] flex justify-between items-center px-4 py-3 md:px-6 md:py-4 shadow-sm">
           <div className="flex-1 text-center text-xs md:text-sm font-medium text-[#2C305F] mr-2 md:mr-4 leading-tight">
             {title}
           </div>
-          
+
           {/* Social Icon */}
           <div className="flex-shrink-0">
             <a
@@ -143,10 +143,10 @@ const MentorCard = ({
               className="block transition duration-300 transform hover:scale-110 hover:brightness-150 hover:drop-shadow-[0_0_6px_#FFEFCA]"
             >
               {social.type === "linkedin" && (
-                 <LinkedInIcon className="w-[50px] h-[50px] md:w-[65px] md:h-[65px]" />
+                <LinkedInIcon className="w-[50px] h-[50px] md:w-[65px] md:h-[65px]" />
               )}
               {social.type === "email" && (
-                 <OutlookIcon className="w-[50px] h-[50px]" />
+                <OutlookIcon className="w-[50px] h-[50px]" />
               )}
             </a>
           </div>
@@ -191,12 +191,11 @@ export const ClubMentors = () => {
         <div
           ref={scrollRef}
           onScroll={handleScroll}
-          className="flex md:flex-wrap md:justify-between items-center md:items-start gap-10 md:gap-12 pt-4 md:pt-8 overflow-x-auto snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] pb-4"
+          className="flex md:grid md:grid-cols-3 items-stretch gap-10 md:gap-8 lg:gap-12 pt-4 md:pt-8 overflow-x-auto snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] pb-4"
         >
           {mentorData.map((mentor) => (
-            // Bọc MentorCard để thiết lập kích thước và Snap trên mobile
-            <div 
-              key={mentor.name} 
+            <div
+              key={mentor.name}
               className="w-full flex-shrink-0 snap-center md:w-auto md:flex-shrink"
             >
               <MentorCard {...mentor} />
@@ -211,8 +210,8 @@ export const ClubMentors = () => {
               key={index}
               onClick={() => scrollTo(index)}
               className={`h-2.5 rounded-full transition-all duration-300 ${
-                activeIndex === index 
-                  ? "w-6 bg-[#DBB968]" 
+                activeIndex === index
+                  ? "w-6 bg-[#DBB968]"
                   : "w-2.5 bg-[#2C305F]/50"
               }`}
               aria-label={`Go to mentor ${index + 1}`}

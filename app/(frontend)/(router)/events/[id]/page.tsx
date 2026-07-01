@@ -367,7 +367,7 @@ export default function EventDetailPage() {
               <div className="sticky top-24 space-y-6">
                 <div className="bg-white rounded-[2rem] p-8 shadow-xl border-t-[6px] border-[#DCB968]">
                   <h3 className="text-2xl font-[900] text-[#2C305F] mb-8 uppercase tracking-wide">
-                    Agenda
+                    What to Expect
                   </h3>
                   <div className="space-y-0">
                     {event.agenda.map((item, idx) => (
