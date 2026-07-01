@@ -61,7 +61,7 @@ const WhatAreYouWaitingFor = ({ id }: WhatAreYouWaitingForProps) => {
                  style={{ background: "linear-gradient(to bottom, #F7D27F, #DBB968)" }}
               >
                 <a
-                  href="https://forms.office.com/r/bykCDMEeNW?origin=lprLink"
+                  href="https://forms.office.com/r/xUCCyDJ1Ew?origin=lprLink"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-center px-8 py-4 bg-yellowPrimary text-[#2C305F] font-bold text-lg rounded-[10px] transition-all hover:bg-yellowEarth hover:text-white w-full sm:w-auto whitespace-nowrap"
@@ -76,7 +76,7 @@ const WhatAreYouWaitingFor = ({ id }: WhatAreYouWaitingForProps) => {
                  style={{ background: "linear-gradient(to bottom, #C0C4DC, #5E5E92)" }}
               >
                 <a
-                  href="https://bit.ly/FinTechBooklet"
+                  href="https://shorturl.at/Cc43g"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-center px-8 py-4 bg-white text-[#2C305F] font-bold text-lg rounded-[10px] transition-all hover:bg-blueSlate hover:text-white w-full sm:w-auto whitespace-nowrap"

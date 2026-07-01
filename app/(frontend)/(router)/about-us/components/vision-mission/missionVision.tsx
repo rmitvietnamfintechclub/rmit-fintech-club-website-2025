@@ -6,7 +6,7 @@ const VisionMission = () => {
 		mission: {
 			title: "MISSION",
 			content:
-				"To realize our vision, our objective in 2024 is to create impactful high-scale events, organize more meaningful and member-centric workshops, and diversify our projects to create more opportunities for members to learn and connect with real-world experts, gaining them valuable industry insights.",
+				"To realize our vision, our objective in 2026 is to create impactful high-scale events, organize more meaningful and member-centric workshops, and diversify our projects to create more opportunities for members to learn and connect with real-world experts, gaining them valuable industry insights.",
 		},
 		vision: {
 			title: "VISION",
