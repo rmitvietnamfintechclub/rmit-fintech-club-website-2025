@@ -33,7 +33,7 @@ export default function CountdownPage() {
     <div className="flex flex-col">
       {/* Hero Section with Yellow background */}
       <div
-        className="relative flex flex-col items-center justify-center min-h-[calc(85vh-var(--nav-h))] md:min-h-[calc(90vh-var(--nav-h))] md:rounded-b-[80px]"
+        className="relative flex flex-col items-center justify-center min-h-[calc(84vh-var(--nav-h))] md:min-h-[calc(90vh-var(--nav-h))] md:rounded-b-[80px]"
         style={{
           "--nav-h": `${navbarHeight}px`,
           backgroundColor: "#DBB968",

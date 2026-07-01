@@ -80,7 +80,7 @@ const StepsToRegisterPage = ({ id }: StepsToRegisterPageProps) => {
         <h2 className="text-3xl md:text-5xl lg:text-6xl font-[900] text-[#2C305F] mb-4 tracking-tight">
           Your Journey <span className="text-[#DBB968]">Starts Here</span>
         </h2>
-        <p className="text-gray-500 text-base md:text-xl max-w-2xl mx-auto font-medium">
+        <p className="text-gray-500 text-base md:text-xl mx-auto font-medium">
           Follow these 5 simple steps to unlock your potential with RMIT FinTech Club.
         </p>
       </motion.div>
