@@ -7,6 +7,7 @@ import { Providers } from "../providers";
 import MainLayout from "@/components/main-layout";
 import { cookies } from "next/headers";
 import { verifyToken } from "@/app/(backend)/libs/auth";
+import { Analytics } from "@vercel/analytics/next"
 
 export const metadata: Metadata = {
   title: {
@@ -57,6 +58,7 @@ export default async function RootLayout({
             {children}
           </MainLayout>
         </Providers>
+        <Analytics />
       </body>
     </html>
   );
