@@ -90,7 +90,7 @@ const Footer: React.FC = () => {
               </a>
             </Link>
 
-            <Link href="https://github.com/RMIT-FinTech-Club" legacyBehavior>
+            <Link href="https://github.com/rmitvietnamfintechclub" legacyBehavior>
               <a
                 target="_blank"
                 className="transform hover:scale-110 transition duration-200 cursor-pointer"
