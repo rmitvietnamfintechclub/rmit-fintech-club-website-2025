@@ -11,15 +11,16 @@ export default function HonoreeCard({
   category,
 }: HonoreeCardProps) {
   const isBestDepartment = category === "Best Department";
-  const isFintechMVP = achievement?.toLowerCase() === "fintech 101 mvp";
+  const isTeam = name?.toLowerCase().includes("team");
+
   return (
     <div
       className={clsx(
         "inline-block bg-[#DBB968] p-1 m-1 rounded-[40px]",
         {
           "md:h-[17.75rem] h-52 md:w-[29rem] w-[22rem]": isBestDepartment,
-          "md:h-[17rem] h-[11.95rem] md:w-[34rem] w-[23rem]": isFintechMVP, //For Fintech MVP
-          "md:h-[17rem] h-60 md:w-64 w-60": !isBestDepartment && !isFintechMVP, // Default if not Best Department or Fintech MVP
+          "md:h-[17rem] h-[11.95rem] md:w-[34rem] w-[23rem]": isTeam, // For Team
+          "md:h-[17rem] h-60 md:w-64 w-60": !isBestDepartment && !isTeam, // Default if not Best Department or Team
         }
       )}
     >
@@ -46,8 +47,8 @@ export default function HonoreeCard({
             {
               // Overlay width conditions
               "md:w-[28rem] w-[21rem]": isBestDepartment,
-              "md:w-[33rem] w-[22rem]": isFintechMVP, // For Fintech MVP
-              "md:w-60 w-56": !isBestDepartment && !isFintechMVP, // Default overlay width
+              "md:w-[33rem] w-[22rem]": isTeam, // For Team
+              "md:w-60 w-56": !isBestDepartment && !isTeam, // Default overlay width
             }
           )}
         >

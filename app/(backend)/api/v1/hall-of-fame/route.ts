@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { getHonorees, createHonoree } from "@/app/(backend)/controllers/hallOfFameController";
 import { publicRoute, adminRoute } from "@/app/(backend)/libs/api-handler"; // Import wrapper đã tạo từ bài trước
 
+export const revalidate = 3600;
+
 // --- GET: PUBLIC ---
 export const GET = publicRoute(async (req) => {
   const { searchParams } = new URL(req.url);
@@ -26,10 +28,9 @@ export const POST = adminRoute(async (req) => {
     const honoree = await createHonoree(body);
     return NextResponse.json(honoree, { status: 201 });
   } catch (error: any) {
-    // Catch lỗi validation từ controller
     if (error.message === "Missing required fields") {
         return NextResponse.json({ error: error.message }, { status: 400 });
     }
-    throw error; // Ném tiếp để wrapper xử lý lỗi 500
+    throw error;
   }
 });

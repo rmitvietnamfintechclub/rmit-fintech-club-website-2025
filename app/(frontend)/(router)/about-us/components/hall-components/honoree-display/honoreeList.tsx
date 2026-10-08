@@ -9,6 +9,12 @@ export default function HonoreeList({ members }: HonoreeListProps) {
     return !!(category && achievement && category.toLowerCase() === achievement.toLowerCase());
   };
 
+  const teamCount = members.filter((member) => 
+    member.name?.toLowerCase().includes("team")
+  ).length;
+
+  const wrapClass = teamCount > 1 ? "flex-wrap" : "";
+
   const isBestDepartmentList = members.length > 0 && members[0].category === "Best Department";
 
   // Layout 2x2 cho Best Department
@@ -18,8 +24,7 @@ export default function HonoreeList({ members }: HonoreeListProps) {
 
     return (
       <div className="m-5 flex flex-col items-center gap-4 md:gap-6">
-        {/* Hàng trên (2 cards) */}
-        <div className="flex flex-col md:flex-row justify-center gap-4">
+        <div className={`flex flex-col md:flex-row justify-center gap-4 ${wrapClass}`}>
           {topRowMembers.map((one, idx) => (
             <HonoreeCard
               key={one.name || idx}
@@ -27,13 +32,12 @@ export default function HonoreeList({ members }: HonoreeListProps) {
               achievement={one.achievement}
               photo_url={one.photo_url}
               category={one.category}
-              hideAchievement={shouldHideAchievement(one.category, one.achievement)} // <-- Updated logic
+              hideAchievement={shouldHideAchievement(one.category, one.achievement)}
             />
           ))}
         </div>
 
-        {/* Hàng dưới (2 cards) */}
-        <div className="flex flex-col md:flex-row justify-center gap-4">
+        <div className={`flex flex-col md:flex-row justify-center gap-4 ${wrapClass}`}>
           {bottomRowMembers.map((one, idx) => (
             <HonoreeCard
               key={one.name || idx}
@@ -41,7 +45,7 @@ export default function HonoreeList({ members }: HonoreeListProps) {
               achievement={one.achievement}
               photo_url={one.photo_url}
               category={one.category}
-              hideAchievement={shouldHideAchievement(one.category, one.achievement)} // <-- Updated logic
+              hideAchievement={shouldHideAchievement(one.category, one.achievement)}
             />
           ))}
         </div>
@@ -56,8 +60,7 @@ export default function HonoreeList({ members }: HonoreeListProps) {
 
     return (
       <div className="m-5 flex flex-col items-center gap-4 md:gap-6">
-        {/* Hàng trên (3 cards) */}
-        <div className="flex flex-col md:flex-row justify-center gap-4">
+        <div className={`flex flex-col md:flex-row justify-center gap-4 ${wrapClass}`}>
           {topRowMembers.map((one, idx) => (
             <HonoreeCard
               key={one.name || idx}
@@ -70,8 +73,7 @@ export default function HonoreeList({ members }: HonoreeListProps) {
           ))}
         </div>
 
-        {/* Hàng dưới (phần còn lại) */}
-        <div className="flex max-md:flex-col-reverse md:flex-row-reverse justify-center max-md:items-center gap-4">
+        <div className={`flex max-md:flex-col-reverse md:flex-row-reverse justify-center max-md:items-center gap-4 ${wrapClass}`}>
           {bottomRowMembers.map((one, idx) => (
             <HonoreeCard
               key={one.name || idx}
@@ -87,9 +89,8 @@ export default function HonoreeList({ members }: HonoreeListProps) {
     );
   }
 
-  // --- Trường hợp mặc định (4 members trở xuống) ---
   return (
-    <div className="m-5 flex flex-col md:flex-row gap-4 justify-center items-center">
+    <div className={`m-5 flex flex-col md:flex-row gap-4 justify-center items-center ${wrapClass}`}>
       {members.map((one, idx) => (
         <HonoreeCard
           key={one.name || idx}

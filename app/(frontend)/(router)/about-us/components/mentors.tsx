@@ -17,7 +17,7 @@ const mentorData = [
     isPriority: true,
   },
   {
-    name: "Dr. HUY PHAM",
+    name: "Assoc. Prof. HUY PHAM",
     title: "SENIOR LECTURER OF FINANCE",
     imageUrl:
       "https://d2uq10394z5icp.cloudfront.net/about_us/mentors/Mentor-HuyPham.png",
