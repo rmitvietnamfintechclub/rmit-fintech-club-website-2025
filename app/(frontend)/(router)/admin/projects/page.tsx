@@ -53,13 +53,17 @@ export default function ProjectsPage() {
       const yearsData = res.data.data || [];
       setAvailableYears(yearsData);
 
-      if (activeTab === 2 && !selectedYear && yearsData.length > 0) {
-        setSelectedYear(yearsData[0].toString());
+      if (yearsData.length > 0) {
+        if (!selectedYear || !yearsData.includes(Number(selectedYear))) {
+          setSelectedYear(yearsData[0].toString());
+        }
+      } else {
+        setSelectedYear("");
       }
     } catch (error) {
       console.error("Failed to fetch years", error);
     }
-  }, [activeTab, selectedYear]);
+  }, [selectedYear]);
 
   useEffect(() => {
     fetchYears();
@@ -432,15 +436,18 @@ export default function ProjectsPage() {
           {activeTab === 2 && renderCompletedProjects()}
 
           {/* TAB 0: ONGOING CLUBWIDE PROJECTS */}
-          {activeTab === 0 && (
-            projects.length > 0 ? (
+          {activeTab === 0 &&
+            (projects.length > 0 ? (
               <>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-in fade-in slide-in-from-bottom-2 duration-500">
                   {currentDisplayedProjects.map((project) => (
                     <ProjectCard
                       key={project._id}
                       project={project}
-                      onEdit={(p) => { setEditingProject(p); setIsModalOpen(true); }}
+                      onEdit={(p) => {
+                        setEditingProject(p);
+                        setIsModalOpen(true);
+                      }}
                       onDelete={() => setDeleteId(project._id)}
                     />
                   ))}
@@ -455,8 +462,7 @@ export default function ProjectsPage() {
               </>
             ) : (
               <EmptyState message="No ongoing club-wide projects" />
-            )
-          )}
+            ))}
         </>
       )}
 
